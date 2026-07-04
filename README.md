@@ -44,7 +44,7 @@ BuildPixies
     <td><a href="https://github.com/Vartmor">Muhammed Köseoğlu</a></td>
     <td>Product Owner</td>
     <td>
-      <a href="https://github.com/Vartmor" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" width="20" height="20"/></a>
+      <a href="https://github.com/Vartmor" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
       <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
     </td>
   </tr>
@@ -52,7 +52,7 @@ BuildPixies
     <td><a href="https://github.com/avanalperen">Alperen Avan</a></td>
     <td>Scrum Master</td>
     <td>
-      <a href="https://github.com/avanalperen" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" width="20" height="20"/></a>
+      <a href="https://github.com/avanalperen" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
       <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
     </td>
   </tr>
@@ -60,7 +60,7 @@ BuildPixies
     <td><a href="#" target="_blank">Kemal Ersin Özkan</a></td>
     <td>Developer</td>
     <td>
-      <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" width="20" height="20"/></a>
+      <a href="#" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
       <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
     </td>
   </tr>
