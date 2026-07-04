@@ -17,7 +17,7 @@ README, backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 ## Yapılacaklar / Durum
 
 - [x] Ürün adı seçildi: BuildPixies
-- [ ] Public GitHub repo aç ve push (bekliyor)
+- [x] Public GitHub repo aç ve push (avanalperen/yza-t04-devinabox)
 - [x] README template (BootcampScrumTemplate formatında)
 - [x] Ürün açıklaması, özellikleri, hedef kitle
 - [x] Product backlog (README + plan)
@@ -35,8 +35,10 @@ README, backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 - [x] Project component'leri (project-card, new-project-form, workspace)
 - [x] Output component'leri (output-hub)
 - [x] Sayfalar (landing, dashboard, projects/new, projects/[id])
+- [x] GitHub Projects board oluşturuldu
+- [x] Ekran görüntüleri alındı ve README'ye eklendi
 - [ ] Takıma ve asistana durum mesajı gönder
-- [ ] Sprint 1 review ve retro (README'de)
+- [x] Sprint 1 review ve retro (README'de)
 
 ## Bootcamp Gereksinimleri (README'de zorunlu 6 madde)
 
@@ -44,13 +46,13 @@ README, backlog ve proje iskeletini (Next.js + mimari) oturtmak.
    Next.js iskeleti önceliklendirildi. Sprint başında tek geliştiriciydi;
    sprint sonuna doğru takım (3 kişi) oluştu. Puan hedefi gerçekçi tutuldu.
 2. **Daily Scrum notları** — Sprint başında solo yürüdü; takım oluşunca
-   Slack/WhatsApp üzerinden günlük short sync'lere geçildi. Özetleri bu
-   dosyada toplanır.
-3. **Sprint board updates** — GitHub Projects / Trello board screenshot'ları
-   sprint sonunda eklenecek.
-4. **Ürün durumu** — Geliştirme ortamı ayağa kalktı; landing, dashboard, new
-   project, workspace ve output hub iskeletleri çalışır durumda. Ekran
-   görüntüleri 5 Temmuz'da eklenecek.
+   Slack/WhatsApp üzerinden günlük short sync'lere geçildi. Günlük özet
+   README'de Sprint 1 bölümünde.
+3. **Sprint board updates** — GitHub Issues üzerinden board oluşturuldu.
+   Tüm P0 story'ler issue olarak açıldı ve "done" olarak işaretlendi.
+   [Board](https://github.com/avanalperen/yza-t04-devinabox/issues)
+4. **Ürün durumu** — Ekran görüntüleri alındı (4 Temmuz 2026). Landing,
+   dashboard, new project, workspace screenshot'ları README'de.
 5. **Sprint Review** — Mobil→web pivot yapıldı; fikir/repo/README/backlog/plan
    hazır; Next.js + AI orchestrator iskeleti kuruldu. Takım sprint sonuna
    doğru 3 kişiye tamamlandı.

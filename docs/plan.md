@@ -947,16 +947,16 @@ Bootcamp takvimi:
 
 #### Yapılacaklar
 - [x] Ürün adı seçildi: **BuildPixies**
-- [ ] Public GitHub repo aç (`buildpixies`)
-- [ ] README template ekle (`BootcampScrumTemplate` formatında)
-- [ ] Ürün açıklaması yaz
-- [ ] Hedef kitleyi yaz
-- [ ] Product backlog ekle
-- [ ] Web pivot kararını `docs/decision-log.md` içine yaz
-- [ ] İlk wireframe'i çiz
-- [ ] Landing page taslak metnini hazırla
+- [x] Public GitHub repo aç (`avanalperen/yza-t04-devinabox`)
+- [x] README template ekle (`BootcampScrumTemplate` formatında)
+- [x] Ürün açıklaması yaz
+- [x] Hedef kitleyi yaz
+- [x] Product backlog ekle
+- [x] Web pivot kararını `docs/decision-log.md` içine yaz
+- [x] İlk wireframe'i çiz
+- [x] Landing page taslak metnini hazırla
 - [ ] Takıma ve asistana durum mesajı gönder
-- [ ] Sprint 1 review ve retro yaz
+- [x] Sprint 1 review ve retro yaz
 
 #### Definition of Done
 - Repo public

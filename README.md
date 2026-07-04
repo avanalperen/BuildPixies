@@ -130,14 +130,55 @@ backlog ve proje iskeletini (Next.js + mimari) oturtmak.
   (iskelet seviyesinde).
 
 - **Daily Scrum**: Sprint başında solo yürüdü; takım oluşunca Slack/WhatsApp
-  üzerinden günlük short sync'lere geçildi. Notlar `docs/sprint-1.md`
-  içerisinde toplanmaktadır.
+  üzerinden günlük short sync'lere geçildi. Günlük özet:
+  - **27 Haz**: Bootcamp başlangıcı. Takım oluşturuldu (Slack). Fikir
+    aranıyor.
+  - **28–30 Haz**: Fikir bulma ve pazar araştırması. Mobil uygulama
+    fikri tartışıldı.
+  - **1 Tem**: BuildPixies fikri netleşti. Web-first karar alındı
+    (`docs/decision-log.md`).
+  - **2 Tem**: Proje planı yazıldı (`docs/plan.md`). Bootcamp
+    kılavuzu okundu, değerlendirme kriterleri hizalandı.
+  - **3 Tem**: Takım 3 kişiye tamamlandı (PO, SM, Dev). Repo
+    açıldı, README ve backlog yazıldı.
+  - **4 Tem**: Next.js + Tailwind + shadcn/ui kurulumu, tüm iskelet
+    sayfaları ve API route'ları yazıldı. Ekran görüntüleri alındı.
 
-- **Sprint board update**: Sprint board screenshot'ları sprint sonunda
-  eklenecektir (GitHub Projects / Trello). Şu anki durum: board
-  oluşturulma aşamasında.
+- **Sprint board update**: Sprint board GitHub Issues üzerinden
+  yönetilmektedir. Tüm P0 story'ler açıldı ve "done" olarak
+  işaretlendi.
+  [GitHub Issues Board](https://github.com/avanalperen/yza-t04-devinabox/issues)
 
-- **Ürün Durumu**: Ekran görüntüleri sprint sonunda (5 Temmuz) eklenecektir.
+  | Story | Title | Priority | Sprint | Status |
+  | --- | --- | --- | --- | --- |
+  | [BP-001](https://github.com/avanalperen/yza-t04-devinabox/issues/1) | Landing page | P0 | 1 | Done |
+  | [BP-003](https://github.com/avanalperen/yza-t04-devinabox/issues/2) | New project wizard | P0 | 1 | Done |
+  | [BP-004](https://github.com/avanalperen/yza-t04-devinabox/issues/3) | Project creation API | P0 | 1 | Done |
+  | [BP-007](https://github.com/avanalperen/yza-t04-devinabox/issues/4) | Pixie team view | P0 | 1 | Done |
+  | [BP-008](https://github.com/avanalperen/yza-t04-devinabox/issues/5) | Pixie status tracking | P0 | 1 | Done |
+  | [BP-010](https://github.com/avanalperen/yza-t04-devinabox/issues/6) | Product Brief generation | P0 | 1 | Done |
+  | [BP-011](https://github.com/avanalperen/yza-t04-devinabox/issues/7) | MVP Scope generation | P0 | 1 | Done |
+  | [BP-012](https://github.com/avanalperen/yza-t04-devinabox/issues/8) | UX Flow generation | P0 | 1 | Done |
+  | [BP-013](https://github.com/avanalperen/yza-t04-devinabox/issues/9) | Tech Architecture generation | P0 | 1 | Done |
+  | [BP-014](https://github.com/avanalperen/yza-t04-devinabox/issues/10) | Backlog generation | P0 | 1 | Done |
+
+- **Ürün Durumu**: Ekran görüntüleri (4 Temmuz 2026):
+
+  **Landing Page (Hero)**
+  ![Landing Hero](public/screenshots/landing-hero.png)
+
+  **Landing Page (Full)**
+  ![Landing Full](public/screenshots/landing.png)
+
+  **Dashboard (Empty State)**
+  ![Dashboard](public/screenshots/dashboard.png)
+
+  **New Project Wizard**
+  ![New Project](public/screenshots/new-project.png)
+
+  **Pixie Workspace**
+  ![Workspace](public/screenshots/workspace.png)
+
   Mevcut durum: Next.js 16 + TypeScript + Tailwind v4 + shadcn/ui kurulu;
   landing page, dashboard, new project form, pixie workspace ve output hub
   iskeletleri çalışır durumda; AI orchestrator (role-based pipeline) ve API
