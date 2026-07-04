@@ -59,6 +59,7 @@ function Button({
     return (
       <ButtonPrimitive
         data-slot="button"
+        nativeButton={false}
         className={classes}
         render={children as React.ReactElement}
         {...props}
