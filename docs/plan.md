@@ -340,7 +340,7 @@ Bootcamp için en önemli export: **README.md**.
 | Styling | **Tailwind CSS + shadcn/ui** | Hızlı, temiz, modern UI |
 | Animation | **Framer Motion** | Pixie kartları ve durum animasyonları |
 | Backend | **Next.js Route Handlers** | Ayrı backend kurmadan API yazılır |
-| Auth | **Supabase Auth** (veya ilk MVP'de authsuz local demo) | Hızlı başlangıç |
+| Auth | **Supabase Auth** (anonymous owner mode, sonra email/OAuth upgrade) | Hızlı başlangıç + owner bazlı güvenlik |
 | Database | **Supabase Postgres** | Proje, output, backlog kayıtları |
 | Vector memory | **Supabase pgvector** | Project memory için semantic recall |
 | AI | **OpenAI API / Agents SDK** | Agent orchestration |
@@ -735,7 +735,7 @@ Bu özellik bizi ciddi şekilde ayrıştırır.
 Kullanıcı gerçek ilerleme notlarını girer:
 ```text
 Today I created the landing page and project form.
-Blocked by Supabase auth setup.
+Blocked by deployment env setup.
 Next I will implement output generation.
 ```
 
@@ -1192,8 +1192,8 @@ Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, S
 | Risk | Etki | Önlem |
 | --- | --- | --- |
 | AI output çok uzun olur | UI bozulur | Section-based output |
-| Agent pipeline yavaş olur | Demo kötü görünür | Loading states + sample fallback |
-| Supabase auth vakit alır | Geliştirme yavaşlar | İlk MVP'de authsuz proje ID |
+| Agent pipeline yavaş olur | Demo kötü görünür | `generation_jobs` + polling + sample fallback; harici queue/streaming roadmap |
+| Supabase auth vakit alır | Geliştirme yavaşlar | Anonymous Supabase Auth + owner bazlı RLS; email/OAuth roadmap |
 | Takım içi koordinasyon kopukluğu | Geliştirme yavaşlar | Günlük sync + net rol dağılımı |
 | Deploy problemi | Teslim riski | Erken Vercel deploy |
 | Prompt çıktısı tutarsız | Ürün kalitesi düşer | JSON schema + validation |

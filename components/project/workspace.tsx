@@ -5,11 +5,18 @@ import { Button } from "@/components/ui/button";
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { OutputHub } from "@/components/outputs/output-hub";
 import type { Project } from "@/types/project";
+import type { GenerationJob } from "@/types/generation-job";
 import type { Blueprint } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
 import { PIXIES } from "@/types/pixie";
 
 const pipelineNames = PIXIES.map((pixie) => pixie.name);
+const pollDelayMs = 1500;
+const maxPollAttempts = 120;
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export function Workspace({ project }: { project: Project }) {
   const [blueprint, setBlueprint] = useState<Blueprint | null>(
@@ -34,7 +41,7 @@ export function Workspace({ project }: { project: Project }) {
     setStatuses(next);
 
     try {
-      const res = await fetch("/api/generate-blueprint", {
+      const res = await fetch("/api/generation-jobs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -51,7 +58,18 @@ export function Workspace({ project }: { project: Project }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Generation failed");
-      setBlueprint(data.blueprint as Blueprint);
+      const jobId = data.job?.id as string | undefined;
+      if (!jobId) throw new Error("Generation job could not be started");
+
+      const finishedJob = await pollGenerationJob(jobId);
+      if (finishedJob.status === "failed") {
+        throw new Error(finishedJob.error || "Generation failed");
+      }
+      if (!finishedJob.blueprint) {
+        throw new Error("Generation finished without a blueprint");
+      }
+
+      setBlueprint(finishedJob.blueprint);
       const done: Record<string, PixieStatus> = {};
       PIXIES.forEach((p) => (done[p.name] = "done"));
       setStatuses(done);
@@ -63,6 +81,24 @@ export function Workspace({ project }: { project: Project }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function pollGenerationJob(jobId: string): Promise<GenerationJob> {
+    for (let attempt = 0; attempt < maxPollAttempts; attempt += 1) {
+      await wait(pollDelayMs);
+      const res = await fetch(`/api/generation-jobs/${jobId}`);
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Generation status could not be loaded");
+      }
+
+      const job = data.job as GenerationJob;
+      if (job.status === "succeeded" || job.status === "failed") {
+        return job;
+      }
+    }
+
+    throw new Error("Generation is still running. Try again in a moment.");
   }
 
   async function handleExport() {

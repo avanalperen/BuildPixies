@@ -3,13 +3,14 @@ import { createProject, listProjects } from "@/lib/projects";
 import { checkRateLimit } from "@/lib/api/rate-limit";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { createProjectRequestSchema } from "@/lib/api/schemas";
+import { getErrorStatus } from "@/lib/errors";
 
 export async function GET() {
   try {
     const projects = await listProjects();
     return Response.json({ projects });
   } catch (error) {
-    return jsonError(getSafeErrorMessage(error), 500);
+    return jsonError(getSafeErrorMessage(error), getErrorStatus(error));
   }
 }
 
@@ -32,6 +33,6 @@ export async function POST(request: NextRequest) {
     const project = await createProject(parsed.data);
     return Response.json({ project }, { status: 201 });
   } catch (error) {
-    return jsonError(getSafeErrorMessage(error), 500);
+    return jsonError(getSafeErrorMessage(error), getErrorStatus(error));
   }
 }

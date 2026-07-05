@@ -1,14 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { AuthRequiredError } from "@/lib/errors";
+import { getSupabaseConfig } from "@/lib/supabase/config";
 
 export async function createClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anonKey) {
-    return null;
-  }
+  const config = getSupabaseConfig();
+  if (!config) return null;
   const cookieStore = await cookies();
-  return createServerClient(url, anonKey, {
+  return createServerClient(config.url, config.key, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
@@ -24,4 +23,18 @@ export async function createClient() {
       },
     },
   });
+}
+
+export async function requireUserId(): Promise<string> {
+  const supabase = await createClient();
+  if (!supabase) {
+    throw new AuthRequiredError();
+  }
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user) {
+    throw new AuthRequiredError();
+  }
+
+  return data.user.id;
 }

@@ -1,19 +1,20 @@
 import { NextRequest } from "next/server";
-import { getProject } from "@/lib/projects";
+import { getGenerationJob } from "@/lib/generation-jobs";
 import { getSafeErrorMessage, jsonError } from "@/lib/api/http";
 import { getErrorStatus } from "@/lib/errors";
 
 export async function GET(
   _request: NextRequest,
-  context: RouteContext<"/api/projects/[id]">,
+  context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
+
   try {
-    const project = await getProject(id);
-    if (!project) {
-      return jsonError("Project not found", 404);
+    const job = await getGenerationJob(id);
+    if (!job) {
+      return jsonError("Generation job not found", 404);
     }
-    return Response.json({ project });
+    return Response.json({ job });
   } catch (error) {
     return jsonError(getSafeErrorMessage(error), getErrorStatus(error));
   }

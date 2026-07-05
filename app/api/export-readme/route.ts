@@ -3,6 +3,7 @@ import { exportMarkdown } from "@/lib/export/markdown";
 import { getProject } from "@/lib/projects";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { exportReadmeRequestSchema } from "@/lib/api/schemas";
+import { getErrorStatus } from "@/lib/errors";
 
 export async function POST(request: NextRequest) {
   const parsed = await parseJsonWithSchema(
@@ -33,6 +34,6 @@ export async function POST(request: NextRequest) {
     const markdown = exportMarkdown(project, body.blueprint);
     return Response.json({ markdown, filename: "README.md" });
   } catch (error) {
-    return jsonError(getSafeErrorMessage(error), 500);
+    return jsonError(getSafeErrorMessage(error), getErrorStatus(error));
   }
 }

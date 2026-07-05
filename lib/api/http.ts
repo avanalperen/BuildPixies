@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AuthRequiredError, StorageUnavailableError } from "@/lib/errors";
 
 type ParseResult<T> =
   | { ok: true; data: T }
@@ -73,6 +74,8 @@ export async function parseJsonWithSchema<T extends z.ZodTypeAny>(
 
 export function getSafeErrorMessage(error: unknown): string {
   if (error instanceof z.ZodError) return "Invalid data";
+  if (error instanceof AuthRequiredError) return error.message;
+  if (error instanceof StorageUnavailableError) return error.message;
   if (error instanceof Error && error.name === "AbortError") {
     return "Request timed out";
   }

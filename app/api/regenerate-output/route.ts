@@ -3,6 +3,7 @@ import { regenerateSection } from "@/lib/ai/orchestrator";
 import { checkRateLimit } from "@/lib/api/rate-limit";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { regenerateOutputRequestSchema } from "@/lib/api/schemas";
+import { getErrorStatus } from "@/lib/errors";
 
 export const maxDuration = 30;
 
@@ -29,6 +30,6 @@ export async function POST(request: NextRequest) {
     );
     return Response.json({ section: parsed.data.section, output });
   } catch (error) {
-    return jsonError(getSafeErrorMessage(error), 500);
+    return jsonError(getSafeErrorMessage(error), getErrorStatus(error));
   }
 }

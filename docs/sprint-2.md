@@ -11,7 +11,7 @@ gerçek blueprint çıktısı üretilsin. Çalışan MVP.
 | 6 Temmuz | Next.js kurulumunu doğrula, Tailwind/shadcn ayarla |
 | 7 Temmuz | Landing page polish |
 | 8 Temmuz | Dashboard ve New Project ekranı doğrulama |
-| 9 Temmuz | Supabase project tablosu (şema + env) |
+| 9 Temmuz | Supabase Auth/RLS canlı proje ayarı ve anon sign-in kontrolü |
 | 10 Temmuz | Project create/list akışı (DB bağlı) |
 | 11 Temmuz | Pixie workspace UI animasyonları |
 | 12 Temmuz | AI prompt schemas doğrulama |

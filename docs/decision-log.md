@@ -107,3 +107,34 @@ hosted deployment'ta Supabase zorunlu storage politikası uygulanacak.
 - OpenAI maliyetli endpoint'leri kısa pencere rate-limit ile korunur.
 - Refresh sonrası hazır proje blueprint çıktısını kaybetmez.
 - Production deploy öncesi Supabase schema/migration gereksinimi görünürdür.
+
+---
+
+## ADR-005 — Owner bazlı Supabase RLS ve generation job modeli
+
+**Tarih:** 5 Temmuz 2026
+**Durum:** Kabul edildi
+
+### Bağlam
+
+Sprint 1 sonunda kalan dürüst riskler; Supabase Auth/RLS eksikliği, uzun AI
+pipeline'ın tek request'e bağlı kalması ve Next/PostCSS audit uyarılarıydı.
+Public çok-kullanıcılı kullanımda proje kayıtları owner bazlı ayrılmalı, AI
+üretimi de UI'da poll edilebilir bir duruma taşınmalıydı.
+
+### Karar
+
+Supabase kullanılan ortamlarda anonymous Auth oturumu ile `owner_id` üretilecek,
+`projects` ve `generation_jobs` tabloları RLS politikalarıyla sadece kendi
+sahibine açık olacak. AI üretimi `POST /api/generation-jobs` ile job oluşturup
+Next `after()` içinde çalışacak; UI sonucu `/api/generation-jobs/[id]` üzerinden
+poll edecek. Next'in mevcut stabil sürümünde güvenli patch olmadığı için
+`postcss@8.5.10` transitive override kullanılacak.
+
+### Sonuçlar
+
+- Supabase Data API, owner dışı project/job satırlarını RLS ile gizler.
+- Local demo Supabase olmadan JSON fallback ile çalışmaya devam eder.
+- Uzun generation akışı kullanıcı arayüzünde job status üzerinden izlenir.
+- Harici durable queue/SSE streaming ve email/OAuth account linking roadmap'e
+  bırakılır.

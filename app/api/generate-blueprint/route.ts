@@ -4,6 +4,7 @@ import { getProject, saveProjectBlueprint, updateProjectStatus } from "@/lib/pro
 import { checkRateLimit } from "@/lib/api/rate-limit";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
+import { getErrorStatus } from "@/lib/errors";
 
 export const maxDuration = 60;
 
@@ -63,6 +64,6 @@ export async function POST(request: NextRequest) {
     if (body.projectId) {
       await updateProjectStatus(body.projectId, "failed");
     }
-    return jsonError(getSafeErrorMessage(error), 500);
+    return jsonError(getSafeErrorMessage(error), getErrorStatus(error));
   }
 }

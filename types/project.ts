@@ -28,6 +28,7 @@ export interface ProjectConstraints {
 
 export interface Project {
   id: string;
+  ownerId?: string;
   title: string;
   rawIdea: string;
   goal: ProjectGoal;

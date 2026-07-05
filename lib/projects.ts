@@ -1,7 +1,11 @@
 import type { Project, CreateProjectInput } from "@/types/project";
 import type { Blueprint } from "@/types/output";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { createClient as createServerClient } from "@/lib/supabase/server";
+import {
+  assertStorageAvailable,
+  canUseLocalFileStore,
+  getSupabaseUserClient,
+  localStorePath,
+} from "@/lib/storage";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -13,36 +17,13 @@ const memory: Map<string, Project> =
   globalStore.__buildpixiesMemory ?? new Map<string, Project>();
 globalStore.__buildpixiesMemory = memory;
 
-const localStorePath = path.join(
-  process.cwd(),
-  ".local",
-  "buildpixies-projects.json",
-);
-
-function canUseLocalFileStore(): boolean {
-  return !requiresSupabase() && process.env.BUILDPIXIES_DISABLE_FILE_STORE !== "1";
-}
-
-function requiresSupabase(): boolean {
-  return (
-    process.env.VERCEL === "1" ||
-    process.env.BUILDPIXIES_REQUIRE_SUPABASE === "1"
-  );
-}
-
-function assertStorageAvailable() {
-  if (!isSupabaseConfigured() && !canUseLocalFileStore()) {
-    throw new Error(
-      "Persistent storage is not configured. Set Supabase env vars or enable local file store for development.",
-    );
-  }
-}
+const projectsStorePath = localStorePath("buildpixies-projects.json");
 
 async function hydrateMemoryFromDisk(): Promise<void> {
   if (globalStore.__buildpixiesMemoryLoaded || !canUseLocalFileStore()) return;
   globalStore.__buildpixiesMemoryLoaded = true;
   try {
-    const raw = await readFile(localStorePath, "utf8");
+    const raw = await readFile(projectsStorePath, "utf8");
     const projects = JSON.parse(raw) as Project[];
     projects.forEach((project) => memory.set(project.id, project));
   } catch {
@@ -53,9 +34,9 @@ async function hydrateMemoryFromDisk(): Promise<void> {
 async function persistMemoryToDisk(): Promise<void> {
   if (!canUseLocalFileStore()) return;
   try {
-    await mkdir(path.dirname(localStorePath), { recursive: true });
+    await mkdir(path.dirname(projectsStorePath), { recursive: true });
     await writeFile(
-      localStorePath,
+      projectsStorePath,
       JSON.stringify(Array.from(memory.values()), null, 2),
       "utf8",
     );
@@ -91,26 +72,27 @@ function toProject(input: CreateProjectInput): Project {
 export async function createProject(input: CreateProjectInput): Promise<Project> {
   assertStorageAvailable();
   const project = toProject(input);
-  if (isSupabaseConfigured()) {
-    const supabase = await createServerClient();
-    if (supabase) {
-      const { error } = await supabase.from("projects").insert({
-        id: project.id,
-        title: project.title,
-        raw_idea: project.rawIdea,
-        goal: project.goal,
-        platform: project.platform,
-        target_audience: project.targetAudience,
-        constraints: project.constraints,
-        output_depth: project.outputDepth,
-        blueprint: project.blueprint,
-        status: project.status,
-        created_at: project.createdAt,
-        updated_at: project.updatedAt,
-      });
-      if (error) throw error;
-      return project;
-    }
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { supabase, userId } = context;
+    const ownedProject = { ...project, ownerId: userId };
+    const { error } = await supabase.from("projects").insert({
+      id: ownedProject.id,
+      owner_id: userId,
+      title: ownedProject.title,
+      raw_idea: ownedProject.rawIdea,
+      goal: ownedProject.goal,
+      platform: ownedProject.platform,
+      target_audience: ownedProject.targetAudience,
+      constraints: ownedProject.constraints,
+      output_depth: ownedProject.outputDepth,
+      blueprint: ownedProject.blueprint,
+      status: ownedProject.status,
+      created_at: ownedProject.createdAt,
+      updated_at: ownedProject.updatedAt,
+    });
+    if (error) throw error;
+    return ownedProject;
   }
   await hydrateMemoryFromDisk();
   memory.set(project.id, project);
@@ -120,16 +102,16 @@ export async function createProject(input: CreateProjectInput): Promise<Project>
 
 export async function listProjects(): Promise<Project[]> {
   assertStorageAvailable();
-  if (isSupabaseConfigured()) {
-    const supabase = await createServerClient();
-    if (supabase) {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("updated_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []).map(rowToProject);
-    }
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { supabase, userId } = context;
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("owner_id", userId)
+      .order("updated_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map(rowToProject);
   }
   await hydrateMemoryFromDisk();
   return Array.from(memory.values()).sort((a, b) =>
@@ -139,17 +121,17 @@ export async function listProjects(): Promise<Project[]> {
 
 export async function getProject(id: string): Promise<Project | null> {
   assertStorageAvailable();
-  if (isSupabaseConfigured()) {
-    const supabase = await createServerClient();
-    if (supabase) {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle();
-      if (error) throw error;
-      return data ? rowToProject(data) : null;
-    }
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { supabase, userId } = context;
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("id", id)
+      .eq("owner_id", userId)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? rowToProject(data) : null;
   }
   await hydrateMemoryFromDisk();
   return memory.get(id) ?? null;
@@ -161,16 +143,16 @@ export async function updateProjectStatus(
 ): Promise<void> {
   assertStorageAvailable();
   const updatedAt = new Date().toISOString();
-  if (isSupabaseConfigured()) {
-    const supabase = await createServerClient();
-    if (supabase) {
-      const { error } = await supabase
-        .from("projects")
-        .update({ status, updated_at: updatedAt })
-        .eq("id", id);
-      if (error) throw error;
-      return;
-    }
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("projects")
+      .update({ status, updated_at: updatedAt })
+      .eq("id", id)
+      .eq("owner_id", userId);
+    if (error) throw error;
+    return;
   }
   await hydrateMemoryFromDisk();
   const existing = memory.get(id);
@@ -186,16 +168,16 @@ export async function saveProjectBlueprint(
 ): Promise<void> {
   assertStorageAvailable();
   const updatedAt = new Date().toISOString();
-  if (isSupabaseConfigured()) {
-    const supabase = await createServerClient();
-    if (supabase) {
-      const { error } = await supabase
-        .from("projects")
-        .update({ blueprint, status: "ready", updated_at: updatedAt })
-        .eq("id", id);
-      if (error) throw error;
-      return;
-    }
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("projects")
+      .update({ blueprint, status: "ready", updated_at: updatedAt })
+      .eq("id", id)
+      .eq("owner_id", userId);
+    if (error) throw error;
+    return;
   }
   await hydrateMemoryFromDisk();
   const existing = memory.get(id);
@@ -208,6 +190,7 @@ export async function saveProjectBlueprint(
 function rowToProject(row: Record<string, unknown>): Project {
   return {
     id: String(row.id),
+    ownerId: row.owner_id ? String(row.owner_id) : undefined,
     title: String(row.title ?? ""),
     rawIdea: String(row.raw_idea ?? ""),
     goal: (row.goal as Project["goal"]) ?? "bootcamp",
