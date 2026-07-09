@@ -99,8 +99,8 @@ formatlarda hazırlanır.
 ## Product Backlog URL
 
 - [GitHub Issues Board](https://github.com/avanalperen/BuildPixies/issues)
-- Detaylı ürün planı: [`docs/plan.md`](docs/plan.md)
-- Sprint kararları: [`docs/decision-log.md`](docs/decision-log.md)
+- Detaylı ürün planı: [`project/docs/plan.md`](project/docs/plan.md)
+- Sprint kararları: [`project/docs/decision-log.md`](project/docs/decision-log.md)
 
 ---
 
@@ -208,7 +208,7 @@ iletişim ekran görüntüleri takım içi kanallardan ayrıca eklenebilir.
 | 29 Haziran | Hedef kitle ve bootcamp teslim kriterleri incelendi; ürünün uygulanabilirliği konuşuldu. |
 | 30 Haziran | Pazar ve problem alanı daraltıldı; fikirden ürüne planlama ihtiyacı öne çıktı. |
 | 1 Temmuz | BuildPixies fikri netleşti; mobil yerine web-first ürün kararı alındı. |
-| 2 Temmuz | `docs/plan.md` yazıldı, bootcamp kılavuzu ve referans README'ler incelendi. |
+| 2 Temmuz | `project/docs/plan.md` yazıldı, bootcamp kılavuzu ve referans README'ler incelendi. |
 | 3 Temmuz | Takım rolleri netleşti; PO, SM ve Developer dağılımı README'ye işlendi. |
 | 4 Temmuz | Next.js + Tailwind + shadcn/ui kurulumu, temel ekranlar, API route'ları ve screenshotlar hazırlandı. |
 | 5 Temmuz | API validation, blueprint persistence, Supabase owner/RLS, generation job/polling ve audit düzeltmeleri tamamlandı. |
@@ -230,30 +230,30 @@ bağlantısı kalacağı için partial bırakıldı.
 ## Ürün Durumu
 
 Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görüntüleri
-`public/screenshots/` altında tutulmaktadır.
+`project/public/screenshots/` altında tutulmaktadır.
 
 <details>
   <summary><h3>Sprint 1 - Ekran Görüntüleri</h3></summary>
 
 ### Landing Page - Hero
 
-![Landing Hero](public/screenshots/landing-hero.png)
+![Landing Hero](project/public/screenshots/landing-hero.png)
 
 ### Landing Page - Full
 
-![Landing Full](public/screenshots/landing.png)
+![Landing Full](project/public/screenshots/landing.png)
 
 ### Dashboard - Empty State
 
-![Dashboard](public/screenshots/dashboard.png)
+![Dashboard](project/public/screenshots/dashboard.png)
 
 ### New Project Wizard
 
-![New Project](public/screenshots/new-project.png)
+![New Project](project/public/screenshots/new-project.png)
 
 ### Pixie Workspace
 
-![Workspace](public/screenshots/workspace.png)
+![Workspace](project/public/screenshots/workspace.png)
 
 </details>
 
@@ -261,13 +261,13 @@ Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görünt�
 
 | Alan | Kod Kanıtı | Durum |
 | --- | --- | --- |
-| Landing / dashboard / new project / workspace | `app/page.tsx`, `app/dashboard/page.tsx`, `app/projects/new/page.tsx`, `app/projects/[id]/page.tsx` | Done |
-| Project create/list/detail | `app/api/projects/*`, `lib/projects.ts` | Done |
-| Blueprint pipeline | `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` | Done |
-| Job + polling | `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` | Done |
-| Supabase owner/RLS | `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
-| README export | `app/api/export-readme/route.ts`, `lib/export/markdown.ts` | Done |
-| Audit | `package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
+| Landing / dashboard / new project / workspace | `project/app/page.tsx`, `project/app/dashboard/page.tsx`, `project/app/projects/new/page.tsx`, `project/app/projects/[id]/page.tsx` | Done |
+| Project create/list/detail | `project/app/api/projects/*`, `project/lib/projects.ts` | Done |
+| Blueprint pipeline | `project/lib/ai/orchestrator.ts`, `project/lib/ai/prompts.ts`, `project/lib/ai/schemas.ts` | Done |
+| Job + polling | `project/app/api/generation-jobs/*`, `project/lib/generation-jobs.ts`, `project/components/project/workspace.tsx` | Done |
+| Supabase owner/RLS | `project/proxy.ts`, `project/components/auth/session-bootstrap.tsx`, `project/supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
+| README export | `project/app/api/export-readme/route.ts`, `project/lib/export/markdown.ts` | Done |
+| Audit | `project/package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
 
 ## Sprint Review
 
@@ -342,7 +342,7 @@ queue/SSE streaming · account linking · Vercel deploy hardening.
 ## Klasör Yapısı
 
 ```text
-buildpixies/
+project/
   app/
     page.tsx
     dashboard/page.tsx
@@ -399,8 +399,8 @@ handoff, project memory ve guardrail katmanını güçlendirmektir.
 
 # Local Setup
 
-Bu repo Node `24.15.0` hedefler. Shell'de `node`/`npm` görünmüyorsa proje
-kökünde `nvm use` çalıştırın.
+Bu repo Node `24.15.0` hedefler. Shell'de `node`/`npm` görünmüyorsa `project/`
+klasörüne girerek `nvm use` çalıştırın.
 
 ```bash
 nvm use
@@ -423,8 +423,8 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 ```
 
 Hosted deploy'larda `BUILDPIXIES_REQUIRE_SUPABASE=1` kullanın. Local geliştirmede
-Supabase yoksa `.local/buildpixies-projects.json` ve
-`.local/buildpixies-generation-jobs.json` fallback'i devreye girer. Şifresiz
+Supabase yoksa `project/.local/buildpixies-projects.json` ve
+`project/.local/buildpixies-generation-jobs.json` fallback'i devreye girer. Şifresiz
 demo akışı için Supabase Auth > Anonymous Sign-Ins açık olmalıdır.
 
 # Screenshots
