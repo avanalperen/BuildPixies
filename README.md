@@ -100,8 +100,8 @@ formatlarda hazırlanır.
 ## Product Backlog URL
 
 - [GitHub Issues Board](https://github.com/avanalperen/BuildPixies/issues)
-- Detaylı ürün planı: [`project/docs/plan.md`](project/docs/plan.md)
-- Sprint kararları: [`project/docs/decision-log.md`](project/docs/decision-log.md)
+- Detaylı ürün planı: [`docs/plan.md`](docs/plan.md)
+- Sprint kararları: [`docs/decision-log.md`](docs/decision-log.md)
 
 ---
 
@@ -231,30 +231,30 @@ bağlantısı kalacağı için partial bırakıldı.
 ## Ürün Durumu
 
 Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görüntüleri
-`project/public/screenshots/` altında tutulmaktadır.
+`public/screenshots/` altında tutulmaktadır.
 
 <details>
   <summary><h3>Sprint 1 - Ekran Görüntüleri</h3></summary>
 
 ### Landing Page - Hero
 
-![Landing Hero](project/public/screenshots/landing-hero.png)
+![Landing Hero](public/screenshots/landing-hero.png)
 
 ### Landing Page - Full
 
-![Landing Full](project/public/screenshots/landing.png)
+![Landing Full](public/screenshots/landing.png)
 
 ### Dashboard - Empty State
 
-![Dashboard](project/public/screenshots/dashboard.png)
+![Dashboard](public/screenshots/dashboard.png)
 
 ### New Project Wizard
 
-![New Project](project/public/screenshots/new-project.png)
+![New Project](public/screenshots/new-project.png)
 
 ### Pixie Workspace
 
-![Workspace](project/public/screenshots/workspace.png)
+![Workspace](public/screenshots/workspace.png)
 
 </details>
 
@@ -262,14 +262,14 @@ Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görünt�
 
 | Alan | Kod Kanıtı | Durum |
 | --- | --- | --- |
-| Landing / dashboard / new project / workspace | `project/app/page.tsx`, `project/app/dashboard/page.tsx`, `project/app/projects/new/page.tsx`, `project/app/projects/[id]/page.tsx` | Done |
-| Project create/list/detail | `project/app/api/projects/*`, `project/lib/projects.ts` | Done |
-| Blueprint pipeline | `project/lib/ai/orchestrator.ts`, `project/lib/ai/prompts.ts`, `project/lib/ai/schemas.ts` | Done |
-| Job + polling | `project/app/api/generation-jobs/*`, `project/lib/generation-jobs.ts`, `project/components/project/workspace.tsx` | Done |
-| Supabase owner/RLS | `project/proxy.ts`, `project/components/auth/session-bootstrap.tsx`, `project/supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
-| README export | `project/app/api/export-readme/route.ts`, `project/lib/export/markdown.ts` | Done |
-| Output controls | `project/app/api/export-json/route.ts`, `project/app/api/regenerate-output/route.ts`, `project/components/outputs/output-hub.tsx` | Done |
-| Audit | `project/package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
+| Landing / dashboard / new project / workspace | `app/page.tsx`, `app/dashboard/page.tsx`, `app/projects/new/page.tsx`, `app/projects/[id]/page.tsx` | Done |
+| Project create/list/detail | `app/api/projects/*`, `lib/projects.ts` | Done |
+| Blueprint pipeline | `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` | Done |
+| Job + polling | `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` | Done |
+| Supabase owner/RLS | `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
+| README export | `app/api/export-readme/route.ts`, `lib/export/markdown.ts` | Done |
+| Output controls | `app/api/export-json/route.ts`, `app/api/regenerate-output/route.ts`, `components/outputs/output-hub.tsx` | Done |
+| Audit | `package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
 
 ## Sprint Review
 
@@ -349,7 +349,7 @@ queue/SSE streaming · account linking · Vercel deploy hardening.
 ## Klasör Yapısı
 
 ```text
-project/
+. /
   app/
     page.tsx
     dashboard/page.tsx
@@ -407,8 +407,8 @@ handoff, project memory ve guardrail katmanını güçlendirmektir.
 
 # Local Setup
 
-Bu repo Node `24.15.0` hedefler. Shell'de `node`/`npm` görünmüyorsa `project/`
-klasörüne girerek `nvm use` çalıştırın.
+Bu repo Node `24.15.0` hedefler. Shell'de `node`/`npm` görünmüyorsa
+repo dizininde `nvm use` çalıştırın.
 
 ```bash
 nvm use
@@ -431,8 +431,8 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 ```
 
 Hosted deploy'larda `BUILDPIXIES_REQUIRE_SUPABASE=1` kullanın. Local geliştirmede
-Supabase yoksa `project/.local/buildpixies-projects.json` ve
-`project/.local/buildpixies-generation-jobs.json` fallback'i devreye girer. Şifresiz
+Supabase yoksa `.local/buildpixies-projects.json` ve
+`.local/buildpixies-generation-jobs.json` fallback'i devreye girer. Şifresiz
 demo akışı için Supabase Auth > Anonymous Sign-Ins açık olmalıdır.
 
 # Screenshots
