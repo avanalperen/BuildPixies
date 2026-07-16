@@ -85,7 +85,7 @@ formatlarda hazırlanır.
 
 - Bootcamp Mode: sprint notlarını review/retro/README formatına dönüştürme
 - OpenAI Agents SDK handoff, tracing ve guardrail katmanı
-- pgvector ile project memory ve decision memory
+- pgvector ile  memory ve decision memory
 - Email/OAuth account linking
 - Durable queue veya SSE streaming
 - Vercel canlı deploy, quota, Turnstile/CAPTCHA ve abuse prevention
@@ -209,7 +209,7 @@ iletişim ekran görüntüleri takım içi kanallardan ayrıca eklenebilir.
 | 29 Haziran | Hedef kitle ve bootcamp teslim kriterleri incelendi; ürünün uygulanabilirliği konuşuldu. |
 | 30 Haziran | Pazar ve problem alanı daraltıldı; fikirden ürüne planlama ihtiyacı öne çıktı. |
 | 1 Temmuz | BuildPixies fikri netleşti; mobil yerine web-first ürün kararı alındı. |
-| 2 Temmuz | `project/docs/plan.md` yazıldı, bootcamp kılavuzu ve referans README'ler incelendi. |
+| 2 Temmuz | `docs/plan.md` yazıldı, bootcamp kılavuzu ve referans README'ler incelendi. |
 | 3 Temmuz | Takım rolleri netleşti; PO, SM ve Developer dağılımı README'ye işlendi. |
 | 4 Temmuz | Next.js + Tailwind + shadcn/ui kurulumu, temel ekranlar, API route'ları ve screenshotlar hazırlandı. |
 | 5 Temmuz | API validation, blueprint persistence, Supabase owner/RLS, generation job/polling ve audit düzeltmeleri tamamlandı. |
