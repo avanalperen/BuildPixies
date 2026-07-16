@@ -1,1548 +1,2101 @@
-# BuildPixies — Proje Planı
+# BuildPixies — Bootcamp Uyumlu Master Ürün ve Teslim Planı
 
-> **Ürün adı:** BuildPixies
-> **Konsept:** Web-first AI product-building workspace — fikrini anlat, pixie takımın MVP blueprint'ine dönüştürsün.
-> **Tagline:** "Your tiny AI product team that turns ideas into launch-ready MVP plans."
->
-> Bu doküman, YZTA Bootcamp 2026 sürecinde geliştirilecek BuildPixies web uygulamasının ürün, mimari ve sprint bazlı planını içerir. Bootcamp kılavuzu (`docs/bootcamp.md`) ve bilgilendirme toplantısı (`docs/bootcamp bilgilendirme toplantısı.md`) ile hizalıdır. Takım 3 kişidir (Product Owner, Scrum Master, Developer); görev dağılımı bölümüne göre yürütülür.
+> **Belge türü:** Yaşayan ürün planı, teknik teslim planı ve Bootcamp kontrol
+> merkezi
+> **Sürüm:** 3.0 — Product Experience Reset
+> **Son doğrulama:** 16 Temmuz 2026, Perşembe
+> **Doğrulanan kod referansı:** `6176086 Harden AI generation`
+> **Repository:** [avanalperen/BuildPixies](https://github.com/avanalperen/BuildPixies)
+> **Kategori:** Yapay Zeka / Veri Bilimi
+> **Kesin ürün teslimi:** **2 Ağustos 2026 Pazar, 23:59**
+> **Takım içi güvenli teslim hedefi:** **2 Ağustos 2026, 18:00**
+> **Planlanan Top 10 sunumu:** **14 Ağustos 2026** — Akademi/jüri takvimine
+> göre değişebilir.
+
+Bu dosya yalnızca “hangi özellikleri yapacağız?” sorusunu cevaplamaz. Aşağıdaki
+dört hattın tek kaynağıdır:
+
+1. Kullanıcının anlayacağı ve değer göreceği ürün deneyimi,
+2. Yapay zeka, mimari, güvenlik ve kalite çalışmaları,
+3. Her sprintte zorunlu Scrum kanıtları,
+4. README, video, canlı ürün ve final formundan oluşan Bootcamp teslimi.
+
+Planın amacı daha fazla özellik eklemek değil; **BuildPixies'i çalışan,
+anlaşılır, kanıtlanabilir, demo edilebilir ve jüri kriterleriyle doğrudan
+eşleşen bir ürün haline getirmektir.**
 
 ---
 
 ## İçindekiler
 
-1. [Durum ve Bağlam](#1-durum-ve-bağlam)
-2. [Strateji: Web-first AI Workspace](#2-strateji-web-first-ai-workspace)
-3. [Ürün Vizyonu](#3-ürün-vizyonu)
-4. [Ürün Kategorisi](#4-ürün-kategorisi)
-5. [Hedef Kullanıcılar](#5-hedef-kullanıcılar)
-6. [Core Promise](#6-core-promise)
-7. [Pixie Karakterleri](#7-pixie-karakterleri)
-8. [Web Uygulaması Ana Ekranları](#8-web-uygulaması-ana-ekranları)
-9. [MVP Kapsamı](#9-mvp-kapsamı)
-10. [Teknoloji Stack'i](#10-teknoloji-stacki)
-11. [Sistem Mimarisi](#11-sistem-mimarisi)
-12. [Veri Modeli](#12-veri-modeli)
-13. [Çıktı Formatları (Structured Outputs)](#13-çıktı-formatları-structured-outputs)
-14. [API Tasarımı](#14-api-tasarımı)
-15. [UI Tasarım Sistemi](#15-ui-tasarım-sistemi)
-16. [Sayfa Sayfa Detaylı Plan](#16-sayfa-sayfa-detaylı-plan)
-17. [Bootcamp Mode](#17-bootcamp-mode)
-18. [Agent Prompt Stratejisi](#18-agent-prompt-stratejisi)
-19. [Clean Architecture Planı](#19-clean-architecture-planı)
-20. [Product Backlog](#20-product-backlog)
-21. [Sprint Planı (Takvime Bağlı)](#21-sprint-planı-takvime-bağlı)
-22. [Görev Dağılımı ve Minimum Plan](#22-görev-dağılımı-ve-minimum-plan)
-23. [Proje Yönetimi ve README Yapısı](#23-proje-yönetimi-ve-readme-yapısı)
-24. [Pazar ve Rekabet Anlatısı](#24-pazar-ve-rekabet-anlatısı)
-25. [Jüri Kriterlerine Göre Strateji](#25-jüri-kriterlerine-göre-strateji)
-26. [Riskler ve Önlemler](#26-riskler-ve-önlemler)
-27. [Demo İçin Örnek Kullanıcı Fikri](#27-demo-için-örnek-kullanıcı-fikri)
-28. [3 Dakikalık Video Planı](#28-3-dakikalık-video-planı)
-29. [Güçlü Ürün Metinleri](#29-güçlü-ürün-metinleri)
-30. [İlk 48 Saatlik Aksiyon Planı](#30-ilk-48-saatlik-aksiyon-planı)
-31. [Nihai Revize Karar](#31-nihai-revize-karar)
-32. [Değerlendirme Kriterleriyle Hizalama](#32-değerlendirme-kriterleriyle-hizalama)
-33. [Referans Repolardan Alınan Dersler](#33-referans-repolardan-alınan-dersler)
-34. [Faydalı Linkler](#34-faydalı-linkler)
+1. [Belge Kullanım Kuralları](#1-belge-kullanım-kuralları)
+2. [Yönetici Özeti ve Kritik Karar](#2-yönetici-özeti-ve-kritik-karar)
+3. [Kaynaklar ve Gerçeklik Hiyerarşisi](#3-kaynaklar-ve-gerçeklik-hiyerarşisi)
+4. [Bootcamp Kuralları ve Değişmez Teslimler](#4-bootcamp-kuralları-ve-değişmez-teslimler)
+5. [Resmî Takvim ve İç Kontrol Kapıları](#5-resmî-takvim-ve-iç-kontrol-kapıları)
+6. [Takım, Roller ve Çalışma Modeli](#6-takım-roller-ve-çalışma-modeli)
+7. [Ürün Vizyonu ve Stratejik Konumlandırma](#7-ürün-vizyonu-ve-stratejik-konumlandırma)
+8. [Hedef Kullanıcılar, JTBD ve Kullanıcı Değeri](#8-hedef-kullanıcılar-jtbd-ve-kullanıcı-değeri)
+9. [Lean Canvas ve Pazar Hipotezi](#9-lean-canvas-ve-pazar-hipotezi)
+10. [Mevcut Deneyim Denetimi](#10-mevcut-deneyim-denetimi)
+11. [Product Experience Reset](#11-product-experience-reset)
+12. [Bilgi Mimarisi ve Ekran Spesifikasyonları](#12-bilgi-mimarisi-ve-ekran-spesifikasyonları)
+13. [AI Ürün Mimarisi ve Pixie Orkestrasyonu](#13-ai-ürün-mimarisi-ve-pixie-orkestrasyonu)
+14. [Teknik Mimari ve Veri Akışı](#14-teknik-mimari-ve-veri-akışı)
+15. [Güvenlik, Gizlilik, Maliyet ve Dayanıklılık](#15-güvenlik-gizlilik-maliyet-ve-dayanıklılık)
+16. [Repo Gerçeklik Denetimi](#16-repo-gerçeklik-denetimi)
+17. [Master Product Backlog](#17-master-product-backlog)
+18. [Öncelikli Story Kabul Kriterleri](#18-öncelikli-story-kabul-kriterleri)
+19. [Sprint 1 Gerçekleşenler ve Kanıt Açıkları](#19-sprint-1-gerçekleşenler-ve-kanıt-açıkları)
+20. [Sprint 2 Kapanış Planı](#20-sprint-2-kapanış-planı)
+21. [Sprint 3 Gün Gün Final Planı](#21-sprint-3-gün-gün-final-planı)
+22. [Scrum Kanıt ve README Operasyon Planı](#22-scrum-kanıt-ve-readme-operasyon-planı)
+23. [Kalite, Test ve Release Stratejisi](#23-kalite-test-ve-release-stratejisi)
+24. [Jüri Kriterleriyle Birebir Eşleme](#24-jüri-kriterleriyle-birebir-eşleme)
+25. [Üç Dakikalık Video ve Demo Senaryosu](#25-üç-dakikalık-video-ve-demo-senaryosu)
+26. [Final Teslim Checklist](#26-final-teslim-checklist)
+27. [Referans Projelerden Alınan Dersler](#27-referans-projelerden-alınan-dersler)
+28. [Risk Kaydı ve Kontenjan Planı](#28-risk-kaydı-ve-kontenjan-planı)
+29. [Definition of Ready ve Definition of Done](#29-definition-of-ready-ve-definition-of-done)
+30. [İletişim ve Scrum Şablonları](#30-iletişim-ve-scrum-şablonları)
+31. [İlk 72 Saatlik Uygulama Sırası](#31-ilk-72-saatlik-uygulama-sırası)
+32. [Kaynak Dizini](#32-kaynak-dizini)
 
 ---
 
-## 1. Durum ve Bağlam
+## 1. Belge Kullanım Kuralları
 
-| Alan | Durum |
+### 1.1 Durum sözlüğü
+
+Bu planda “Done” kelimesi dosya varlığı anlamına gelmez.
+
+| Durum | Anlamı |
 | --- | --- |
-| **Bugün** | 16 Temmuz 2026 Perşembe |
-| **Bootcamp süreci** | Sprint 2'nin son geliştirme günleri; MVP kapsamı tamamlandı, canlı deploy kanıtları ve sprint kapanış belgeleri hazırlanıyor |
-| **Takım durumu** | 3 kişi: Muhammed Köseoğlu (PO), Alperen Avan (SM), Kemal Ersin Özkan (Dev) |
-| **Asistan bildirimi** | Takım oluştu; asistan ile iletişim kuruldu |
-| **Ürün teslimi** | 2 Ağustos 2026 23:59 |
-| **Top 10 sunum** | 14 Ağustos 2026 (tarih değişebilir) — YZ'den top 7, No-Code'tan top 3 |
-| **Repo** | GitHub'a pushlandı; `main` branch'i `origin/main` ile senkron |
-| **Pivot kararı** | Mobil uygulama → **Web uygulaması** kararı kabul edildi ve Next.js app olarak uygulandı |
+| **Done** | Kod `main` branch'inde, kabul kriterleri karşılanmış, otomatik test geçmiş ve sprint kanıtı hazırlanmış |
+| **Code Complete** | Kod ve test hazır; canlı ortam, ekran görüntüsü veya README kanıtı eksik |
+| **Partial** | Story'nin değer üreten bir kısmı çalışıyor; kabul kriterlerinin tamamı karşılanmıyor |
+| **Planned** | Kapsam ve kabul kriterleri belli; geliştirme başlamadı |
+| **Blocked** | Açık engel, sorumlu ve çözüm tarihi kayıtlı |
+| **Dropped** | Bilinçli olarak kapsam dışına çıkarıldı; nedeni decision log'a yazıldı |
+| **External Confirmation** | Koddan doğrulanamayan takım/form/asistan/iletişim bilgisi ekip tarafından teyit edilmeli |
 
-### Bootcamp Gereksinimleri (her sprint sonunda README'de zorunlu)
+### 1.2 Güncelleme ritmi
 
-Her sprint sonunda aşağıdaki 6 madde GitHub README'ye eklenmek zorundadır. Asistanlar bunları kontrol eder ve puanlar. Yapılmazsa top 10'a girilemez.
+- Product Owner ürün hedefi, kullanıcı değeri ve kabul kriterlerini günceller.
+- Scrum Master tarih, owner, story point, board ve kanıt durumunu günceller.
+- Developer tamamladığı işin teknik kanıtını ve test sonucunu ekler.
+- Her gün sonunda yalnızca değişen durumlar güncellenir.
+- Her Sprint Review öncesi plan ile repo arasında doğrulama yapılır.
+- Tarihsel sprint kayıtları geriye dönük “daha iyi görünmesi” için değiştirilmez;
+  eksik kanıt sonradan eklenirse `backfilled` olarak açıkça etiketlenir.
 
-1. **Backlog dağıtma mantığı** — Hangi story'ler seçildi, puan dağılımı nasıl
-2. **Daily Scrum notları** — Günlük scrum kayıtları (Slack/WhatsApp screenshot veya metin)
-3. **Sprint board updates** — Miro/ClickUp/Jira/Asana/GitHub Projects board screenshot'ları
-4. **Ürün durumu** — Ekran görüntüleri, çalışır durum kanıtı
-5. **Sprint Review** — Alınan kararlar, tamamlanan/ertelenen işler, katılımcılar
-6. **Sprint Retrospective** — Neler iyi gitti, neler iyileştirilmeli, aksiyon maddeleri
+### 1.3 Kanıt olmadan tamamlandı sayılmayacaklar
 
-### Kod Doğrulama Özeti (16 Temmuz 2026)
-
-Bu bölüm, planın artık sadece niyet dokümanı değil, repo gerçekliğiyle hizalı
-yaşayan ürün planı olması için eklendi.
-
-| Alan | Koddan doğrulanan durum |
-| --- | --- |
-| Landing / dashboard / new project / workspace | **Yapıldı** — `app/page.tsx`, `app/dashboard/page.tsx`, `app/projects/new/page.tsx`, `app/projects/[id]/page.tsx` |
-| Project create/list/detail | **Yapıldı** — `app/api/projects/route.ts`, `app/api/projects/[id]/route.ts`, `lib/projects.ts` |
-| Blueprint generation | **Yapıldı** — `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` |
-| Job + polling modeli | **Yapıldı** — `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` |
-| Durable queue + dağıtık rate limit | **Yapıldı** — Vercel Queue worker/lease akışı ve Supabase owner bazlı atomik kota |
-| Supabase Auth/RLS temeli | **Yapıldı** — `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` |
-| Output Hub + README export | **Yapıldı** — `components/outputs/output-hub.tsx`, `app/api/export-readme/route.ts`, `lib/export/markdown.ts` |
-| Regenerate section | **Yapıldı** — UI kontrolü, server-side validation ve proje kaydına persistence var |
-| Bootcamp Mode | **Yapıldı** — gerçek ilerleme notlarından Daily/Review/Retro/README/ürün durumu/backlog taslağı; UI, API ve persistence hazır |
-| Kritik demo E2E + CI | **Yapıldı** — Playwright landing→project→blueprint→export→Bootcamp→dashboard akışını doğrular; GitHub Actions kalite kapısı var |
-| JSON export / feedback kayıtları | **Kısmen yapıldı** — JSON export hazır; feedback kaydı sonraki sprintte |
+- Sadece component dosyası bulunması kullanıcı story'sini tamamlamaz.
+- Sadece local çalışması deploy hazırlığını tamamlamaz.
+- Sadece “done” etiketi issue'yu tamamlamaz; issue kapatılmalı ve PR/commit bağlanmalı.
+- Sadece metin halinde “test edildi” yazılması kalite kanıtı değildir; komut/CI sonucu gerekir.
+- Sample fallback gerçek AI üretimi gibi sunulamaz.
+- Role-based prompt pipeline, olmadığı halde belirli bir Agents SDK kullanıyormuş
+  gibi anlatılamaz.
 
 ---
 
-## 2. Strateji: Web-first AI Workspace
+## 2. Yönetici Özeti ve Kritik Karar
 
-### Eski fikir
-> Mobil uygulama içinde tatlı AI yazılım geliştirme takımı.
+### 2.1 Bugünkü durum
 
-### Yeni fikir
-> Web üzerinde çalışan, fikirden MVP'ye giden süreci pixie karakterli AI agent'larla yöneten interaktif ürün geliştirme workspace'i.
+BuildPixies'in çalışan bir Next.js uygulaması, güçlü bir tasarım sistemi,
+proje oluşturma akışı, rol bazlı AI pipeline'ı, strict structured outputs,
+generation job/polling modeli, durable queue, Supabase RLS temeli, export,
+regenerate, Bootcamp Mode, Playwright E2E ve GitHub Actions kalite kapısı vardır.
 
-### Web'in Avantajları (mobil'e göre)
+Ancak ürün şu anda **görsel olarak tamamlanmış, deneyim olarak yeterince
+açıklayıcı olmayan bir arayüz** hissi vermektedir. Kullanıcı:
 
-| Alan | Mobilde zordu | Web'de avantaj |
+- ürünün farkını landing'de kanıtla göremiyor,
+- uzun üretim sırasında gerçek ilerlemeyi göremiyor,
+- sonuç geldiğinde 11 sekme arasında neyin önemli olduğunu seçemiyor,
+- “şimdi ne yapmalıyım?” sorusuna tek ekranda cevap alamıyor,
+- Bootcamp Mode ile ana idea-to-MVP deneyiminin ilişkisini hemen anlayamıyor.
+
+16 Temmuz canlı testinde tam 11 bölümlük blueprint üretimi **252 saniye**
+sürmüştür. Bu süre teknik olarak route sınırı içinde olsa da, progressive ürün
+deneyimi olmadan demo ve kullanıcı değeri açısından kabul edilemez.
+
+### 2.2 Kritik ürün kararı
+
+Sprint 2'nin kalanında ve Sprint 3'te öncelik “daha çok özellik” değil,
+**Product Experience Reset** olacaktır:
+
+1. Landing iddiasını gerçek örnekle kanıtlamak,
+2. Üretimi gerçek pixie/section ilerlemesiyle görünür yapmak,
+3. Sonucu bir “MVP Command Center” içinde özetlemek,
+4. Kullanıcıya sonraki üç aksiyonu vermek,
+5. Bootcamp özelliğini ana deneyimden ayırıp bağlama göre sunmak,
+6. Tüm bunları Bootcamp kanıtlarıyla aynı anda belgelemek.
+
+### 2.3 North Star
+
+> **BuildPixies, dağınık bir fikri; kararları verilmiş, kapsamı sınırlandırılmış
+> ve ilk sprinti hazır bir MVP planına dönüştürür.**
+
+### 2.4 Ana başarı ölçütleri
+
+| Ölçüt | Hedef |
+| --- | --- |
+| 5 saniye testi | Yeni kullanıcı ürünün ne yaptığını tek cümleyle anlatabilmeli |
+| 30 saniye testi | Kullanıcı gerçek örnek blueprint'e ulaşabilmeli |
+| İlk sistem geri bildirimi | Generate tıklamasından sonra 2 saniye içinde job/progress görünmeli |
+| Progressive değer | İlk tamamlanan bölüm tüm pipeline bitmeden açılmalı |
+| Sonuç anlaşılırlığı | Kullanıcı MVP özeti ve ilk 3 aksiyonu tek ekranda görmeli |
+| Demo güvenliği | Curated sample project AI beklemeden açılmalı |
+| Kalite | `lint`, `typecheck`, `build`, kritik E2E ve CI geçmeli |
+| Bootcamp kanıtı | Her sprintin zorunlu 6 maddesi README'de bulunmalı |
+
+---
+
+## 3. Kaynaklar ve Gerçeklik Hiyerarşisi
+
+### 3.1 Kaynak önceliği
+
+Birbiriyle çelişen bilgi varsa aşağıdaki sıra uygulanır:
+
+1. [`docs/bootcamp.md`](bootcamp.md) — resmî kılavuz,
+2. [`docs/bootcamp bilgilendirme toplantısı.md`](<bootcamp bilgilendirme toplantısı.md>) — toplantıda açıklanan operasyon ayrıntıları,
+3. `main` branch'indeki çalışan kod, Git geçmişi, PR ve CI,
+4. Bu master plan,
+5. [`README.md`](../README.md) ve sprint belgeleri,
+6. GitHub Issues/Projects board,
+7. Tasarım referansları ve eski niyet belgeleri.
+
+### 3.2 İncelenen yerel referanslar
+
+- [`references/BootcampScrumTemplate/README.md`](../references/BootcampScrumTemplate/README.md)
+- [`references/GhostOfAnnaScrumExample/README.md`](../references/GhostOfAnnaScrumExample/README.md)
+- [`references/U-21-Cherry-Chasers/README.md`](../references/U-21-Cherry-Chasers/README.md)
+- [`references/OUA-zaten-Bootcamp-2023/README.md`](../references/OUA-zaten-Bootcamp-2023/README.md)
+- [`references/planova/README.md`](../references/planova/README.md)
+- `references/` altında bulunan screenshot, burndown, persona, sözleşme,
+  flowchart ve proje yönetimi ekleri
+- [`assets/magical_productivity_system/DESIGN.md`](../assets/magical_productivity_system/DESIGN.md)
+- `assets/` altındaki landing, dashboard, wizard ve workspace görsel referansları
+
+### 3.3 Planın doğruladığı dış durum
+
+| Alan | 16 Temmuz 2026 doğrulaması |
+| --- | --- |
+| Repo | Public, default branch `main` |
+| Remote | `avanalperen/BuildPixies` |
+| Son commit | `6176086 Harden AI generation` |
+| Son CI | Quality workflow başarılı; lint, typecheck, build, 3 E2E geçti |
+| PR | PR #11 Selin Akkaş tarafından açıldı ve merge edildi |
+| Canlı homepage | GitHub repo metadata içinde boş; Vercel proje bağı doğrulanmadı |
+| Issue board | 10 issue açık; “done” etiketli olmalarına rağmen kapatılmamış |
+| Ekip | README'de 4 kişi; resmî ekip formu durumu koddan doğrulanamaz |
+
+---
+
+## 4. Bootcamp Kuralları ve Değişmez Teslimler
+
+### 4.1 Değişmez kurallar
+
+- Ürün takım tarafından sıfırdan geliştirilmelidir.
+- Hazır proje kullanımı, satın alınmış proje veya dışarıdan ücretli geliştirme
+  desteği diskalifiye riski taşır.
+- AI araçlarının kullanımı serbesttir; ancak ortaya çıkan ürün ve kararların
+  sorumluluğu takımdadır.
+- GitHub repository public olmalıdır.
+- Commit geçmişi, ilk/son commit ve projenin altı haftalık gelişimi incelenebilir.
+- Ürün, Scrum süreci ve sprint ilerlemeleri GitHub içinde belgelenmelidir.
+- Son teslim gecikmesi kabul edilmez.
+- Final video YouTube'a yüklenmiş ve en fazla 3 dakika olmalıdır.
+- Canlı deploy opsiyonel olsa da ürün canlıya alınabilir biçimde geliştirilmiş
+  olmalıdır; mümkünse canlı link sunulmalıdır.
+- Product Owner ve Scrum Master dahil tüm ekip üyelerinin ürün geliştirmeye
+  katkı vermesi beklenir.
+
+### 4.2 Her sprint sonunda zorunlu 6 kanıt
+
+| Zorunlu başlık | Minimum kabul edilebilir kanıt | BuildPixies standardı |
 | --- | --- | --- |
-| Demo | Telefon ekranı kısıtlı | Büyük ekran, net anlatım |
-| Output görüntüleme | Uzun metinler yorucu | Doküman paneli rahat |
-| Backlog board | Dar alan | Kanban board kolay |
-| Kod iskeleti | Mobilde kötü deneyim | Code block / file tree güzel görünür |
-| Export | Sınırlı | Markdown, JSON, kopyala, indir |
-| Deploy | App store gerekebilir | Vercel linki yeterli |
-| Bootcamp teslim | APK/TestFlight karmaşık | Canlı link + video kolay |
+| Backlog dağıtma mantığı | Neden bu story'ler seçildi, puan hedefi | Story/puan/owner/dependency/taşınan iş tablosu |
+| Daily Scrum notları | Yazılı özet veya iletişim kanıtı | Tarihli kısa metin + redakte edilmiş ekran görüntüsü bağlantısı |
+| Sprint Board Updates | Miro/ClickUp/Jira/Asana/GitHub Projects screenshot | Sprint başı, orta ve son board görüntüsü |
+| Ürün Durumu | Çalışan ürün ekran görüntüleri | Caption, tarih, ilgili story ve mümkünse canlı URL |
+| Sprint Review | Yapılanlar, yapılmayanlar, kararlar, katılımcılar | Demo sonucu, test sonucu, taşınan işler ve katılımcı listesi |
+| Sprint Retrospective | İyi gidenler, sorunlar, aksiyonlar | Owner ve hedef tarih atanmış aksiyonlar |
 
-BuildPixies artık bir **AI-powered web workspace** olacak. Tatlı karakter estetiği korunacak ama ürün daha "satılabilir SaaS" gibi görünecek.
+Bu altı madde tamamlanmazsa mezuniyet mümkün olsa bile Top 10/ilk 3 şansı
+ciddi biçimde kaybolur. Top 10 seçimi ürün ve proje yönetimi puanlarının birlikte
+değerlendirilmesiyle yapılır.
+
+### 4.3 Final teslim paketi
+
+- Public GitHub repo,
+- eksiksiz ürün/takım/backlog bilgisi,
+- Sprint 1, 2 ve 3'ün altışar zorunlu kanıtı,
+- çalışan ürün veya doğrulanmış deploy-ready paket,
+- maksimum 3 dakikalık YouTube videosu,
+- ürün teslim formundaki tüm alanlar,
+- varsa canlı ürün URL'si,
+- final README ve teknik mimari açıklaması.
 
 ---
 
-## 3. Ürün Vizyonu
+## 5. Resmî Takvim ve İç Kontrol Kapıları
 
-### Ürün Cümlesi
-> **BuildPixies helps solo builders, bootcamp teams and early founders turn rough app ideas into structured MVP plans using a cute team of specialized AI agents.**
+### 5.1 Resmî Bootcamp takvimi
 
-### Türkçe Karşılığı
-> BuildPixies, fikri olan ama ürüne nereden başlayacağını bilmeyen kişilere; uzman AI agent'lardan oluşan tatlı bir mini takım aracılığıyla ürün planı, backlog, mimari, tasarım akışı ve kod başlangıcı üretir.
+| Tarih | Resmî etkinlik | BuildPixies açısından anlamı |
+| --- | --- | --- |
+| 12 Haziran 2026 | Takımların açıklanması | Takım iletişimi ve rol hazırlığı |
+| 19 Haziran 2026 | Sprint 1 başlangıcı | Fikir, takım, repo ve ürün temeli |
+| 5 Temmuz 2026 | Sprint 1 bitişi | İlk altı Scrum kanıtı |
+| 6 Temmuz 2026, 20:00 | Sprint 2 başlangıcı ve soru-cevap | Çalışan MVP sprinti |
+| 19 Temmuz 2026 | Sprint 2 bitişi | Çalışan ürün + ikinci kanıt paketi |
+| 20 Temmuz 2026, 20:00 | Sprint 3 başlangıcı ve soru-cevap | Final polish, deploy, video, teslim |
+| 2 Ağustos 2026, 23:59 | Kesin ürün teslimi | Geç teslim yok |
+| 14 Ağustos 2026 | Planlanan Top 10 sunumu | Tarih değişebilir; seçilenlere format iletilecek |
 
-### Kısa Pitch
-> "Most people don't fail because they lack ideas. They fail because they don't know how to turn an idea into a buildable product. BuildPixies gives every solo builder a tiny AI product team."
+### 5.2 Takım içi daha erken kapılar
+
+| İç tarih | Kapı | Geçiş şartı |
+| --- | --- | --- |
+| 16 Temmuz | Plan ve gerçeklik reseti | Master plan, owner önerileri, P0 scope |
+| 17 Temmuz 12:00 | Board hygiene | Story'ler açık/kapalı doğru, owner ve sprint belli |
+| 18 Temmuz 18:00 | Sprint 2 code freeze | P0 kodu merge, kalite zinciri yeşil |
+| 19 Temmuz 15:00 | Sprint 2 evidence freeze | README, board, screenshots, daily, review/retro hazır |
+| 19 Temmuz 20:00 | Sprint 2 kapanış | `main` temiz, kanıt paketi kontrol edildi |
+| 20 Temmuz 20:00 | Sprint 3 planning | Akademi soru-cevap çıktıları plana işlendi |
+| 25 Temmuz 20:00 | Core feature freeze | Yeni ana özellik yok; yalnız eksik P0 ve bug |
+| 28 Temmuz 20:00 | Release Candidate 1 | Canlı deploy/smoke, demo project, kritik E2E |
+| 30 Temmuz 20:00 | Evidence ve README freeze | Final screenshotlar, mimari, kriter eşleme |
+| 31 Temmuz 20:00 | Video script freeze | 3 dakikalık storyboard ve prova |
+| 1 Ağustos 18:00 | Submission candidate | Video yüklenmiş, link incognito doğrulanmış |
+| 2 Ağustos 18:00 | İç teslim | Form gönderilmiş olmalı |
+| 2 Ağustos 23:59 | Resmî son an | Yalnız acil tampon; normal iş planı değildir |
+
+### 5.3 Scope freeze kuralı
+
+- 25 Temmuz'dan sonra yeni P1 başlanmaz.
+- 28 Temmuz'dan sonra yeni özellik başlanmaz.
+- Son beş gün; deploy, doğrulama, erişilebilirlik, kanıt, video ve bug içindir.
+- “Jüri puanı getirir” gerekçesi tek başına özellik eklemek için yeterli değildir;
+  özellik ana kullanıcı yolculuğuna ve ölçülebilir kanıta bağlanmalıdır.
 
 ---
 
-## 4. Ürün Kategorisi
+## 6. Takım, Roller ve Çalışma Modeli
 
-BuildPixies'i sadece "AI coding tool" diye anlatmayalım. Çünkü o zaman GitHub Copilot, Cursor, Replit Agent gibi devlerle aynı kulvara girer.
+### 6.1 Repo üzerinde görünen takım
 
-### Doğru Kategori
+| Kişi | Scrum rolü | Önerilen ana sorumluluk | Kanıtlanan katkı / not |
+| --- | --- | --- | --- |
+| Muhammed Köseoğlu | Product Owner | Ürün vizyonu, UX kabulü, backlog önceliği, demo hikâyesi | Repo/ürün koordinasyonu |
+| Alperen Avan | Scrum Master | Sprint ritmi, board, blocker, kanıt paketi, release checklist | Repo owner/iletişim |
+| Kemal Ersin Özkan | Developer | Frontend, AI pipeline, entegrasyon, kalite | Resmî profil bağlantısı README'de tamamlanmalı |
+| Selin Akkaş | Developer | Output deneyimi, export/regenerate, frontend kalite | PR #11 merge edilmiş katkı |
+
+> Bu sorumluluk dağılımı master plan önerisidir. Resmî ekip bilgi formundaki
+> roster, rol ve iletişim sorumluları bir sonraki takım sync'inde doğrulanmalı.
+> Kılavuz ideal olarak 5 kişilik takımdan söz eder; bilgilendirme toplantısı,
+> eksik üyelerle devam edilebileceğini açıklar. Repo gerçeği dört kişidir ve
+> farklı gösterilmemelidir.
+
+### 6.2 Herkesin ortak sorumluluğu
+
+- Her üye ürün geliştirme sürecine aktif katkı verir.
+- Her story'nin tek bir accountable owner'ı olur; destekçiler ayrıca yazılır.
+- Blocker 24 saatten uzun saklanmaz; aynı gün kanala yazılır.
+- PR açan kişi kabul kriteri ve test kanıtı ekler.
+- Reviewer yalnız kod stilini değil kullanıcı sonucu ve dokümantasyon etkisini
+  kontrol eder.
+- Sprint sonunda kanıt işi yalnız Scrum Master'a bırakılmaz; herkes kendi
+  çalışmasının kanıtını teslim eder.
+
+### 6.3 Önerilen RACI
+
+| İş | PO | SM | Dev-Kemal | Dev-Selin |
+| --- | --- | --- | --- | --- |
+| Ürün anlatısı ve kabul kriterleri | A/R | C | C | C |
+| Board ve sprint kanıtı | C | A/R | R | R |
+| Landing/sample deneyimi | A | C | C | R |
+| Progressive generation backend | C | C | A/R | C |
+| Workspace/Command Center | A | C | R | R |
+| AI prompt/schema/reliability | C | C | A/R | C |
+| Deploy/Supabase smoke | C | A | R | R |
+| E2E/CI/quality gate | C | C | A/R | R |
+| README ve final teslim | R | A/R | C | C |
+| Video ve demo provası | A/R | R | C | C |
+
+`A`: accountable, `R`: responsible, `C`: consulted. Dağılım takım sync'inde
+değiştirilebilir; değişiklik bu tabloya ve board'a işlenir.
+
+### 6.4 Scrum ritmi
+
+| Etkinlik | Sıklık | Süre | Çıktı |
+| --- | --- | --- | --- |
+| Async Daily | Her gün | 5–10 dk | Dün/bugün/blocker/kanıt |
+| Kısa teknik sync | Gerektiğinde | 15 dk | Interface ve dependency kararı |
+| Mid-sprint review | Sprint ortası | 30 dk | Scope ve risk düzeltmesi |
+| Sprint Review | Sprint sonu | 45 dk | Çalışan demo, test, tamamlanan/taşınan iş |
+| Retrospective | Sprint sonu | 30 dk | En fazla 3 aksiyon, owner, tarih |
+| Evidence closeout | Sprint sonu | 30 dk | README altı madde doğrulaması |
+
+### 6.5 Git ve PR standardı
+
+- Branch: `feat/bp-031-progress-events`, `fix/bp-039-deploy-smoke` gibi.
+- Commit mesajları kısa ve İngilizce: `Add progress events`, `Refine command center`.
+- Her commit tek mantıksal değişiklik taşır.
+- PR açıklamasında story, kullanıcı sonucu, testler, screenshot ve risk bulunur.
+- Secret, `.env.local`, kullanıcı verisi veya ham private mesaj commit edilmez.
+- `main` merge öncesi lint, typecheck, build ve ilgili E2E geçer.
+- Merge sonrası CI sonucu ve ilgili issue güncellenir/kapatılır.
+
+---
+
+## 7. Ürün Vizyonu ve Stratejik Konumlandırma
+
+### 7.1 Ürün tanımı
+
+BuildPixies, fikri olan fakat bu fikri uygulanabilir bir MVP planına nasıl
+dönüştüreceğini bilmeyen kullanıcılar için web tabanlı bir **AI Product
+Planning & MVP Builder Workspace**'tir.
+
+### 7.2 Problem
+
+Yeni başlayan ekipler ve solo builder'lar çoğunlukla fikir eksikliğinden değil,
+karar eksikliğinden zorlanır:
+
+- problem ve hedef kullanıcı bulanıktır,
+- MVP kapsamı sürekli büyür,
+- product, UX, tech ve delivery kararları birbirinden kopuktur,
+- backlog ve acceptance criteria üretilemez,
+- ilk sprintte ne yapılacağı belli değildir,
+- bootcamp/hackathon teslim belgeleri son güne kalır,
+- genel amaçlı chatbot cevapları uzun fakat eyleme dönük olmayabilir.
+
+### 7.3 Çözüm
+
+Kullanıcı dağınık fikrini girer. Uzman rollerdeki pixie pipeline:
+
+1. eksik bilgileri ve guardrail'leri çıkarır,
+2. product brief ve pazar açısını kurar,
+3. MVP scope'u sınırlar,
+4. UX ve teknik planı üretir,
+5. backlog, test ve sprint planını hazırlar,
+6. README/delivery çıktısına dönüştürür,
+7. kullanıcıya tek ekranda karar özeti ve sonraki aksiyonları gösterir.
+
+### 7.4 Doğru kategori
+
 > **AI Product Planning & MVP Builder Workspace**
+> Alt kategori: **Idea-to-MVP assistant for bootcamp teams, junior builders and
+> small product teams**
 
-### Alt Kategori
-> **Idea-to-MVP assistant for solo builders and small teams**
+BuildPixies bir coding agent veya yalnız doküman üretici olarak
+konumlandırılmamalıdır. Cursor, Copilot veya Replit gibi kod üretim araçlarıyla
+aynı vaadi vermek yerine, onların öncesindeki ürün kararlarını hazırlar.
 
-Bu daha savunulabilir. Çünkü BuildPixies'in ana değeri "kod yazdırmak" değil; fikri **ürüne dönüştürme sürecini yönetmek**.
+### 7.5 Core promise
 
----
+> **Give us a messy idea. Get a decision-ready MVP blueprint.**
 
-## 5. Hedef Kullanıcılar
+Türkçe karşılığı:
 
-### Birincil: Bootcamp / Hackathon / Junior Builder
-Bu kullanıcıda problem çok net:
-- Fikri var ama kapsamı büyütüyor
-- README yazmayı bilmiyor
-- Backlog çıkaramıyor
-- Sprint planı yapamıyor
-- Teknik mimariyi yapılandıramıyor
-- "Ne yapacağım?" hissinde kayboluyor
+> **Dağınık fikrini ver; kapsamı, ilk sprinti ve sonraki adımları belli bir MVP
+> blueprint'i al.**
 
-BuildPixies bu kullanıcıya doğrudan değer verir.
+### 7.6 Farklılaştırıcılar
 
-### İkincil: Solo Founder / Indie Hacker
-Teknik olabilir veya olmayabilir. Şunu ister:
-- Fikrini hızlıca MVP'ye çevirmek
-- Hangi özellikleri yapacağını seçmek
-- Landing page / demo / roadmap / pitch hazırlamak
-- Teknik kişiye anlatılabilir brief çıkarmak
+- Tek genel cevap yerine uzman rol ve bağımlılık sıralı orchestration,
+- must-have / later / out-of-scope karar disiplini,
+- product, UX, tech, QA ve delivery'nin aynı blueprint'te birleşmesi,
+- Bootcamp/Hackathon için gerçek ilerleme notlarından source-grounded teslim
+  paketi,
+- section bazlı revizyon, export ve proje persistence,
+- beginner-friendly pixie metaforu,
+- “daha çok özellik” yerine uygulanabilir ilk sprint üretimi.
 
-### Üçüncül: Freelancer / Junior Developer
-Müşteri fikrini alıp şunlara çevirmek ister:
-- Scope document
-- User stories
-- Feature list
-- Tech stack
-- Development plan
-- Test checklist
+### 7.7 Kapsam dışı
 
----
+- Tam otomatik production kodu üretmek,
+- GitHub'a kullanıcı izni olmadan kod push etmek,
+- Jira/Notion yerine tam proje yönetim platformu olmak,
+- gerçek kullanıcı araştırması yapılmadan pazar gerçeği icat etmek,
+- yapılmamış sprint işlerini yapılmış gibi belgelemek,
+- ücretsiz router üzerinde production SLA vaat etmek,
+- son teslim öncesi kapsamı mobil uygulamaya genişletmek.
 
-## 6. Core Promise
+### 7.8 Ürün ilkeleri
 
-> **"Give us a messy idea. Get a structured MVP blueprint."**
-
-Kullanıcıdan mükemmel prompt beklemiyoruz. Kullanıcı dağınık yazabilir:
-
-> "Ben restoranlar için stok, sipariş ve personel takibi yapan bir şey yapmak istiyorum ama basit olsun."
-
-BuildPixies bunu alıp şuna çevirir:
-- Problem statement
-- Target persona
-- MVP scope
-- User stories
-- Feature priority
-- UX flow
-- Data model
-- Tech stack
-- Sprint plan
-- Risks
-- Demo script
+1. **Proof before promise:** İddia gerçek örnekle gösterilir.
+2. **Progress before waiting:** Uzun iş görünür ve kademeli ilerler.
+3. **Decisions before documents:** Önce karar özeti, sonra detay sekmeleri.
+4. **Honest AI:** Kullanılan mimari ve fallback açıkça anlatılır.
+5. **Action over volume:** Kullanıcı sonraki 3 işi bilir.
+6. **Cute but credible:** Pixie dili erişilebilirlik sağlar; profesyonel
+   kullanışlılığı gölgelemez.
+7. **Evidence is part of Done:** Bootcamp kanıtı geliştirme işinin parçasıdır.
 
 ---
 
-## 7. Pixie Karakterleri
+## 8. Hedef Kullanıcılar, JTBD ve Kullanıcı Değeri
 
-BuildPixies isminin en büyük avantajı: agent'ları karakterleştirebiliriz.
+### 8.1 Birincil persona — Bootcamp/Hackathon Builder
 
-### Pixie Ekibi
-
-| Pixie | Rol | Kişilik | Ürettiği çıktı |
-| --- | --- | --- | --- |
-| **Pip** | Orchestrator Pixie | Takım kaptanı | Fikri analiz eder, işleri dağıtır |
-| **Pria** | Product Pixie | Stratejik | Problem, hedef kitle, değer önerisi |
-| **Moxie** | Market Pixie | Gerçekçi | Rakipler, pazar açısı, farklılaşma |
-| **Luma** | UX Pixie | Yaratıcı | Kullanıcı akışı, ekran haritası |
-| **Tinker** | Tech Pixie | Mimar | Stack, veri modeli, API planı |
-| **Bitsy** | Code Pixie | Pratik | Dosya ağacı, kod iskeleti |
-| **Quill** | Docs Pixie | Düzenli | README, pitch, proje dokümanı |
-| **Bugsy** | QA Pixie | Şüpheci | Test senaryoları, riskler |
-| **Sprinta** | Scrum Pixie | Planlayıcı | Backlog, sprint planı, retro notları |
-
-### MVP Agent Konsolidasyonu
-
-MVP'de hepsini gerçek ayrı agent gibi yapmak zorunda değiliz. Ama ürün deneyiminde hepsi görünür olabilir. Arkada ilk sürümde 5 ana agent yeterli:
-
-1. **Pip** — Orchestrator
-2. **Pria** — Product
-3. **Luma** — UX
-4. **Tinker** — Tech
-5. **Sprinta/Quill** — Scrum + Docs
-
-OpenAI Agents SDK tarafında agent'lar planlama yapabilen, araç çağırabilen, uzmanlar arasında iş birliği kurabilen ve çok adımlı işler için durum tutabilen uygulamalar olarak konumlanıyor; SDK'da handoff, session, guardrail ve tracing gibi parçalar da var. Bu yüzden BuildPixies'in "uzman agent takım" mimarisi teknik olarak jüriye anlatılabilir bir temel kazanıyor.
-
-> **Sprint 2'de rol bazlı prompt pipeline ile başla; Sprint 3'te gerçek Agents SDK handoff'a geç.**
-
----
-
-## 8. Web Uygulaması Ana Ekranları
-
-### 8.1 Landing Page
-Amaç: Ürünün değerini 10 saniyede anlatmak.
-
-Bölümler:
-1. **Hero** — "Turn messy ideas into build-ready MVPs."
-2. **Mini demo** — "Idea → Pixies working → MVP blueprint"
-3. **Pixie team cards** — Product, UX, Tech, Code, QA, Scrum
-4. **Output examples** — Backlog, architecture, README, test plan
-5. **CTA** — "Summon your pixies"
-
-Bootcamp için landing page çok önemli. Ürün "tamamlanmış" hissini artırır.
-
-### 8.2 Dashboard
-Kullanıcının projeleri listelenir.
-
-Kart yapısı:
-- Project name
-- One-liner
-- Status: Draft / In Progress / Blueprint Ready
-- Last updated
-- Pixies completed: 5/7
-- Open project
-
-Boş state:
-> "No ideas yet. Summon your first pixie team."
-
-### 8.3 New Idea Wizard
-Bu ekran ürünün kalbi.
-
-Adımlar:
-1. **Idea** — "What do you want to build?" (büyük textarea)
-2. **Audience** — Hedef kullanıcı, teknik seviye, B2B/B2C
-3. **Platform** — Web app / Mobile app / Chrome extension / AI tool / Marketplace
-4. **Goal** — Bootcamp project / Startup MVP / Client project / Portfolio project
-5. **Constraints** — Time, team size, budget, tech preference
-
-Özellikle "Bootcamp project" seçeneği koymak bizi farklılaştırır.
-
-### 8.4 Pixie Workspace
-Burası en görsel ekran.
-
-- **Sol panel:** Project summary, user idea, current goal
-- **Orta panel:** Pixie cards; her pixie'nin status'u (Waiting / Thinking / Drafting / Done / Needs review)
-- **Sağ panel:** Active output preview, kullanıcı feedback kutusu
-
-Bu ekranın demo etkisi yüksek olur.
-
-### 8.5 Blueprint Output Hub
-Burada tüm çıktılar sekmeler halinde görünür:
-- Product Brief
-- MVP Scope
-- User Stories
-- UX Flow
-- Tech Architecture
-- Data Model
-- API Plan
-- Code Skeleton
-- Test Plan
-- Sprint Plan
-- README Export
-- Pitch Script
-
-### 8.6 Backlog Board
-Kanban gibi: Icebox / Todo / In Progress / Done. MVP'de gerçek drag-drop şart değil; basit kolonlu görünüm yeterli.
-
-### 8.7 Export Center
-Kullanıcı şunları alabilmeli:
-- Copy Markdown
-- Download `.md`
-- Download `.json`
-- Generate README
-- Generate pitch script
-
-Bootcamp için en önemli export: **README.md**.
-
----
-
-## 9. MVP Kapsamı
-
-### MVP'de Kesin Olacaklar
-
-| Özellik | Açıklama | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| Landing page | Ürünü anlatan ana sayfa | P0 | **Yapıldı** — `app/page.tsx`, `components/landing/*` |
-| Dashboard | Projeleri listeleme | P0 | **Yapıldı** — `app/dashboard/page.tsx`, `components/project/project-card.tsx` |
-| Yeni fikir oluşturma | Wizard veya tek form | P0 | **Yapıldı** — `app/projects/new/page.tsx`, `components/project/new-project-form.tsx` |
-| Pixie workspace | Agent kartları ve çalışma durumu | P0 | **Yapıldı** — `components/project/workspace.tsx`, `components/pixies/*` |
-| Product Brief üretimi | Problem, hedef kitle, değer önerisi | P0 | **Yapıldı** — `productBrief` schema + prompt + Output Hub |
-| MVP Scope üretimi | Must-have / nice-to-have ayrımı | P0 | **Yapıldı** — `mvpScope` schema + prompt + Output Hub |
-| Backlog üretimi | User story + priority | P0 | **Yapıldı** — `backlog` schema + prompt + Output Hub |
-| UX Flow üretimi | Ekran listesi ve kullanıcı akışı | P0 | **Yapıldı** — `uxFlow` schema + prompt + Output Hub |
-| Tech Plan üretimi | Stack, DB, API, architecture | P0 | **Yapıldı** — `techPlan` schema + prompt + Output Hub |
-| Test Plan üretimi | Test senaryoları ve riskler | P1 | **Yapıldı** — `testPlan` schema + prompt + Output Hub |
-| README export | Markdown çıktısı | P1 | **Yapıldı** — `lib/export/markdown.ts`, `app/api/export-readme/route.ts` |
-| Project memory | Kararlar ve önceki çıktıların saklanması | P1 | **Kısmen yapıldı** — proje + blueprint persist var; pgvector/decision memory yok |
-| Supabase owner/RLS | Public çok-kullanıcı güvenliği | P0 | **Yapıldı** — anonymous auth + `owner_id` RLS migration |
-| Generation jobs | Uzun AI üretimini job status ile izleme | P0 | **Yapıldı** — `generation_jobs` table + polling API |
-| Bootcamp Mode | Sprint notu / review / retro / README / backlog taslağı | P1 | **Yapıldı** — source-grounded üretim, Markdown export ve proje kaydı |
-
-### MVP'de Olmayacaklar
-
-- Tam çalışan kod projesi üretme
-- GitHub'a otomatik commit
-- Gerçek Figma tasarımı oluşturma
-- Canlı collaborative editing
-- Multi-user takım daveti
-- Payment sistemi
-- Admin panel
-- App Store / Play Store
-- Mobil native app
-
-> Bu karar bizi kurtarır. Çünkü teslim için "çalışan proje" daha önemli.
-
-### Mobile Sadece Roadmap'te
-> "Future roadmap: mobile companion app for reviewing and refining MVP blueprints on the go."
-
----
-
-## 10. Teknoloji Stack'i
-
-### En Mantıklı Stack
-
-| Katman | Öneri | Neden |
-| --- | --- | --- |
-| Frontend | **Next.js + TypeScript** | Web app, landing, dashboard, API route uyumu |
-| Styling | **Tailwind CSS + shadcn/ui** | Hızlı, temiz, modern UI |
-| Animation | **motion** (Framer ekosistemi) | Pixie kartları ve durum animasyonları; ağır animasyon polish Sprint 3 |
-| Backend | **Next.js Route Handlers** | Ayrı backend kurmadan API yazılır |
-| Auth | **Supabase Auth** (anonymous owner mode, sonra email/OAuth upgrade) | Hızlı başlangıç + owner bazlı güvenlik |
-| Database | **Supabase Postgres** | Proje, output, backlog kayıtları |
-| Vector memory | **Supabase pgvector** | Project memory için semantic recall |
-| AI | **OpenAI API / Agents SDK** | Agent orchestration |
-| Deploy | **Vercel** | Next.js için en pratik deploy |
-| Repo | GitHub public repo | Bootcamp zorunlu/avantajlı |
-
-> Next.js App Router'daki Route Handlers, `app` klasörü içinde özel request handler yazmaya izin veriyor; bu sayede ayrı bir backend kurmadan `/api/generate-blueprint` gibi endpoint'ler yapılabilir. Vercel, Next.js projelerini doğrudan CLI veya Git entegrasyonu ile deploy edebiliyor; environment variable yönetimi de Vercel tarafında proje ortamlarına göre yapılabiliyor. Supabase ise AI uygulamaları için Postgres ve pgvector ile embedding saklama, indexleme ve sorgulamayı destekliyor.
-
-### Hızlı Başlangıç Alternatifi
-
-Daha da basitleştirmek istersen:
-
-| Katman | Basit seçim |
+| Alan | Tanım |
 | --- | --- |
-| Frontend/backend | Next.js |
-| DB | Supabase |
-| AI | OpenAI Responses API |
-| Agent görünümü | Uygulama içinde role-based pipeline |
-| Deploy | Vercel |
+| Bağlam | 2–5 kişilik ekip, kısıtlı zaman, farklı teknik seviyeler |
+| Ana problem | Fikir var; scope, backlog, rol dağılımı ve teslim planı yok |
+| Kaygı | Son gün çalışan ürün ve belgeleri yetiştirememek |
+| Başarı | İlk sprint görevleri, acceptance criteria, demo ve README planı hazır |
+| Satın alma/kullanma motivasyonu | Zaman kazanmak, boş sayfa korkusunu aşmak, takım hizalamak |
 
-İlk hafta (Sprint 2 başı) gerçek Agents SDK yerine role-based prompt pipeline yapılabilir. Sprint 3'te bu gerçek agent mimarisi olarak güçlendirilir.
+**JTBD:**
 
----
+> Bir bootcamp fikrini seçtiğimde, ekibimin aynı hedefte çalışabilmesi ve teslim
+> gününde kaos yaşamamak için fikri doğrulanabilir MVP kapsamına ve sprint
+> planına çevirmek istiyorum.
 
-## 11. Sistem Mimarisi
+### 8.2 İkincil persona — Solo Founder / Indie Hacker
 
-### Basit Mimari
-
-```text
-User
- ↓
-Next.js Web App
- ↓
-/api/projects
-/api/generation-jobs
-/api/generation-jobs/[id]
-/api/generate-blueprint
-/api/regenerate-output
-/api/bootcamp-report
-/api/export-readme
- ↓
-Vercel Queue + leased generation worker / direct Bootcamp report generator
- ↓
-AI Orchestrator Service
- ↓
-Pixie Agents
- ↓
-Supabase Auth + Postgres RLS
- ↓
-Output Hub
-```
-
-> Kod durumu: Yeni ana üretim akışı `/api/generation-jobs` üzerinden durable
-> queue job'ı oluşturur; worker lease/idempotency korumasıyla üretir ve workspace
-> sonucu `/api/generation-jobs/[id]` ile poll eder. `/api/generate-blueprint`
-> geriye uyumluluk için hâlâ durur. Bootcamp raporu tek, sınırlı bir üretim
-> olduğu için ayrı, owner-scoped `/api/bootcamp-report` route'unda çalışır.
-
-### Agent Pipeline
-
-```text
-Raw Idea
-  ↓
-Pip / Orchestrator
-  ↓
-Pria / Product Pixie
-  ↓
-Moxie / Market Pixie
-  ↓
-Luma / UX Pixie
-  ↓
-Tinker / Tech Pixie
-  ↓
-Bugsy / QA Pixie
-  ↓
-Sprinta / Scrum Pixie
-  ↓
-Quill / Documentation Pixie
-  ↓
-Blueprint
-```
-
-### Agent Handoff Mantığı
-OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi için kullanılıyor; bu, BuildPixies'te "Product Pixie işi UX Pixie'ye devrediyor" gibi anlatılabilir. Sessions tarafında da agent'ların konuşma geçmişini farklı run'lar boyunca koruması destekleniyor; bu BuildPixies'in project memory özelliği için anlamlı.
-
----
-
-## 12. Veri Modeli
-
-### `projects`
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Project id |
-| owner_id | uuid | Supabase Auth kullanıcısı; RLS sahiplik anahtarı |
-| title | text | Proje adı |
-| raw_idea | text | Kullanıcının ham fikri |
-| goal | text | Bootcamp / startup / portfolio |
-| platform | text | Web / mobile / extension |
-| target_audience | text | Hedef kullanıcı |
-| constraints | jsonb | Süre, ekip, bütçe |
-| output_depth | text | quick / detailed / bootcamp-ready |
-| blueprint | jsonb | Üretilmiş tam blueprint çıktısı |
-| bootcamp_report | jsonb | Son source-grounded Bootcamp Mode raporu |
-| status | text | draft / generating / ready / failed |
-| created_at | timestamp | Oluşturma tarihi |
-| updated_at | timestamp | Güncelleme tarihi |
-
-**Kod durumu:** **Yapıldı.** İlk schema `202607040001_initial_schema.sql`, owner/RLS
-ekleri `202607050001_auth_rls_generation_jobs.sql`, Bootcamp Mode alanı
-`202607160002_bootcamp_mode.sql`, uygulama erişimi `lib/projects.ts`.
-
-### `generation_jobs`
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Job id |
-| project_id | uuid | Bağlı proje; null olabilir |
-| owner_id | uuid | Supabase Auth kullanıcısı; RLS sahiplik anahtarı |
-| status | text | queued / running / succeeded / failed |
-| input | jsonb | Worker'ın yeniden deneyebileceği kalıcı generation input'u |
-| error | text | Hata varsa |
-| blueprint | jsonb | Job sonucunda oluşan blueprint |
-| attempt_count | integer | Lease alma / yeniden deneme sayısı |
-| lease_token | uuid | Yalnızca lease sahibi worker'ın tamamlayabilmesi için token |
-| lease_expires_at | timestamp | Stale worker recovery zamanı |
-| queue_message_id | text | Vercel Queue mesajı ile korelasyon anahtarı |
-| created_at | timestamp | Tarih |
-| updated_at | timestamp | Son güncelleme |
-| started_at | timestamp | Çalışmaya başlama |
-| completed_at | timestamp | Bitiş |
-
-**Kod durumu:** **Yapıldı.** API: `app/api/generation-jobs/*`, queue consumer:
-`app/api/queues/generate-blueprint/route.ts`, storage/worker:
-`lib/generation-jobs.ts`, `lib/generation-worker.ts`.
-
-### `rate_limit_buckets`
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| owner_id | uuid | Auth kullanıcısı ve kota sahiplik anahtarı |
-| bucket | text | Endpoint grubu (`ai:bootcamp`, `ai:generate` vb.) |
-| window_started_at | timestamp | Sabit kota penceresinin başlangıcı |
-| request_count | integer | Pencere içindeki atomik istek sayısı |
-
-**Kod durumu:** **Yapıldı.** `consume_rate_limit` security-definer RPC'si
-uygulama instance'larından bağımsız, owner bazlı kotayı atomik uygular.
-
-### Roadmap Veri Modelleri
-
-Aşağıdaki tablolar ürün stratejisinde değerli, fakat mevcut kodda henüz ayrı
-tablo olarak yok. Şimdilik `projects.blueprint` JSONB alanı bütün çıktı
-paketini saklıyor.
-
-#### `pixie_runs` — Sonraki sprint
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Run id |
-| project_id | uuid | Bağlı proje |
-| pixie_name | text | Pip, Pria, Luma... |
-| role | text | product, ux, tech... |
-| status | text | waiting / running / done / failed |
-| input | jsonb | Agent input |
-| output | jsonb | Agent output |
-| error | text | Hata varsa |
-| created_at | timestamp | Tarih |
-
-#### `outputs` — Sonraki sprint
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Output id |
-| project_id | uuid | Bağlı proje |
-| type | text | product_brief, backlog, ux_flow... |
-| title | text | Başlık |
-| content_markdown | text | Markdown içerik |
-| content_json | jsonb | Structured içerik |
-| version | int | Revizyon |
-| created_by | text | Hangi pixie |
-| created_at | timestamp | Tarih |
-
-#### `backlog_items` — Sonraki sprint
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Item id |
-| project_id | uuid | Bağlı proje |
-| title | text | Task adı |
-| user_story | text | User story |
-| priority | text | P0/P1/P2 |
-| sprint | int | Sprint önerisi |
-| status | text | todo / doing / done |
-| acceptance_criteria | jsonb | Kabul kriterleri |
-
-#### `decisions` — Sonraki sprint
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Decision id |
-| project_id | uuid | Bağlı proje |
-| decision | text | Alınan karar |
-| reason | text | Neden |
-| impact | text | Hangi alanı etkiler |
-| created_by | text | Pixie/user |
-| created_at | timestamp | Tarih |
-
-#### `memory_chunks` — Sprint 3 / pgvector
-
-| Alan | Tip | Açıklama |
-| --- | --- | --- |
-| id | uuid | Memory id |
-| project_id | uuid | Bağlı proje |
-| content | text | Hafıza metni |
-| embedding | vector | Embedding |
-| source_type | text | idea/output/decision |
-| created_at | timestamp | Tarih |
-
----
-
-## 13. Çıktı Formatları (Structured Outputs)
-
-Bu ürünün profesyonel görünmesi için AI çıktıları düz paragraf değil, yapılandırılmış olmalı.
-
-### Product Brief
-
-```json
-{
-  "project_name": "string",
-  "one_liner": "string",
-  "problem": "string",
-  "target_users": ["string"],
-  "main_value": "string",
-  "use_cases": ["string"],
-  "success_metrics": ["string"]
-}
-```
-
-### MVP Scope
-
-```json
-{
-  "must_have": [
-    { "feature": "string", "why": "string" }
-  ],
-  "nice_to_have": [
-    { "feature": "string", "why_later": "string" }
-  ],
-  "out_of_scope": [
-    { "feature": "string", "reason": "string" }
-  ]
-}
-```
-
-### Backlog
-
-```json
-{
-  "items": [
-    {
-      "title": "Create project dashboard",
-      "user_story": "As a user, I want to see my projects so that I can continue previous ideas.",
-      "priority": "P0",
-      "sprint": 1,
-      "acceptance_criteria": [
-        "Projects are listed as cards",
-        "Each card has status and updated date"
-      ]
-    }
-  ]
-}
-```
-
-### Tech Plan
-
-```json
-{
-  "recommended_stack": {
-    "frontend": "Next.js",
-    "backend": "Next.js Route Handlers",
-    "database": "Supabase",
-    "ai": "OpenAI"
-  },
-  "architecture": "string",
-  "database_tables": ["string"],
-  "api_routes": ["string"],
-  "risks": ["string"]
-}
-```
-
----
-
-## 14. API Tasarımı
-
-Next.js içinde mevcut route'lar:
-
-| Route | Method | Amaç | Kod durumu |
-| --- | --- | --- | --- |
-| `/api/projects` | GET | Projeleri listele | **Yapıldı** |
-| `/api/projects` | POST | Yeni proje oluştur | **Yapıldı** |
-| `/api/projects/[id]` | GET | Proje detayını getir | **Yapıldı** |
-| `/api/generation-jobs` | POST | Blueprint generation job başlat | **Yapıldı** |
-| `/api/generation-jobs/[id]` | GET | Job durumunu ve sonucu getir | **Yapıldı** |
-| `/api/generate-blueprint` | POST | Geriye uyumlu direkt pipeline endpoint'i | **Yapıldı** |
-| `/api/regenerate-output` | POST | Tek bölümü tekrar üret ve blueprint'i kaydet | **Yapıldı** |
-| `/api/bootcamp-report` | POST | Gerçek ilerleme notlarından Scrum belge paketi üret ve projeye kaydet | **Yapıldı** |
-| `/api/export-json` | POST | Blueprint'i JSON olarak dışa aktar | **Yapıldı** |
-| `/api/export-readme` | POST | README markdown üret | **Yapıldı** |
-| `/api/save-feedback` | POST | Kullanıcı feedback'ini kaydet | **Sonraki sprint** |
-
-### `/api/generation-jobs` Input
-
-```json
-{
-  "projectId": "uuid"
-}
-```
-
-Alternatif olarak kaydedilmemiş fikir için:
-
-```json
-{
-  "input": {
-    "rawIdea": "I want to build an AI habit tracker for students...",
-    "goal": "bootcamp",
-    "platform": "web",
-    "targetAudience": "students",
-    "constraints": {
-      "teamSize": 1,
-      "timeline": "4 weeks",
-      "budget": "free tools"
-    },
-    "outputDepth": "bootcamp-ready"
-  }
-}
-```
-
-### Job Başlatma Output'u
-
-```json
-{
-  "job": {
-    "id": "uuid",
-    "projectId": "uuid",
-    "status": "queued",
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
-  }
-}
-```
-
-### Job Polling Output'u
-
-```json
-{
-  "job": {
-    "id": "uuid",
-    "status": "succeeded",
-    "blueprint": {
-      "productBrief": {},
-      "mvpScope": {},
-      "uxFlow": {},
-      "techPlan": {},
-      "backlog": {},
-      "testPlan": {},
-      "readme": "markdown"
-    }
-  }
-}
-```
-
-> Kod durumu: Request validation `lib/api/schemas.ts`, response persistence
-> `lib/projects.ts` ve job persistence `lib/generation-jobs.ts` içinde.
-
----
-
-## 15. UI Tasarım Sistemi
-
-BuildPixies için **"cute SaaS"** dili kullanalım.
-
-### Genel His
-- Tatlı ama oyuncak gibi değil
-- Pastel ama okunabilir
-- Pixie karakterleri var ama ürün hâlâ profesyonel
-- "Magical workspace" hissi
-
-### Renkler
-
-| Amaç | Renk hissi |
+| Alan | Tanım |
 | --- | --- |
-| Ana renk | Lavender / violet |
-| İkincil | Mint |
-| Uyarı | Soft amber |
-| Başarı | Soft green |
-| Zemin | Off-white / very light lavender |
-| Dark text | Slate / ink |
+| Bağlam | Tek kişi veya çok küçük ekip; fikir çok, zaman az |
+| Ana problem | Fikirleri karşılaştırma ve MVP sınırı çizme |
+| Başarı | Problem, hedef kullanıcı, MVP, teknik yaklaşım ve ilk 2 sprint net |
 
-### Stil
-- Büyük yuvarlatılmış kartlar
-- Hafif gölgeler
-- Glow efektleri
-- Sparkle iconları
-- Agent status badge'leri
-- Smooth loading animasyonları
+**JTBD:**
 
-### Tasarım Referans Dili (sunumda anlatım)
-> "We intentionally designed BuildPixies as a friendly AI workspace. The cute pixie metaphor lowers the intimidation barrier for beginners, while structured outputs keep the product useful for real development planning."
+> Yeni bir ürün fikrini düşündüğümde, kodlamaya başlamadan önce yanlış şeyi
+> inşa etme riskini azaltmak için en küçük uygulanabilir planı görmek istiyorum.
 
----
+### 8.3 Üçüncül persona — Junior Developer / Freelancer
 
-## 16. Sayfa Sayfa Detaylı Plan
+**JTBD:**
 
-### Landing Page
+> Belirsiz bir müşteri fikri aldığımda, beklentiyi yönetebilmek ve işi tahmin
+> edebilmek için onu scope, user story, teknik plan ve test checklist'ine
+> dönüştürmek istiyorum.
 
-**Bölümler:**
+### 8.4 Kullanıcı yolculuğu başarı sinyalleri
 
-1. **Navbar** — Logo: BuildPixies · Product · How it works · Pixies · Start building
-2. **Hero** — Başlık: "Turn messy ideas into build-ready MVPs." Alt metin + CTA: "Start with an idea" + Secondary: "See sample blueprint"
-3. **How it works** — Drop your idea → Pixies analyze it → Get your MVP blueprint
-4. **Pixie Team** — Pria, Luma, Tinker, Bugsy, Sprinta
-5. **Output Preview** — Product brief card, Backlog card, Tech plan card
-6. **Footer**
-
-### Dashboard
-
-Kart yapısı:
-```text
-Project Card
-- Name
-- One-liner
-- Status
-- Last updated
-- Pixies completed
-- Open project
-```
-
-### New Project Wizard
-
-Form alanları:
-- Project idea
-- Who is it for?
-- What platform?
-- What is your goal?
-- How much time do you have?
-- Do you have a preferred stack?
-- Team size
-- Output depth: Quick / Detailed / Bootcamp-ready
-
-### Workspace
-
-Layout:
-```text
---------------------------------------------------
-| Sidebar        | Main Workspace     | Output    |
-| Project info   | Pixie team cards   | Preview   |
-| Outputs list   | Current progress   | Feedback  |
---------------------------------------------------
-```
-
-Pixie card örneği:
-```text
-Luma
-UX Pixie
-Status: Designing flow...
-Output: 5 screens mapped
-```
-
-### Output Hub
-
-Sekmeler: Overview · Product · UX · Tech · Backlog · Tests · Docs · Export
-
-Her sekmede:
-- Markdown preview
-- Copy button — **Yapıldı**
-- Regenerate button — **Yapıldı** (bölüm bazlı üretim ve persistence)
-- "Make shorter" / "Make more technical" / "Adapt for bootcamp" — **Sonraki sprint**
-
-Mevcut kodda Output Hub; Plan, Product, Market, Scope, UX, Tech, Code, Backlog,
-Tests, Sprints ve README sekmelerini gösterir. README sekmesinde Markdown copy,
-JSON download ve README download kontrolleri vardır.
+- İlk fikir girişinde örnek veya yönlendirme kullanabilme,
+- Eksik bilgi varsa bunu görünür biçimde görebilme,
+- Üretim sırasında hangi kararın hazırlandığını anlayabilme,
+- Overview ekranından MVP'yi 60 saniyede okuyabilme,
+- İlk sprint görevlerini kopyalayabilme/indirebilme,
+- Bir bölümü yeniden üretebilme veya daha küçük/teknik hale getirebilme,
+- Bootcamp goal seçildiyse delivery pack'e geçebilme.
 
 ---
 
-## 17. Bootcamp Mode
+## 9. Lean Canvas ve Pazar Hipotezi
 
-Bu özellik bizi ciddi şekilde ayrıştırır.
+Bu tablo doğrulanmış pazar gerçeği değil, test edilecek ürün hipotezidir.
 
-### Bootcamp Mode Ne Yapar?
-
-Kullanıcı gerçek ilerleme notlarını girer:
-```text
-Today I created the landing page and project form.
-Blocked by deployment env setup.
-Next I will implement output generation.
-```
-
-BuildPixies bunu şu formatlara dönüştürür:
-- Daily Scrum note
-- Sprint Review
-- Sprint Retrospective
-- README sprint section
-- Product status summary
-- Backlog update explanation
-
-**Kod durumu: Yapıldı.** Workspace içindeki Bootcamp Mode formu sprint adı,
-hedefi ve gerçek ilerleme notlarını alır. `/api/bootcamp-report` isteği Zod ile
-doğrulanır, owner bazlı rate limit uygulanır ve sonuç `projects.bootcamp_report`
-alanına kaydedilir. OpenAI çıktısı strict schema ile kontrol edilir; API anahtarı
-yokken source-grounded deterministic fallback kullanılır. Markdown kopyalama ve
-`.md` indirme kontrolleri de hazırdır.
-
-> Bootcamp dokümanında sprint sonunda beklenen belgeler açıkça backlog dağıtma mantığı, daily scrum notları, sprint board updates, ürün durumu, sprint review ve retrospective olarak listeleniyor. BuildPixies'in Bootcamp Mode'u bu gereksinimi doğrudan ürün özelliğine dönüştürüyor.
-
-### Etik Konumlandırma
-> "BuildPixies does not fake sprint documentation. It helps users organize their real progress notes into a clear Scrum format."
-
-Bu önemli. Çünkü sahte ilerleme üretmek etik olmaz.
-
----
-
-## 18. Agent Prompt Stratejisi
-
-### Pip (Orchestrator)
-- Kullanıcının fikrini anlamalı
-- Eksik bilgileri saptamalı
-- Hangi pixie'nin hangi çıktıyı üreteceğine karar vermeli
-- Output'ları birbiriyle tutarlı hale getirmeli
-- Gereksiz karmaşıklığı kesmeli
-
-### Pria (Product)
-- Problem
-- Hedef kullanıcı
-- Değer önerisi
-- Kullanım senaryoları
-- MVP sınırı
-- Başarı metrikleri
-
-### Luma (UX)
-- Kullanıcı yolculuğu
-- Ekran listesi
-- Her ekranın amacı
-- Primary action
-- Empty state
-- Error state
-
-### Tinker (Tech)
-- Stack önerisi
-- Veritabanı tabloları
-- API endpoint'leri
-- 3 sprintlik teknik plan
-- Riskler
-- Deploy yaklaşımı
-
-### Bugsy (QA)
-- Happy path testleri
-- Edge-case testleri
-- Hata mesajları
-- Güvenlik riskleri
-- Demo öncesi kontrol listesi
-
-### Sprinta (Scrum)
-- Product backlog
-- Sprint backlog
-- Acceptance criteria
-- Daily note formatı
-- Review ve retro taslağı
-
----
-
-## 19. Clean Architecture Planı
-
-Repo'da düzenli görünmek jüri için önemli.
-
-### Önerilen Klasör Yapısı
-
-```text
-buildpixies/
-  app/
-    page.tsx
-    dashboard/
-      page.tsx
-    projects/
-      new/
-        page.tsx
-      [id]/
-        page.tsx
-    api/
-      projects/
-        route.ts
-        [id]/
-          route.ts
-      generation-jobs/
-        route.ts
-        [id]/
-          route.ts
-      generate-blueprint/
-        route.ts
-      regenerate-output/
-        route.ts
-      export-readme/
-        route.ts
-
-  components/
-    auth/
-    landing/
-    pixies/
-    project/
-    outputs/
-    ui/
-
-  lib/
-    ai/
-      orchestrator.ts
-      prompts.ts
-      schemas.ts
-      pixies/
-        product.ts
-        ux.ts
-        tech.ts
-        qa.ts
-        scrum.ts
-    supabase/
-      config.ts
-      client.ts
-      server.ts
-    export/
-      markdown.ts
-    api/
-      http.ts
-      rate-limit.ts
-      schemas.ts
-    generation-jobs.ts
-    generation-runner.ts
-    projects.ts
-    storage.ts
-
-  types/
-    generation-job.ts
-    output.ts
-    project.ts
-    pixie.ts
-
-  docs/
-    sprint-1.md
-    sprint-2.md
-    sprint-3.md
-```
-
-### Mimari Prensipler
-- UI component'leri ayrı
-- AI prompt'ları `lib/ai` içinde
-- TypeScript type'ları ayrı
-- API routes sade
-- Output formatları schema ile kontrol edilmeli
-- README içinde mimari diyagram olmalı
-
----
-
-## 20. Product Backlog
-
-### Epic 1 — Landing & Onboarding
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-001 | Kullanıcı olarak ürünün ne yaptığını landing page'de anlamak istiyorum | P0 | **Yapıldı** — `app/page.tsx`, `components/landing/*` |
-| BP-002 | Kullanıcı olarak örnek blueprint görmek istiyorum | P1 | **Yapıldı** — statik output preview var (`components/landing/output-preview.tsx`) |
-| BP-003 | Kullanıcı olarak hızlıca yeni fikir girmek istiyorum | P0 | **Yapıldı** — `components/project/new-project-form.tsx` |
-
-### Epic 2 — Project Creation
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-004 | Kullanıcı olarak yeni proje oluşturmak istiyorum | P0 | **Yapıldı** — `POST /api/projects`, `lib/projects.ts` |
-| BP-005 | Kullanıcı olarak hedef kitle ve platform seçmek istiyorum | P0 | **Yapıldı** — form alanları + Zod schema |
-| BP-006 | Kullanıcı olarak bootcamp/startup/portfolio amacı seçmek istiyorum | P1 | **Yapıldı** — goal select + API schema |
-
-### Epic 3 — Pixie Workspace
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-007 | Kullanıcı olarak pixie takımımı görmek istiyorum | P0 | **Yapıldı** — `components/pixies/pixie-team.tsx` |
-| BP-008 | Kullanıcı olarak hangi pixie'nin çalıştığını görmek istiyorum | P0 | **Kısmen yapıldı** — UI status var; gerçek per-pixie streaming/event henüz yok |
-| BP-009 | Kullanıcı olarak tamamlanan çıktıları açmak istiyorum | P0 | **Yapıldı** — `components/outputs/output-hub.tsx` sekmeleri |
-
-### Epic 4 — AI Blueprint Generation
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-010 | Kullanıcı olarak product brief üretmek istiyorum | P0 | **Yapıldı** — `productBrief` schema/prompt/output |
-| BP-011 | Kullanıcı olarak MVP scope almak istiyorum | P0 | **Yapıldı** — `mvpScope` schema/prompt/output |
-| BP-012 | Kullanıcı olarak UX flow almak istiyorum | P0 | **Yapıldı** — `uxFlow` schema/prompt/output |
-| BP-013 | Kullanıcı olarak tech architecture almak istiyorum | P0 | **Yapıldı** — `techPlan` schema/prompt/output |
-| BP-014 | Kullanıcı olarak backlog almak istiyorum | P0 | **Yapıldı** — `backlog` schema/prompt/output |
-| BP-015 | Kullanıcı olarak test planı almak istiyorum | P1 | **Yapıldı** — `testPlan` schema/prompt/output |
-
-### Epic 5 — Export
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | **Yapıldı** — Output Hub copy kontrolü |
-| BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 | **Yapıldı** — `lib/export/markdown.ts`, `/api/export-readme` |
-| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | **Yapıldı** — `/api/export-json` ve download kontrolü |
-
-### Epic 6 — Bootcamp Mode
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 | **Yapıldı** — Daily Scrum ve ürün durumu taslağı |
-| BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 | **Yapıldı** — evidence ve missing-information ayrımıyla |
-| BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 | **Yapıldı** — done/in-progress/carried-over açıklaması |
-
-### Epic 7 — Güvenlik, Kalıcılık ve Operasyon
-
-| ID | User Story | Öncelik | Kod durumu |
-| --- | --- | --- | --- |
-| BP-022 | Kullanıcı olarak projelerimin başkasına görünmemesini istiyorum | P0 | **Yapıldı** — Supabase `owner_id` + RLS |
-| BP-023 | Kullanıcı olarak uzun AI üretimini sayfa donmadan takip etmek istiyorum | P0 | **Yapıldı** — `generation_jobs` + polling |
-| BP-024 | Geliştirici olarak bilinen moderate audit uyarılarını kapatmak istiyorum | P0 | **Yapıldı** — `postcss@8.5.10` override |
-| BP-025 | Geliştirici olarak gerçek durable queue/SSE streaming istiyorum | P1 | **Kısmen yapıldı** — durable Vercel Queue hazır; SSE bekliyor |
-| BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | **Sonraki sprint** |
-| BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | **Sonraki sprint** |
-| BP-028 | Geliştirici olarak kritik demo akışını her değişiklikte doğrulamak istiyorum | P1 | **Yapıldı** — Playwright E2E + GitHub Actions |
-
----
-
-## 21. Sprint Planı (Takvime Bağlı)
-
-Bootcamp takvimi:
-- **Sprint 1:** 19 Haziran – 5 Temmuz (bitiyor!)
-- **Sprint 2:** 6 Temmuz – 19 Temmuz
-- **Sprint 3:** 20 Temmuz – 2 Ağustos
-- **Teslim:** 2 Ağustos 23:59
-- **Top 10 sunum:** 14 Ağustos
-
-### Sprint 1 — 4–5 Temmuz (Kalan İki Gün)
-
-**Sprint hedefi:** BuildPixies web pivot kararını belgelemek, repo ve ürün planını oturtmak.
-
-#### Yapılacaklar
-- [x] Ürün adı seçildi: **BuildPixies**
-- [x] Public GitHub repo aç ve pushla (`avanalperen/BuildPixies` redirect'iyle güncel)
-- [x] README template ekle (`BootcampScrumTemplate` formatında)
-- [x] Ürün açıklaması yaz
-- [x] Hedef kitleyi yaz
-- [x] Product backlog ekle
-- [x] Web pivot kararını `docs/decision-log.md` içine yaz
-- [x] İlk wireframe'i çiz
-- [x] Landing page taslak metnini hazırla
-- [ ] Takıma ve asistana durum mesajı gönder (koddan doğrulanamaz; iletişim kanıtı gerekli)
-- [x] Sprint 1 review ve retro yaz
-
-#### Definition of Done
-- Repo public
-- README'de ürün fikri var
-- Backlog var
-- Sprint 1 notları var
-- Web app mimari kararı var
-- En az 1 ekran taslağı var
-
-#### Sprint 1 Çıktıları (README'ye)
-
-| Madde | İçerik |
+| Lean Canvas alanı | BuildPixies hipotezi |
 | --- | --- |
-| Backlog dağıtma mantığı | P0 story'ler seçildi; repo, README, fikir önceliklendirildi |
-| Daily Scrum notları | Sprint başında solo; takım oluşunca Slack/WhatsApp günlük short sync |
-| Sprint Board updates | GitHub Projects / Trello screenshot'ları |
-| Ürün durumu | Fikir, backlog, wireframe, landing copy screenshot'ları |
-| Sprint Review | Takım sprint sonuna doğru 3 kişiye tamamlandı; mobil→web pivot yapıldı; fikir/repo/backlog hazır |
-| Sprint Retrospective | Takım iletişim kanalları oturtuldu; Sprint 2'de üç kişi tam kapasite kodlamaya geçilecek |
+| Problem | Fikirden scope/backlog/teknik plana geçiş dağınık; genel chatbot cevapları uygulanabilir sıraya dönüşmüyor |
+| Mevcut alternatifler | ChatGPT/benzeri genel asistanlar, Notion şablonları, manuel Jira/Miro planı, mentor/freelancer desteği |
+| Müşteri segmenti | Önce bootcamp/hackathon ekipleri; sonra solo founder ve junior freelancer |
+| Early adopter | Teslim tarihi yaklaşan, fikri olan fakat backlog/README/sprint planı olmayan ekip |
+| Unique value proposition | “Messy idea → decision-ready MVP blueprint + first sprint” |
+| Çözüm | Guided intake, pixie orchestration, progressive output, command center, delivery export |
+| Kanallar | Bootcamp toplulukları, GitHub, LinkedIn ürün demosu, öğrenci/hackathon toplulukları |
+| Gelir hipotezi | Freemium sample/quick blueprint; ücretli sabit model, takım workspace'i ve export entegrasyonları |
+| Maliyet | LLM inference, Supabase, Vercel, log/monitoring, destek |
+| Ana metrik | Başlatılan fikirden export edilen blueprint oranı |
+| Erken metrikler | Landing→wizard, wizard→generate, generate→overview, overview→export/regenerate |
+| Savunulabilirlik | Bootcamp odaklı workflow bilgisi, yapılandırılmış karar şemaları, project memory, takım delivery paketi |
 
-### Sprint 2 — 6–19 Temmuz (Çalışan MVP)
+### 9.1 Doğrulama planı
 
-**Sprint hedefi:** Kullanıcı fikir girsin, BuildPixies workspace açılsın ve ilk gerçek blueprint çıktısı üretilsin.
-
-| Gün | İş | Durum |
-| --- | --- | --- |
-| 6 Temmuz | Next.js projesi kur, Tailwind/shadcn ayarla | **Yapıldı** — `package.json`, `app/*`, `components/ui/*` |
-| 7 Temmuz | Landing page tasarla | **Yapıldı** — `components/landing/*` |
-| 8 Temmuz | Dashboard ve New Project ekranı | **Yapıldı** — `app/dashboard`, `app/projects/new` |
-| 9 Temmuz | Supabase Auth/RLS canlı proje ayarı ve anon sign-in kontrolü | **Kod yapıldı** — migration + proxy; canlı Supabase ayarı deploy sırasında doğrulanacak |
-| 10 Temmuz | Project create/list akışı | **Yapıldı** — `/api/projects`, `lib/projects.ts` |
-| 11 Temmuz | Pixie workspace UI | **Yapıldı** — `components/project/workspace.tsx`, `components/pixies/*` |
-| 12 Temmuz | AI prompt schemas | **Yapıldı** — `lib/ai/prompts.ts`, `lib/ai/schemas.ts` |
-| 13 Temmuz | Product Brief generation | **Yapıldı** |
-| 14 Temmuz | MVP Scope + Backlog generation | **Yapıldı** |
-| 15 Temmuz | UX Flow generation | **Yapıldı** |
-| 16 Temmuz | Tech Plan generation | **Yapıldı** |
-| 17 Temmuz | Output Hub | **Yapıldı** — sekmeli çıktı hub + README download |
-| 18 Temmuz | Hata düzeltme, screenshots | **Kısmen yapıldı** — kritik E2E ve link semantiği tamam; Sprint 2 screenshot'ları kalır |
-| 19 Temmuz | Sprint 2 README, review, retro | **Zamanı gelmedi** |
-
-#### Definition of Done
-- Canlı veya local çalışan web app var
-- Kullanıcı proje oluşturabiliyor
-- En az 4 çıktı üretiliyor: Product brief, MVP scope, Backlog, UX flow veya Tech plan
-- Pixie kartları görünüyor
-- Output Hub çalışıyor
-- README güncel
-- Kritik demo yolculuğu production build üzerinde E2E geçiyor
-
-### Sprint 3 — 20 Temmuz – 2 Ağustos (AI Derinliği + Polish + Demo)
-
-**Sprint hedefi:** Ürünü jüri demosuna hazır hale getirmek: agent derinliği, export, Bootcamp Mode, polish, video.
-
-| Gün | İş | Durum |
-| --- | --- | --- |
-| 20 Temmuz | Agent pipeline'ı güçlendir | **Kısmen yapıldı** — role-based pipeline var; Agents SDK handoff yok |
-| 21 Temmuz | Project memory / decisions tablosu | **Sonraki sprint** |
-| 22 Temmuz | Regenerate section özelliği | **Erken tamamlandı** — PR #11 ve post-merge persistence düzeltmesi |
-| 23 Temmuz | README export | **Yapıldı** |
-| 24 Temmuz | Bootcamp Mode basic | **Erken tamamlandı** — 16 Temmuz; UI/API/persistence/export |
-| 25 Temmuz | Test Plan output | **Yapıldı** |
-| 26 Temmuz | Landing page polish | **Kısmen yapıldı** — temel landing var, final polish kalır |
-| 27 Temmuz | Workspace animasyonları | **Kısmen yapıldı** — status UI var, motion polish yok |
-| 28 Temmuz | Deploy denemesi (Vercel) | **Sonraki sprint** |
-| 29 Temmuz | Demo data hazırla | **Kısmen yapıldı** — sample fallback var; curated demo project kalır |
-| 30 Temmuz | README final screenshots | **Kısmen yapıldı** — Sprint 1 screenshots var; final screenshots kalır |
-| 31 Temmuz | Video script | **Planlandı** — bölüm 28 var; video script dosyası yok |
-| 1 Ağustos | 3 dakikalık video çekimi | **Sonraki sprint** |
-| 2 Ağustos | Final test + teslim | **Sonraki sprint** |
-
-#### Definition of Done
-- Uygulama deploy edilmiş veya deploy edilebilir durumda
-- 3 dakikalık video hazır
-- GitHub README tamam
-- Sprint 1, 2, 3 belgeleri tamam
-- Ürün demo akışı sorunsuz
-- En az bir sample project hazır
-
-### İleri Sprint İyileştirmeleri
-
-| İyileştirme | Neden önemli | Önerilen sprint |
-| --- | --- | --- |
-| Bootcamp Mode basic | **Erken tamamlandı** — source-grounded belge paketi ve Markdown export | Sprint 3 |
-| SSE streaming / per-pixie events | Durable Vercel Queue tamamlandı; UI gerçek pipeline event'lerini henüz göstermiyor | Sprint 3 |
-| Email/OAuth account linking | Anonymous auth demo için iyi; kalıcı kullanıcı hesabı için yükseltme gerekir | Sprint 3 |
-| Quota, Turnstile/CAPTCHA, usage limit | Public AI endpoint maliyeti ve abuse riskini azaltır | Sprint 3 |
-| Vercel + canlı Supabase smoke | Local build yetmez; final teslim canlı link ister | Sprint 3 |
-| Curated demo project + video script dosyası | 3 dakikalık demo akışını risksizleştirir | Sprint 3 |
-| Per-pixie run/event logging | Pixie status'ları gerçek pipeline olaylarına bağlanır | Sprint 3 / sonrası |
-| pgvector memory + decisions | Proje hafızası ve tekrar üretim kalitesi güçlenir | Sprint 3 / sonrası |
+- En az 3 hedef kullanıcıyla 15 dakikalık test yapılacak.
+- Kullanıcıya ürün anlatılmadan landing gösterilecek.
+- Kullanıcıdan “Bu ürün ne yapıyor?” cevabı alınacak.
+- Örnek proje açtırılacak ve ilk üç aksiyonu bulması istenecek.
+- “Hangi çıktıyı gerçekten kullanırdın?” sorusu sorulacak.
+- Sonuçlar tarihli notlarla `docs/evidence/user-testing/` altında tutulacak.
+- 27 Temmuz'a kadar en az 3 gözlem ve 3 somut değişiklik kararı çıkarılacak.
 
 ---
 
-## 22. Görev Dağılımı ve Minimum Plan
+## 10. Mevcut Deneyim Denetimi
 
-Takım 3 kişidir. Aşağıdaki scope Sprint 2'den itibaren üç kişiyle yürütülür.
+| Sorun | Kod/ürün kanıtı | Kullanıcı etkisi | Karar |
+| --- | --- | --- | --- |
+| “View Demo” gerçek demo değil | Hero CTA `/#features` bağlantısına gidiyor | İddia kanıtlanmıyor | Curated sample blueprint'e bağla |
+| Doğrulanmamış sosyal kanıt | “Loved by 1,000+ creators” metni | Güven zedelenir | Gerçek metrik oluşana kadar kaldır |
+| Plan/gerçeklik farkı | Eski plan olmayan `output-preview.tsx` dosyasını Done gösteriyor | Yanlış tamamlanma algısı | Backlog durumlarını yeniden denetle |
+| Tüm pixie'ler aynı anda thinking | UI generate başında tüm statüleri değiştiriyor | Orchestration tiyatro gibi görünür | Gerçek job event'lerine bağla |
+| Sonuç yalnız finalde açılıyor | Polling `succeeded/failed` bekliyor | 252 saniye boş bekleme | Partial blueprint + event polling |
+| Çıktı aşırı parçalı | 11 yatay tab | Bilgi yükü, öncelik kaybı | Overview + 4 çıktı grubu |
+| Yanlış panel başlığı | Tüm Output Hub “MVP Scope” başlığı altında | Information scent bozuk | “Blueprint”/aktif bölüm başlığı |
+| Bootcamp Mode ana akışa yapışık | Workspace altında sürekli büyük form | Ürün kategorisi karışır | Goal-aware Delivery Pack alanı |
+| Dashboard yalnız kart listesi | Next action/son aktivite yok | Proje yönetimi hissi zayıf | Project health + next action |
+| Sign In bilgi mimarisi belirsiz | Anonymous session var, CTA beklenti yaratıyor | Auth vaadi anlaşılmıyor | Gerçek auth hazır değilse doğru etiketle |
+| Tasarım ürünün önünde | Asset referansları birebir uygulandı | Güzel ama jenerik SaaS hissi | Tasarım kabulünü kullanıcı sonucuna bağla |
 
-### MVP Scope
-1. Landing page
-2. New Project form
-3. Pixie workspace görünümü
-4. Job endpoint + polling ile blueprint generation
-5. Output Hub
-6. README export
-7. Supabase owner/RLS temeli
-8. Bootcamp Mode basic
-9. Vercel deploy
+### 10.1 Korunacak güçlü alanlar
 
-### Görev Dağılımı
-
-| Kişi | Rol | Sorumluluk |
-| --- | --- | --- |
-| Muhammed Köseoğlu | Product Owner | Ürün vizyonu, backlog önceliklendirme, UI/UX, pixie avatarları, demo |
-| Alperen Avan | Scrum Master | Sprint yönetimi, iletişim, Supabase ve database, dokümantasyon |
-| Kemal Ersin Özkan | Developer | Frontend (Next.js), AI prompt/agent pipeline, kod kalitesi |
-
-### Takım iletişim kanalı
-> Slack + WhatsApp üzerinden günlük short sync'ler. Sprint başında planning,
-> sonunda review + retro. Asistan ile haftalık ofis saatleri.
+- Tutarlı indigo/pink/gold tasarım sistemi,
+- responsive temel grid,
+- guided wizard yapısı,
+- pixie rol metaforu,
+- strict output schemas,
+- section regenerate/export,
+- durable generation job modeli,
+- Bootcamp Mode'un source-grounded etik yaklaşımı,
+- E2E ve CI kalite kapısı.
 
 ---
 
-## 23. Proje Yönetimi ve README Yapısı
+## 11. Product Experience Reset
 
-> Bootcamp dokümanında ürünün sıfırdan geliştirilmesi, GitHub'da belgelenmesi, takım rollerinin ve ürün bilgilerinin yazılması, sprint çıktılarının eklenmesi bekleniyor. README'yi ürün kadar ciddiye almalısın.
+### 11.1 Hedef ana akış
 
-### GitHub README Ana Başlıkları
+```text
+Landing
+  → Gerçek örnek blueprint
+  → Guided idea intake
+  → Idea review / eksik bilgi
+  → Progressive pixie generation
+  → MVP Command Center
+  → Detail groups
+  → Refine / Export / Delivery Pack
+```
+
+### 11.2 Aşama bazlı deneyim
+
+| Aşama | Kullanıcının sorusu | Ürünün cevabı |
+| --- | --- | --- |
+| Landing | “Bu ne?” | Dağınık fikir ile karar verilmiş blueprint'i yan yana göster |
+| Sample | “Sonuç neye benziyor?” | Tıklanabilir gerçek curated proje |
+| Intake | “Ne yazmalıyım?” | Örnek fikirler, kalite ipucu, oluşacak çıktılar |
+| Review | “Eksik bir şey var mı?” | Audience, platform, goal, constraints ve eksik bilgiler |
+| Generation | “Sistem ne yapıyor?” | Gerçek pixie, bölüm, durum ve tamamlanan çıktılar |
+| Overview | “Bana ne önerdi?” | Problem, kullanıcı, 3 must-have, 3 out-of-scope, risk, ilk sprint |
+| Detail | “Neden/nasıl?” | Product, Experience, Build, Delivery grupları |
+| Action | “Şimdi ne yapacağım?” | İlk 3 görev, refine, export, share |
+
+### 11.3 MVP Command Center
+
+İlk açılan sonuç ekranı aşağıdakileri göstermelidir:
+
+- Blueprint readiness ve son güncelleme,
+- tek cümlelik ürün vaadi,
+- ana problem ve birincil kullanıcı,
+- 3 must-have feature,
+- 3 out-of-scope kararı,
+- önerilen ilk sprint hedefi,
+- en büyük 3 ürün/teknik risk,
+- eksik bilgiler,
+- “Start here” ilk 3 backlog item,
+- `Refine`, `Copy first sprint`, `Download`, `Open details` aksiyonları.
+
+Bu overview mümkün olduğunca mevcut structured output verilerinden türetilmeli;
+yalnız overview için ek ve pahalı bir AI çağrısı zorunlu olmamalıdır.
+
+### 11.4 Progressive generation
+
+İlk iterasyonda SSE zorunlu değildir. Mevcut polling genişletilecektir:
+
+1. Generation job; `events`, `partialBlueprint`, `currentSection` ve
+   `completedSections` taşıyacak.
+2. Orchestrator `thinking`, `done`, `failed` event'lerini gerçek section ile
+   job store'a yazacak.
+3. Section tamamlandığında partial çıktı atomik şekilde job'a kaydedilecek.
+4. Poll endpoint partial state'i döndürecek.
+5. UI yalnız gerçek aktif pixie'yi “working” gösterecek.
+6. Tamamlanan section anında açılacak.
+7. Hata olursa tamamlanan işler korunacak; retry veya resume kararı görünür
+   olacak.
+8. Durable queue ve local fallback aynı event contract'ını kullanacak.
+
+SSE ancak polling contract'ı stabil ve zaman uygunsa P1 optimizasyon olarak
+eklenir.
+
+### 11.5 Çıktı gruplama
+
+| Grup | Mevcut bölümler |
+| --- | --- |
+| Overview | Mevcut section'ların türetilmiş karar özeti |
+| Product | Orchestration Plan, Product Brief, Market Analysis, MVP Scope |
+| Experience | UX Flow |
+| Build | Tech Plan, Code Skeleton, Test Plan |
+| Delivery | Backlog, Sprint Plan, README |
+
+### 11.6 Refine aksiyonları
+
+P1 kapsamında section bazlı kontrollü komutlar:
+
+- Make the MVP smaller,
+- Make this more technical,
+- Adapt this for a 2-person team,
+- Adapt this for Bootcamp delivery,
+- Explain why this decision was made,
+- Regenerate with feedback.
+
+Free-form chat ilk sürüm için gerekli değildir. Kontrollü aksiyonlar daha iyi
+ölçülebilir, test edilebilir ve schema-safe olur.
+
+---
+
+## 12. Bilgi Mimarisi ve Ekran Spesifikasyonları
+
+### 12.1 Önerilen route yapısı
+
+```text
+/
+/sample
+/dashboard
+/projects/new
+/projects/[id]
+/projects/[id]/delivery
+/projects/[id]/settings          (P2)
+```
+
+### 12.2 Landing Page
+
+**Amaç:** Ürünü 5 saniyede anlatmak ve 30 saniyede kanıtlamak.
+
+**Zorunlu bloklar:**
+
+1. Navbar: Product, How it works, Sample blueprint, Start building.
+2. Hero: tek problem, tek vaat, iki gerçek CTA.
+3. Before/After: ham fikir ve Command Center sonucu.
+4. Interactive sample: Product/Build/Delivery'den küçük gerçek kesitler.
+5. “How it works”: Idea → Pixies decide → Action plan.
+6. Pixie roles: isim değil, aldığı karar ve ürettiği çıktı.
+7. Bootcamp use case: ana segment için somut delivery pack.
+8. Trust: GitHub, structured outputs, privacy yaklaşımı; sahte kullanıcı sayısı yok.
+9. Final CTA: “Create my MVP blueprint”.
+
+**Kabul:**
+
+- `View sample blueprint` gerçek `/sample` veya curated project'e gider.
+- “1,000+ creators” kaldırılır veya gerçek analitik kanıtı olmadan kullanılmaz.
+- Mobile 390 px ve desktop 1440 px screenshot alınır.
+- Hero metni ürün kategorisini “AI product planning” olarak açıklar.
+
+### 12.3 Sample Blueprint
+
+**Amaç:** AI beklemeden ürün değerini göstermek ve demo güvenliği sağlamak.
+
+- Curated, kaliteli, sabit bir university project planner örneği kullanılır.
+- `Sample` etiketi görünür; gerçek kullanıcı projesi gibi sunulmaz.
+- Command Center ilk açılır.
+- Product/Experience/Build/Delivery grupları gezilebilir.
+- CTA, örneği kendi fikriyle yeniden başlatır.
+- Sample veri uygulama sürümüyle schema uyumlu tutulur ve E2E ile doğrulanır.
+
+### 12.4 New Project Wizard
+
+**Amaç:** Kullanıcıdan minimum fakat yeterli bağlam almak.
+
+**Adımlar:**
+
+1. Idea: büyük textarea, 3 örnek fikir, karakter sayısı değil kalite ipucu.
+2. Audience: kim, hangi bağlam, en büyük problem.
+3. Goal: Bootcamp, Startup MVP, Client, Portfolio, Hackathon.
+4. Platform: Web, Mobile, Extension, AI Tool, Marketplace, Desktop.
+5. Constraints: timeline, team size, budget/stack tercihi, output depth.
+6. Review: girilen bilgiler ve oluşacak çıktılar.
+
+**Kabul:**
+
+- Hata yalnız submit anında değil ilgili adımda gösterilir.
+- Back/forward veri kaybetmez.
+- Quick sample ile form doldurulabilir.
+- Submit sonrası project URL oluşur ve generation kullanıcı aksiyonuyla başlar.
+
+### 12.5 Workspace — Generation State
+
+**Üst alan:** Project title, goal, status, last saved.
+**Sol alan:** Fikir özeti ve constraints.
+**Orta alan:** Gerçek sıraya göre pixie timeline.
+**Ana alan:** Aktif/bitmiş section preview.
+**Alt/yan aksiyon:** Cancel desteklenmiyorsa sahte cancel gösterilmez; retry/resume
+gerçek davranışa bağlanır.
+
+Her pixie kartı:
+
+- rol,
+- yaptığı gerçek iş,
+- status,
+- ilgili section,
+- tamamlanma zamanı,
+- açılabilir output bağlantısı göstermelidir.
+
+### 12.6 Workspace — Ready State
+
+- Command Center default görünüm,
+- grouped navigation,
+- active section başlığı,
+- section regenerate ve refine,
+- autosave durumu,
+- export aksiyonları,
+- hata/eksik bilgi göstergeleri.
+
+### 12.7 Dashboard
+
+Her proje kartında:
+
+- proje adı ve one-liner,
+- goal/platform,
+- status,
+- blueprint readiness,
+- son aktivite,
+- **next action**,
+- açık proje butonu.
+
+Boş state tek CTA ve bir sample linki içermelidir. Junk/test projeleri final
+screenshot ve canlı demo ortamından temizlenmelidir.
+
+### 12.8 Delivery Pack / Bootcamp Mode
+
+Bootcamp Mode ana workspace altındaki sürekli form olmak yerine ayrı ve goal-aware
+bir alana taşınacaktır.
+
+**Girdiler:** Sprint name, sprint goal, factual progress notes, evidence links.
+**Çıktılar:** Daily summary, product status, Sprint Review, Retrospective,
+backlog update explanation, README sprint section, missing information.
+**Etik kural:** Yapılmamış iş veya var olmayan evidence üretilemez.
+**Kabul:** Eksik bilgi açıkça işaretlenir; source notes kaybolmaz; Markdown copy
+ve download çalışır.
+
+### 12.9 Responsive ve erişilebilirlik
+
+- 390×844, 768×1024 ve 1440×1000 viewport doğrulanır.
+- Klavye ile wizard, tabs/navigation ve action buttons kullanılabilir.
+- Focus görünürdür.
+- Kontrast kritik metinlerde WCAG AA hedefler.
+- Loading yalnız renk/animasyonla anlatılmaz; metin ve `aria-live` kullanılır.
+- `prefers-reduced-motion` korunur.
+- Uzun AI içeriği taşma ve yatay scroll üretmez.
+- Form error'ları alanla programatik ilişkilidir.
+
+---
+
+## 13. AI Ürün Mimarisi ve Pixie Orkestrasyonu
+
+### 13.1 Mevcut gerçek mimari
+
+BuildPixies bugün OpenAI-compatible chat completions üzerinde çalışan,
+bağımlılık koruyan **role-based prompt pipeline** kullanır. Bu, uzman roller ve
+orchestration içeren gerçek bir AI uygulamasıdır; ancak belirli bir Agents SDK
+handoff sistemi değildir. Jüri anlatısında bu ayrım korunmalıdır.
+
+### 13.2 Pixie ve output eşlemesi
+
+| Pixie | Rol | Output / karar |
+| --- | --- | --- |
+| Pip | Orchestrator | Orchestration plan, missing information, sequence, guardrails |
+| Pria | Product | Product brief ve MVP scope |
+| Moxie | Market | Competitors, positioning, differentiation, market risk |
+| Luma | UX | Journey, screens, actions, empty/error states |
+| Tinker | Tech | Stack, architecture, tables, API routes, risk |
+| Bitsy | Code | File tree, starter tasks, conventions |
+| Bugsy | QA | Happy path, edge case, security, demo checklist |
+| Sprinta | Scrum | Backlog ve sprint plan |
+| Quill | Docs | README / delivery documentation |
+
+### 13.3 Pipeline bağımlılıkları
+
+```text
+Pip: orchestration plan
+  ├─ Pria: product brief
+  ├─ Moxie: market analysis
+  ├─ Pria/Luma/Tinker: scope + UX + tech
+  ├─ Bitsy/Bugsy/Sprinta: code + tests + backlog
+  ├─ Sprinta: sprint plan
+  └─ Quill: README
+```
+
+Bağımsız işler batch halinde çalışır; sonraki aşamalar önceki structured
+output'ları context olarak kullanır.
+
+### 13.4 Sağlayıcı stratejisi
+
+1. `OPENROUTER_API_KEY` varsa OpenRouter tercih edilir.
+2. Varsayılan model `openrouter/free` düşük maliyetli demo/geliştirme içindir.
+3. OpenRouter yok, `OPENAI_API_KEY` varsa OpenAI-compatible fallback çalışır.
+4. İki key de yoksa deterministic sample fallback kullanılır.
+5. Sample çıktılar UI ve videoda `Sample` olarak etiketlenir.
+
+### 13.5 Mevcut dayanıklılık
+
+- Provider timeout,
+- `Retry-After` uyumlu 429/5xx retry,
+- OpenRouter için varsayılan 4 retry,
+- JSON fence normalization ve parsing,
+- strict Zod section schemas,
+- geçersiz structured output için bir section retry,
+- güvenli client error mesajı,
+- provider/status/error type/request id içeren secret-safe log,
+- data collection varsayılan `deny`,
+- parameter support zorunluluğu,
+- generation route'larında geniş max duration.
+
+### 13.6 Sprint 3 AI kanıt hedefi
+
+Jüriye “AI var” demek yerine aşağıdaki teknik kanıt gösterilir:
+
+- rol ve prompt sorumluluk tablosu,
+- pipeline dependency diagram,
+- schema örneği,
+- provider routing kararı,
+- retry/validation/guardrail örneği,
+- project blueprint persistence,
+- regenerate sırasında previous output context kullanımı,
+- per-pixie event/trace kaydı,
+- sample fallback ile gerçek AI ayrımı.
+
+### 13.7 Agents SDK ve vector memory kararı
+
+- Belirli bir SDK kullanmak Bootcamp kılavuzunda zorunlu değildir.
+- Agents SDK migration yalnız ürün kararlılığını düşürmeden somut handoff/tracing
+  değeri üretiyorsa yapılır.
+- `pgvector` yalnız semantic retrieval ihtiyacı kanıtlanırsa eklenir.
+- Kısa vadede project blueprint, previous outputs ve decision log tablosu daha
+  anlamlı memory kanıtıdır.
+- Sırf puan için kullanılmayan teknoloji eklenmez; kılavuz amaç dışı eklenen
+  özelliklerin puan getirmeyeceğini açıkça belirtir.
+
+---
+
+## 14. Teknik Mimari ve Veri Akışı
+
+### 14.1 Güncel stack
+
+| Katman | Teknoloji |
+| --- | --- |
+| Framework | Next.js 16.2.10 App Router |
+| Runtime | Node.js >=24.15.0, TypeScript, React 19 |
+| UI | Tailwind CSS v4, Base UI/shadcn patterns, Motion, Lucide |
+| Validation | Zod 4 strict request/output schemas |
+| AI client | OpenAI Node SDK üzerinden OpenRouter/OpenAI-compatible API |
+| Database/Auth | Supabase Postgres, anonymous auth, owner RLS |
+| Background work | Vercel Queue + generation jobs + lease/retry |
+| Local fallback | `.local/*.json` namespaced store |
+| Tests | ESLint, TypeScript, Next build, Playwright, Supabase SQL tests |
+| CI | GitHub Actions Quality workflow |
+
+### 14.2 Ana veri akışı
+
+```text
+Browser
+  → POST /api/projects
+  → Project persisted (Supabase or local store)
+  → POST /api/generation-jobs
+  → Job created
+  → Vercel Queue worker OR Next after() local runner
+  → AI orchestration batches
+  → strict section validation
+  → partial events/outputs (planned)
+  → atomic blueprint + job completion
+  → GET /api/generation-jobs/:id polling
+  → Command Center / Output groups
+  → regenerate / export / delivery pack
+```
+
+### 14.3 Temel veri varlıkları
+
+| Varlık | Ana alanlar | Durum |
+| --- | --- | --- |
+| Project | id, owner, raw idea, goal, platform, audience, constraints, status, blueprint | Done |
+| GenerationJob | id, project, status, generation input, blueprint/error, attempts, lease | Done |
+| BootcampReport | source notes, sprint metadata, structured report | Done |
+| RateLimit | owner/bucket/window/count | Done |
+| GenerationEvent | pixie, section, status, timestamp, safe message | Planned P0 |
+| PartialBlueprint | completed sections during job | Planned P0 |
+| DecisionMemory | accepted/rejected decisions and rationale | Planned P2 |
+
+### 14.4 API envanteri
+
+| Endpoint | Amaç | Koruma/Not |
+| --- | --- | --- |
+| `GET /api/projects` | Proje listesi | Owner-aware storage |
+| `POST /api/projects` | Proje oluştur | Zod + rate limit |
+| `GET /api/projects/:id` | Proje detayı | Owner/RLS |
+| `POST /api/generation-jobs` | Async blueprint başlat | 300s, rate limit, durable/local runner |
+| `GET /api/generation-jobs/:id` | Job poll | Owner-aware |
+| `POST /api/queues/generate-blueprint` | Queue callback | Node runtime, retry/lease |
+| `POST /api/generate-blueprint` | Senkron/uyumluluk üretimi | 300s; ana UI job endpoint kullanır |
+| `POST /api/regenerate-output` | Tek section regenerate | 120s, strict validation |
+| `POST /api/bootcamp-report` | Source-grounded delivery report | 120s, ayrı rate limit |
+| `POST /api/export-readme` | Markdown export | Request validation |
+| `POST /api/export-json` | JSON export | Request validation |
+
+### 14.5 Mimari kalite hedefleri
+
+- Route handler yalnız HTTP sınırını yönetir; domain logic `lib/` içinde kalır.
+- Request ve provider output aynı schema değildir; ikisi ayrı doğrulanır.
+- Server-only key hiçbir `NEXT_PUBLIC_` değişkeninde bulunmaz.
+- Storage adapter local ve Supabase davranışını aynı contract'ta tutar.
+- Worker idempotent olmalıdır.
+- Partial event geliştirmesi durable/local runner davranışını ayırmamalıdır.
+- Error log kullanıcı girdisini, token'ı veya API key'i içermemelidir.
+
+---
+
+## 15. Güvenlik, Gizlilik, Maliyet ve Dayanıklılık
+
+### 15.1 Güvenlik baseline
+
+- API key'ler server-only environment'ta,
+- `.env.local` Git ignore altında,
+- anonymous Supabase user + `owner_id` RLS,
+- service role yalnız server tarafında,
+- Zod ile body/size validation,
+- rate-limited AI endpoints,
+- generic upstream error,
+- CI'da deterministic AI fallback,
+- production ortamında local store kapalı olmalı,
+- secret scanning final checklist'in parçası.
+
+### 15.2 OpenRouter privacy kararı
+
+- Varsayılan provider preference `data_collection: deny`.
+- `OPENROUTER_ALLOW_DATA_COLLECTION=1` yalnız açık veri etkisi kararıyla açılır.
+- Demo girdilerinde kişisel veri kullanılmaz.
+- Final videoda API key, browser devtools secret veya kişisel proje gösterilmez.
+
+### 15.3 Maliyet ve kota
+
+- Free router geliştirme ve düşük trafik demo için uygundur; availability ve
+  latency değişkendir.
+- Bir blueprint bugün 11 completion çağrısı üretmektedir.
+- Tam canlı test 252 saniye sürmüş; demo sırasında sıfırdan tam üretim risklidir.
+- Curated sample project final videonun ana güvenlik ağıdır.
+- Canlı demoda gerçek üretim gösterilecekse sabit/predictable model ve küçük
+  test bütçesi feature freeze öncesi kararlaştırılır.
+- Public deploy için per-user quota ve Turnstile/CAPTCHA P1'dir.
+
+### 15.4 Hata ve fallback ilkesi
+
+| Hata | Kullanıcı davranışı | Sistem davranışı |
+| --- | --- | --- |
+| 429/5xx | “Provider busy, retrying” | Backoff/retry, sonra güvenli 503 |
+| Invalid JSON/schema | “Output is being corrected” | İlgili section bir kez yeniden üret |
+| Timeout | Tamamlanan section'ları koru | Job failed/resumable tasarımı |
+| Queue unavailable | Açık status/error | Job fail + project status update |
+| No AI key | Sample mode etiketi | Deterministic fallback |
+| Storage unavailable | Projeyi kaydedemediğini söyle | Hosted ortamda fail closed |
+
+---
+
+## 16. Repo Gerçeklik Denetimi
+
+### 16.1 Çalışan alanlar
+
+| Alan | Durum | Kod/kanıt |
+| --- | --- | --- |
+| Landing/dashboard/wizard/workspace | Code Complete | `app/`, `components/` |
+| Project create/list/detail | Done | API + storage + E2E |
+| 11-section blueprint | Done | prompts, schemas, orchestrator, live smoke |
+| OpenRouter integration | Done | client, env docs, live inference |
+| AI retry/schema hardening | Done | commit `6176086`, CI success |
+| Job + polling | Done | job routes/store/UI |
+| Durable queue/lease | Code Complete | queue route, worker, migrations |
+| Supabase RLS/rate limit | Code Complete | migrations + SQL test |
+| Export/regenerate | Done | PR #11 + persistence hardening |
+| Bootcamp Mode | Code Complete | UI/API/schema/persistence/export |
+| E2E/CI | Done | 3 Playwright test, Quality workflow |
+| Design system | Code Complete | assets referansları uygulanmış |
+
+### 16.2 Partial veya eksik alanlar
+
+| Alan | Gerçek durum | Sonraki karar |
+| --- | --- | --- |
+| Landing sample blueprint | Eski plan Done diyor; ilgili component yok | P0 gerçek sample oluştur |
+| Per-pixie progress | UI status var, gerçek event yok | P0 partial events |
+| Command Center | Yok | P0 |
+| Output information architecture | 11 tab | P0 regroup |
+| Bootcamp area separation | Ana workspace altında | P1 delivery route |
+| Canlı Vercel deploy | Repo homepage boş, `.vercel` bağı yok | P0 Sprint 3 |
+| Canlı Supabase smoke | Kod var, production kanıtı yok | P0 Sprint 3 |
+| User testing | Kanıt yok | 3 test P1 |
+| Final video | Yok | 31 Temmuz–1 Ağustos |
+| Final screenshots | Sprint 1 görselleri eski tasarım | Sprint 2/3 yeniden çek |
+| Sprint 2 README altı kanıt | Henüz ara güncelleme | 19 Temmuz zorunlu |
+| Issue hygiene | “done” issue'lar açık | 17 Temmuz düzelt |
+| Repo description | Eski “Dev-in-a-Box” anlatısı | Güncelle |
+| Repo homepage | Boş | Deploy sonrası ekle |
+| Team socials | Kemal/Selin bilgileri eksik olabilir | External confirmation |
+
+### 16.3 Dokümantasyon tutarsızlıkları
+
+- Eski plan üç kişilik takım gösteriyordu; README dört kişi gösteriyor.
+- Eski plan `components/landing/output-preview.tsx` dosyasını var ve Done
+  gösteriyordu; repo envanterinde böyle bir dosya yok.
+- Sprint 1 belgesi eski remote adını içeriyor.
+- README'de BP-002 Done işaretli; gerçek sample blueprint deneyimi yok.
+- GitHub Issues #1–#10 “done” etiketi taşıdığı halde açık.
+- Product screenshots yeni design rebuild sonrası güncellenmemiş.
+
+Bu maddeler ürün hatası değilse bile değerlendirme sırasında güvenilirlik
+zayıflatır ve Sprint 2 kapanışında düzeltilmelidir.
+
+---
+
+## 17. Master Product Backlog
+
+Story point ölçeği: `1, 2, 3, 5, 8`. 8'den büyük iş bölünür. Owner atamaları
+öneridir ve takım sync'inde kesinleşir.
+
+### 17.1 Mevcut backlog gerçeklik özeti
+
+| Aralık | Durum |
+| --- | --- |
+| BP-001–BP-028 | Çoğu kodlandı; BP-002, BP-008, BP-025 ve deploy/evidence yorumları yeniden açılmalı |
+| BP-029–BP-050 | Product Experience Reset, production, evidence ve final teslim backlog'u |
+
+### 17.2 Yeni ve revize backlog
+
+| ID | Story / sonuç | P | SP | Durum | Sprint | Önerilen owner | Bağımlılık | Kanıt |
+| --- | --- | ---: | ---: | --- | --- | --- | --- | --- |
+| BP-001R | Landing ürünü 5 saniyede doğru anlatır | P0 | 3 | Planned | S2 | PO + Selin | Copy kararı | Desktop/mobile screenshot + 3 test |
+| BP-002R | Gerçek sample blueprint görülebilir | P0 | 5 | Planned | S2 | Selin | Curated data | `/sample` E2E + screenshot |
+| BP-008R | Pixie statüleri gerçek job event'lerinden gelir | P0 | 8 | Planned | S2–S3 | Kemal | Job event contract | API smoke + UI E2E |
+| BP-025R | Partial outputs polling ile açılır; SSE opsiyonel | P0 | 8 | Planned | S3 | Kemal | BP-008R | Long-running E2E |
+| BP-029 | Sahte sosyal kanıt ve ölü CTA kaldırılır | P0 | 1 | Planned | S2 | Selin | Yok | Link test + screenshot |
+| BP-030 | Curated demo project schema-safe ve versiyonlu olur | P0 | 3 | Planned | S2 | PO + Selin | Output schema | Fixture validation |
+| BP-031 | Job events ve partial blueprint persist edilir | P0 | 8 | Planned | S2–S3 | Kemal | Migration/store design | Unit/SQL/API test |
+| BP-032 | Workspace gerçek timeline ve progressive output gösterir | P0 | 8 | Planned | S3 | Kemal + Selin | BP-031 | Playwright |
+| BP-033 | MVP Command Center overview eklenir | P0 | 5 | Planned | S3 | PO + Selin | Curated mapping | UX acceptance + E2E |
+| BP-034 | 11 tab, 4 anlamlı çıktı grubuna dönüşür | P0 | 5 | Planned | S3 | Selin | BP-033 | Responsive screenshot |
+| BP-035 | Controlled refine aksiyonları eklenir | P1 | 5 | Planned | S3 | Kemal | Regenerate API | Schema test |
+| BP-036 | Bootcamp Mode ayrı Delivery Pack alanına taşınır | P1 | 5 | Planned | S3 | Selin | Route/IA | Goal-aware E2E |
+| BP-037 | Landing/wizard/workspace accessibility ve mobile polish | P0 | 5 | Planned | S3 | Selin | Core UI freeze | Keyboard/mobile test |
+| BP-038 | Safe generation event/log observability | P1 | 3 | Planned | S3 | Kemal | BP-031 | Log sample, no secret |
+| BP-039 | Vercel production deploy | P0 | 5 | Planned | S3 | SM + Kemal | Env/Supabase | Public URL + smoke |
+| BP-040 | Production Supabase migration/auth/RLS smoke | P0 | 5 | Planned | S3 | SM + Kemal | Supabase project | Auth isolation evidence |
+| BP-041 | Public quota + Turnstile/CAPTCHA kararı | P1 | 5 | Planned | S3 | Kemal | Deploy | Abuse test/ADR |
+| BP-042 | Sprint screenshot/evidence klasörü ve naming standardı | P0 | 2 | Planned | S2 | SM | Team artifacts | Relative README links |
+| BP-043 | Sprint 2 altı zorunlu README maddesi | P0 | 3 | Planned | S2 | SM + herkes | Evidence | README review |
+| BP-044 | 3 dakikalık video, thumbnail ve doğrulanmış YouTube linki | P0 | 8 | Planned | S3 | PO + SM | RC1 | Incognito link check |
+| BP-045 | Final submission form ve release checklist | P0 | 3 | Planned | S3 | SM | Video/deploy/README | Submission proof |
+| BP-046 | GitHub issue/label/description/homepage hygiene | P0 | 2 | Planned | S2 | SM | Deploy URL kısmi | Board screenshot |
+| BP-047 | En az 3 hedef kullanıcı testi | P1 | 3 | Planned | S3 | PO | RC UX | Tarihli bulgu tablosu |
+| BP-048 | AI architecture/trace kanıt sayfası | P0 | 3 | Planned | S3 | Kemal + PO | Event logs | README diagram + demo |
+| BP-049 | Decision memory tablosu ve rationale | P2 | 8 | Planned | S3 sonrası | Kemal | Core freeze | ADR/prototype |
+| BP-050 | Email/OAuth account linking | P2 | 8 | Planned | S3 sonrası | Kemal | Production auth | Auth E2E |
+
+### 17.3 Öncelik sırası
+
+**Sprint 2 zorunlu:** BP-001R, BP-002R, BP-029, BP-030, BP-042, BP-043,
+BP-046 ve BP-008R/BP-031'in contract tasarımı.
+**Sprint 3 core:** BP-008R, BP-025R, BP-031, BP-032, BP-033, BP-034,
+BP-037, BP-039, BP-040, BP-044, BP-045, BP-048.
+**Zaman kalırsa:** BP-035, BP-036, BP-038, BP-041, BP-047.
+**Final sonrası:** BP-049, BP-050 ve tam Agents SDK migration.
+
+---
+
+## 18. Öncelikli Story Kabul Kriterleri
+
+### BP-002R — Gerçek Sample Blueprint
+
+- Sample route AI key olmadan açılır.
+- Fixture mevcut `blueprintSchema` ile doğrulanır.
+- `Sample project` etiketi görünür.
+- Overview ve tüm output grupları açılır.
+- “Use this structure for my idea” CTA wizard'a gider.
+- Sample route production E2E kapsamındadır.
+- Landing `View Demo` bu route'a gider.
+
+### BP-031 — Job Events ve Partial Blueprint
+
+- Durable ve local job store aynı event tipini kullanır.
+- Event alanları: id, pixie, section, status, safe message, timestamp.
+- Section `done` olmadan partial output publish edilmez.
+- Poll response backward compatible olur.
+- Owner isolation korunur.
+- Retry duplicate event üretse bile UI idempotent işler.
+- Tamamlanan partial data job failure sonrası kaybolmaz.
+- Raw prompt/output loglanmaz.
+
+### BP-032 — Progressive Workspace
+
+- İlk 2 saniyede queued/running state görünür.
+- Aynı anda yalnız gerçek aktif pixie'ler working görünür.
+- Tamamlanan bölüm anında tıklanabilir olur.
+- Page refresh job takibini kaybetmez.
+- Failed state tamamlanan section'ları gösterir.
+- Retry varsa gerçek endpoint'e bağlıdır.
+- Mobile'da timeline ve output okunur.
+- Screen reader status değişimlerini duyabilir.
+
+### BP-033 — MVP Command Center
+
+- Default tab `Overview` olur.
+- Bir cümlelik ürün, hedef kullanıcı, must-have, out-of-scope, risk, first
+  sprint ve next actions gösterilir.
+- Veriler mevcut validated blueprint'ten deterministic türetilir.
+- Eksik liste boşsa uygun empty state gösterilir.
+- First sprint kopyalanabilir.
+- Sample ve gerçek project aynı component'i kullanır.
+
+### BP-039/BP-040 — Production Release
+
+- Vercel build başarılı.
+- Production Supabase migration'ları uygulanmış.
+- Anonymous user A, user B'nin projesini okuyamaz.
+- Project create → generation/sample → export smoke geçer.
+- Queue callback ve region config doğrulanır.
+- Hosted ortam local JSON store'a düşmez.
+- Server-only env browser bundle/log içinde görünmez.
+- GitHub repo homepage canlı URL'ye güncellenir.
+
+### BP-043 — Sprint 2 README Closeout
+
+- Altı zorunlu başlık eksiksiz.
+- Daily notları tarihli ve gerçek.
+- Board baş/orta/son screenshotları relative path ile bağlı.
+- Yeni tasarım ve gerçek blueprint screenshotları var.
+- Review; tamamlanan, taşınan ve başarısız işleri ayırıyor.
+- Retro aksiyonlarında owner ve tarih var.
+- Katılımcılar gerçek toplantı katılımına göre yazılmış.
+
+---
+
+## 19. Sprint 1 Gerçekleşenler ve Kanıt Açıkları
+
+### 19.1 Sprint bilgisi
+
+- **Dönem:** 19 Haziran – 5 Temmuz 2026
+- **Hedef:** Fikir, takım, repo, plan, web pivot ve çalışan teknik temel
+- **Ürün sonucu:** Çalışan Next.js iskeleti ve ilk blueprint akışı
+- **Tarihsel belge:** [`docs/sprint-1.md`](sprint-1.md)
+
+### 19.2 Gerçekleşen güçlü işler
+
+- BuildPixies fikri ve web-first pivot,
+- public repo ve README,
+- landing, dashboard, wizard, workspace, Output Hub,
+- project APIs ve local/Supabase storage,
+- role-based AI prompts/schemas,
+- generation job/polling,
+- owner RLS temeli,
+- README export,
+- Sprint 1 ürün screenshotları,
+- decision log.
+
+### 19.3 Eksik/iyileştirilecek kanıtlar
+
+| Kanıt | Durum | Düzeltme |
+| --- | --- | --- |
+| Backlog mantığı | README'de var | Story point ölçeği gelecekte Fibonacci ile standardize edilir |
+| Daily Scrum | Metin var | Gerçek iletişim screenshot'ları varsa redakte edilerek `backfilled` eklenir |
+| Board update | Link ve özet var | Sprint 1 tarihli board screenshot'ı eklenmeli |
+| Ürün durumu | 5 screenshot var | Mevcut haliyle yeterli; tarihi/caption korunmalı |
+| Review | Var | Katılımcı ve taşınan iş doğruluğu teyit edilir |
+| Retro | Var | Aksiyon owner/tarih formatına taşınabilir |
+
+Tarihsel gerçekliği korumak için mevcut olmayan eski screenshot üretilmez.
+Elde gerçek kaynak varsa sonradan eklenen kanıt açıkça `backfilled on <date>`
+olarak işaretlenir.
+
+---
+
+## 20. Sprint 2 Kapanış Planı
+
+### 20.1 Sprint bilgisi
+
+- **Dönem:** 6 Temmuz – 19 Temmuz 2026
+- **Hedef:** Kullanıcı fikir girsin, gerçek blueprint üretilsin, sonuç
+  saklansın/export edilsin; çalışan MVP kanıtlanabilsin.
+- **Bugünkü durum:** Core hedef fazlasıyla kodlandı; ürün anlaşılırlığı ve sprint
+  kanıtı kapanış riski.
+
+### 20.2 Sprint 2 gerçekleşen teknik kapsam
+
+- PR #11: Markdown copy, JSON export, section regenerate controls,
+- regenerate persistence ve eşzamanlı istek koruması,
+- Sprint Plan output,
+- durable Vercel Queue, lease, retry ve atomic completion,
+- Supabase distributed rate limit,
+- source-grounded Bootcamp Mode,
+- Playwright demo journey ve GitHub Actions,
+- design references'ın uygulanması,
+- OpenRouter Free integration,
+- 429/5xx retry ve invalid output hardening,
+- canlı key, tek section ve tam pipeline smoke.
+
+### 20.3 16–19 Temmuz günlük plan
+
+#### 16 Temmuz — Gerçeklik ve ürün reseti
+
+| İş | Owner | Çıktı |
+| --- | --- | --- |
+| Master planı bootcamp kaynaklarıyla güncelle | PO | Bu belge |
+| Ekip roster/rol/form durumunu doğrula | SM | External confirmation notu |
+| Issue #1–#10 state/label temizliği planı | SM | Board hygiene checklist |
+| Landing/workspace baseline screenshot al | Selin | Sprint 2 before kanıtı |
+| Progressive event contract taslağı | Kemal | Type/API/migration notu |
+| Sprint 2 evidence klasörünü oluştur | SM | Dosya yapısı ve naming |
+
+#### 17 Temmuz — Proof before promise
+
+| İş | Owner | Çıktı |
+| --- | --- | --- |
+| Sahte sosyal kanıtı kaldır, CTA düzelt | Selin | BP-029 |
+| Curated sample fixture ve route | Selin + PO | BP-002R/BP-030 |
+| Landing Before/After sample bölümü | Selin | BP-001R |
+| Event/partial schema ve storage contract | Kemal | BP-031 ilk dilim |
+| Daily/board kanıtlarını arşivle | SM | Evidence links |
+| Repo description'ı ürün kategorisine hizala | SM + PO | GitHub metadata |
+
+#### 18 Temmuz — Entegrasyon ve code freeze
+
+| İş | Owner | Çıktı |
+| --- | --- | --- |
+| Sample E2E ve responsive kontrol | Selin | CI test |
+| Job event backend ilk dikey dilim | Kemal | Gerçek Pip/section status |
+| Command Center low-fidelity component/data mapping | PO + Selin | Sprint 3 hazır başlangıç |
+| `lint`, `typecheck`, `build`, E2E | Dev ekip | Green quality gate |
+| Sprint 2 final product screenshots | PO/SM | Desktop + mobile |
+| Code freeze 18:00 | SM | Açık blocker listesi |
+
+#### 19 Temmuz — Sprint closeout
+
+| Saat | İş | Owner |
+| --- | --- | --- |
+| 10:00 | Board ve story state doğrulama | SM |
+| 11:00 | Product demo + acceptance | PO + ekip |
+| 12:00 | Sprint Review | Ekip |
+| 13:00 | Retrospective | Ekip |
+| 14:00 | README altı zorunlu madde | SM + herkes |
+| 15:00 | Evidence freeze | SM |
+| 16:00 | Final lint/type/build/E2E | Dev ekip |
+| 17:00 | README link ve privacy kontrolü | PO + SM |
+| 18:00 | Sprint 2 commit/push/CI | Reviewer |
+| 20:00 | Kapanış ve Sprint 3 input listesi | Ekip |
+
+### 20.4 Sprint 2 Definition of Done
+
+- Kullanıcı proje oluşturabiliyor.
+- Gerçek OpenRouter ile validated blueprint üretilmiş.
+- Blueprint project/job'a kaydoluyor.
+- Regenerate/export çalışıyor.
+- Sample blueprint AI beklemeden açılıyor.
+- Landing gerçek sample'a bağlanıyor.
+- En az ilk gerçek pixie progress dilimi veya tamamlanmış event contract'ı var;
+  kalan iş Sprint 3'e açıkça taşınmış.
+- Main kalite zinciri yeşil.
+- README'de altı zorunlu sprint kanıtı var.
+- Board screenshot ve yeni ürün screenshotları ekli.
+- Review/Retro gerçek katılımcı ve kararlarla yazılı.
+
+---
+
+## 21. Sprint 3 Gün Gün Final Planı
+
+### 21.1 Sprint bilgisi
+
+- **Dönem:** 20 Temmuz – 2 Ağustos 2026
+- **Sprint Goal:** BuildPixies'i ürün değeri net, progressive AI deneyimi olan,
+  deploy edilmiş, kanıtları ve 3 dakikalık videosu hazır bir submission
+  candidate haline getirmek.
+
+### 21.2 Günlük plan
+
+#### 20 Temmuz — Planning ve Akademi soru-cevap
+
+- Sprint 2 review/retro aksiyonlarını Sprint 3'e taşı.
+- 20:00 soru-cevap toplantısına katıl veya notlarını al.
+- Değişen teslim/sunum kuralı varsa bu plana işle.
+- Sprint 3 capacity ve owner'ları teyit et.
+- P0/P1 ayrımını board'a uygula.
+- **Exit:** Sprint goal, sprint backlog ve owner'lar kesin.
+
+#### 21 Temmuz — Progressive event backend
+
+- GenerationEvent/partial blueprint modelini tamamla.
+- Local store ve Supabase migration/adapter davranışını hizala.
+- Orchestrator callback'lerini job persistence'a bağla.
+- Poll response contract testini yaz.
+- **Exit:** API gerçek section progress döndürüyor.
+
+#### 22 Temmuz — Progressive workspace
+
+- Timeline gerçek events ile çalışır.
+- Refresh/reconnect job durumunu korur.
+- Partial section preview açılır.
+- Failed state completed sections'ı korur.
+- Mobile state kontrol edilir.
+- **Exit:** 4 dakikalık job artık boş bekleme değildir.
+
+#### 23 Temmuz — MVP Command Center
+
+- Overview data mapping,
+- must-have/out-of-scope/risk/first sprint/next action,
+- sample ve gerçek proje ortak component,
+- copy first sprint,
+- empty/partial states.
+- **Exit:** Kullanıcı tek ekranda MVP kararını anlar.
+
+#### 24 Temmuz — Output IA ve refinement
+
+- 11 tab → Overview/Product/Experience/Build/Delivery,
+- active header düzeltmesi,
+- kontrollü refine aksiyonlarından en değerlisi,
+- regenerate feedback validation.
+- **Exit:** Detaylar karar hiyerarşisini bozmaz.
+
+#### 25 Temmuz — Core feature freeze
+
+- Delivery Pack ayrımı yalnız core stabilse yapılır.
+- Tüm P0 story acceptance review.
+- Agents SDK/pgvector için go/no-go kararı.
+- Yeni ana özellik dondurulur.
+- **Exit:** Açık yalnız bug, deploy, evidence, accessibility.
+
+#### 26 Temmuz — Production security ve observability
+
+- Env matrix,
+- quota/Turnstile kararı,
+- safe logs/request IDs,
+- hosted local-store fail-closed,
+- RLS/owner isolation,
+- dependency audit.
+- **Exit:** Production readiness checklist %80+.
+
+#### 27 Temmuz — UX test ve accessibility
+
+- 3 hedef kullanıcı testinden en az 2'si,
+- 5-second comprehension,
+- sample→overview task,
+- mobile/keyboard/focus/aria,
+- en kritik 3 UX düzeltmesi.
+- **Exit:** Bulgu ve karar tablosu hazır.
+
+#### 28 Temmuz — Release Candidate 1
+
+- Vercel deploy,
+- Supabase production migrations,
+- anonymous auth/RLS smoke,
+- project→generation/sample→export smoke,
+- production URL GitHub homepage'e eklenir,
+- incognito test.
+- **Exit:** Public RC1 erişilebilir.
+
+#### 29 Temmuz — Demo project ve architecture evidence
+
+- Curated project final içeriği,
+- AI architecture diagram,
+- model/routing/schema/retry açıklaması,
+- README technical architecture,
+- issue/PR/CI kanıt bağlantıları.
+- **Exit:** Jüri AI ve mimari kriterlerini repodan görebilir.
+
+#### 30 Temmuz — Evidence ve README freeze
+
+- Sprint 3 board screenshots,
+- final landing/dashboard/wizard/workspace/overview/delivery screenshots,
+- Lean Canvas/persona özeti,
+- tüm sprint linkleri,
+- repo description/topics/homepage,
+- broken link kontrolü.
+- **Exit:** README submission-ready.
+
+#### 31 Temmuz — Video script ve prova
+
+- 180 saniyelik script,
+- screen recording shot list,
+- demo data reset,
+- iki süreli prova,
+- ses/çözünürlük/cursor kontrolü,
+- thumbnail.
+- **Exit:** Script 2:50–3:00 aralığında.
+
+#### 1 Ağustos — Video ve Submission Candidate
+
+- Final video kaydı,
+- edit, subtitle gerekiyorsa ekleme,
+- YouTube upload,
+- incognito playback,
+- tüm submission linklerini tek dosyada toplama,
+- release tag adayı.
+- **Exit:** Video ve ürün linkleri çalışıyor.
+
+#### 2 Ağustos — Final teslim
+
+- 10:00 production smoke,
+- 11:00 README/links/secret/privacy review,
+- 12:00 final team sign-off,
+- 14:00 form doldurma,
+- **18:00 iç teslim ve gönderim**,
+- 18:00–23:59 yalnız kanıtlanmış teslim hatası için tampon.
+
+### 21.3 Sprint 3 Definition of Done
+
+- Public veya açıkça deploy-ready çalışan ürün,
+- progressive generation veya jüriye gösterilebilir gerçek event kanıtı,
+- MVP Command Center,
+- curated sample project,
+- responsive ve keyboard-usable core journey,
+- production Supabase/RLS smoke,
+- final README ve üç sprint kanıtı,
+- 3 dakikayı aşmayan YouTube videosu,
+- form 2 Ağustos 18:00 iç hedefine kadar gönderilmiş,
+- `main` green CI ve temiz worktree,
+- son dakika başlamış açık P0 yok.
+
+---
+
+## 22. Scrum Kanıt ve README Operasyon Planı
+
+### 22.1 Önerilen dosya yapısı
+
+```text
+docs/
+  evidence/
+    sprint-1/
+      daily/
+      board/
+      product/
+    sprint-2/
+      daily/
+      board/
+      product/
+      review/
+      retrospective/
+    sprint-3/
+      daily/
+      board/
+      product/
+      review/
+      retrospective/
+    user-testing/
+    architecture/
+```
+
+### 22.2 Dosya adlandırma
+
+```text
+2026-07-17-daily-whatsapp-01-redacted.png
+2026-07-17-board-mid-sprint.png
+2026-07-19-product-command-center-desktop.png
+2026-07-19-product-command-center-mobile.png
+2026-07-19-review-notes.md
+```
+
+### 22.3 Privacy standardı
+
+- Telefon numaraları, özel mesajlar ve ilgisiz konuşmalar kırpılır/blur edilir.
+- API key, environment value, e-mail ve kullanıcı ID görünmez.
+- Screenshot'a anlamlı alt yazı eklenir.
+- Kanıtın tarihi ve neyi kanıtladığı yazılır.
+- Dış image host yerine mümkün olduğunca repo-relative dosya kullanılır.
+
+### 22.4 Sprint README şablonu
+
+Her sprint bölümü aynı sırayı kullanır:
+
+1. Sprint dönemi ve hedefi,
+2. Sprint capacity ve planlanan/tamamlanan story point,
+3. Backlog dağıtma mantığı,
+4. Daily Scrum,
+5. Sprint Board Updates,
+6. Ürün Durumu,
+7. Teknik doğrulama,
+8. Sprint Review ve katılımcılar,
+9. Sprint Retrospective,
+10. Taşınan işler ve sonraki sprint aksiyonları.
+
+### 22.5 Story point standardı
+
+- Fibonacci: 1, 2, 3, 5, 8.
+- Puan iş süresi değil; belirsizlik, karmaşıklık ve risk karşılaştırmasıdır.
+- Planlanan ve tamamlanan puan ayrı yazılır.
+- Bitmeyen story kısmi puan almaz; sonraki sprint'e taşınır veya bölünür.
+- Geçmiş Sprint 1'in 100 puan yaklaşımı tarihsel kayıt olarak kalabilir;
+  Sprint 2 kapanışından itibaren yeni standarda geçiş açıklanır.
+
+### 22.6 Board standardı
+
+Kolonlar:
+
+```text
+Backlog → Ready → In Progress → Review → Done
+```
+
+Her issue:
+
+- story ID,
+- user outcome,
+- priority,
+- sprint,
+- owner,
+- acceptance criteria,
+- test/evidence,
+- dependency,
+- PR/commit linki taşır.
+
+“Done” issue açık bırakılmaz. Kapatılamıyorsa etiket `code-complete` veya
+`partial` olmalıdır.
+
+---
+
+## 23. Kalite, Test ve Release Stratejisi
+
+### 23.1 Her PR kalite kapısı
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm run test:e2e
+```
+
+Değişikliğe göre ek doğrulama:
+
+- Supabase migration: SQL test + local/remote migration planı,
+- AI client: mock provider contract + secret-safe log,
+- UI: desktop/mobile screenshot + keyboard check,
+- route: valid/invalid/unauthorized/rate-limited request,
+- docs: `git diff --check`, link/path ve tarih kontrolü.
+
+### 23.2 E2E kritik yolculuklar
+
+1. Landing → sample blueprint,
+2. Landing → wizard → project,
+3. Project → deterministic generation → overview,
+4. Section regenerate → persistence,
+5. README/JSON export,
+6. Bootcamp delivery report,
+7. Dashboard project state,
+8. Invalid input rejection,
+9. Mobile core journey,
+10. Progressive job refresh/reconnect — BP-032 ile eklenecek.
+
+### 23.3 Canlı AI smoke politikası
+
+- CI gerçek provider kullanmaz.
+- Mock provider; header, auth, model, response format, token parametreleri ve
+  privacy preferences'ı doğrular.
+- Canlı smoke manuel ve düşük frekanslıdır.
+- Çıktıda key veya ham hassas content gösterilmez.
+- Final demo öncesi tek section ve curated full pipeline test edilir.
+
+### 23.4 Release checklist
+
+- Main ile origin senkron,
+- worktree temiz,
+- CI green,
+- production build green,
+- migrations applied,
+- env matrix complete,
+- smoke test pass,
+- screenshots current,
+- README current,
+- rollback/known issues notu,
+- release tag.
+
+### 23.5 Known limitation standardı
+
+Ürün eksikleri gizlenmez. README ve demo için kısa liste:
+
+- Free model latency/availability,
+- current role-based pipeline vs future SDK handoff,
+- anonymous auth/account linking durumu,
+- partial progress/SSE durumu,
+- production quota sınırı.
+
+Bu şeffaflık ürünün bitmemiş görünmesi değil, teknik karar kalitesidir.
+
+---
+
+## 24. Jüri Kriterleriyle Birebir Eşleme
+
+### 24.1 Ön değerlendirme — YZ
+
+| Kriter | Max | BuildPixies kanıtı | Eksik | Deadline |
+| --- | ---: | --- | --- | --- |
+| Yarışmaya hazır çalışan proje | 10 | Core E2E, generation, export, Bootcamp Mode | Public RC + progressive UX | 28 Temmuz |
+| Özgünlük | 10 | Pixie orchestration + idea-to-MVP + delivery pack | 5-second anlatı ve sample proof | 19 Temmuz |
+| Ürün tamamlanma | 10 | Landing→project→blueprint→export | Command Center, deploy, final polish | 30 Temmuz |
+| Pazara uygunluk | 10 | Bootcamp/junior builder problem eşleşmesi | 3 user test + Lean Canvas | 27–30 Temmuz |
+
+### 24.2 Ekstra teknik puan alanları — YZ
+
+| Kriter | Max | Kanıt stratejisi | Yapılmayacak hata |
+| --- | ---: | --- | --- |
+| AI model/agent/memory/orchestration | 20 | Provider rationale, role graph, strict schemas, persistence, regenerate context, event trace | Kullanılmayan SDK/vector DB eklemek veya yanlış claim |
+| Mimari/clean code | 15 | App/lib/types ayrımı, validation, storage adapter, queue lease, RLS, CI | Sadece klasör ağacı gösterip kararları açıklamamak |
+| Canlı/deploy-ready ürün | 10 | Vercel URL, Supabase production smoke, env docs, CI | Local çalışmayı deploy kabul etmek |
+
+### 24.3 Final değerlendirme — YZ
+
+| Kriter | Max | Demo/README mesajı |
+| --- | ---: | --- |
+| İhtiyaç ve çözüm eşleşmesi | 20 | “Fikir çok, uygulanabilir karar ve ilk sprint yok” problemi → Command Center |
+| Kullanıcı değeri ve deneyimi | 10 | 5 saniye anlatı, progressive progress, ilk 3 aksiyon, export |
+| Pazar potansiyeli | 10 | Bootcamp/hackathon wedge → solo builder/freelancer genişlemesi |
+| Fonksiyonel yeterlilik | 15 | Create, generate, partial progress, refine, persist, export, delivery |
+| Ürün bütünlüğü | 10 | Tutarlı IA, design system, sample, dashboard, error states |
+| Yapay zeka öğeleri | 35 | Çok aşamalı orchestration, schema, guardrail, memory context, retry, trace |
+
+### 24.4 Jüri anlatısında kullanılacak dürüst teknik cümle
+
+> BuildPixies currently uses a dependency-aware, role-based orchestration
+> pipeline over OpenAI-compatible models. Each pixie owns a strict structured
+> output, later steps consume validated earlier decisions, projects persist the
+> resulting blueprint, and section regeneration reuses project context. We
+> prioritize traceable product decisions and resilient outputs over adding an
+> SDK only for its name.
+
+### 24.5 Puan kaybettirecek durumlar
+
+- Broken public link,
+- 3 dakikayı aşan video,
+- sprint altı maddelerinin eksikliği,
+- sahte kullanıcı/metrik iddiası,
+- gerçek olmayan agent/memory claim'i,
+- AI beklerken boş ekran,
+- README ile repo durumunun çelişmesi,
+- açık secret veya kişisel veri,
+- son gün eklenmiş ve test edilmemiş özellik,
+- private/erişilemeyen board veya video linki.
+
+---
+
+## 25. Üç Dakikalık Video ve Demo Senaryosu
+
+### 25.1 Video amacı
+
+Video feature turu değil, problem→çözüm→kanıt→teknik derinlik hikâyesidir.
+Maksimum süre 3 dakikadır; hedef final export **2:50–2:58** olmalıdır.
+
+### 25.2 Zaman kodlu storyboard
+
+| Süre | Görüntü | Anlatı |
+| --- | --- | --- |
+| 0:00–0:15 | Ham fikir/boş sayfa problemi | “Ideas fail between inspiration and an actionable plan.” |
+| 0:15–0:30 | Landing Before/After | BuildPixies'in tek cümlelik vaadi |
+| 0:30–0:50 | Wizard hızlı giriş | Audience, goal, constraints |
+| 0:50–1:15 | Pixie timeline kısa kayıt | Gerçek role/section progress; uzun bekleme hızlandırılmış veya önceden kaydedilmiş |
+| 1:15–1:45 | Command Center | Must-have, out-of-scope, risk, first sprint, next actions |
+| 1:45–2:05 | Build/Delivery detayı | Tech plan, backlog, tests, README export |
+| 2:05–2:20 | Bootcamp Delivery Pack | Gerçek notlardan review/retro; fake progress yok |
+| 2:20–2:42 | AI architecture diagram | Role graph, schemas, persistence, retry, queue, RLS |
+| 2:42–2:55 | Pazar ve kapanış | Bootcamp teams → solo builders; core promise |
+
+### 25.3 Demo güvenliği
+
+- Ana video curated project kullanır.
+- Sıfırdan full free-router generation'ın 252 saniyesi videoda beklenmez.
+- Gerçek progress kısa kayıt/ hızlandırma ile gösterilebilir; kurgu olduğu
+  gizlenmez.
+- Demo browser'da bildirim, password manager, personal bookmark kapalıdır.
+- Seed/sample data temiz ve profesyoneldir.
+- Junk local project isimleri görünmez.
+- Network/console secret gösterilmez.
+
+### 25.4 Video teknik checklist
+
+- 1080p,
+- okunabilir browser zoom,
+- temiz mikrofon,
+- mouse hareketi kontrollü,
+- background müzik varsa konuşmayı bastırmaz,
+- subtitle opsiyonel fakat önerilir,
+- YouTube public veya erişilebilir unlisted,
+- copyright problemi olmayan asset/audio,
+- thumbnail,
+- incognito playback,
+- süre 3:00 altında.
+
+---
+
+## 26. Final Teslim Checklist
+
+### Repository
+
+- [ ] Repo public.
+- [ ] Default branch `main`.
+- [ ] Main CI green.
+- [ ] Worktree ve remote senkron.
+- [ ] Açık P0 issue yok veya known issue olarak açıklanmış.
+- [ ] Repo description BuildPixies'i doğru anlatıyor.
+- [ ] Homepage canlı URL.
+- [ ] README broken link yok.
+- [ ] Secret ve `.env.local` tracked değil.
+- [ ] License kararı verildi.
+- [ ] Final tag/release oluşturuldu.
+
+### Ürün
+
+- [ ] Landing 5-second test geçiyor.
+- [ ] Sample blueprint açılıyor.
+- [ ] Wizard çalışıyor.
+- [ ] Project persistence çalışıyor.
+- [ ] Generation/progressive state çalışıyor.
+- [ ] Command Center okunuyor.
+- [ ] Regenerate ve export çalışıyor.
+- [ ] Delivery Pack çalışıyor.
+- [ ] Mobile core journey çalışıyor.
+- [ ] Error/empty/loading state'leri mevcut.
+
+### Production
+
+- [ ] Vercel URL erişilebilir.
+- [ ] Production Supabase migration'ları güncel.
+- [ ] RLS owner isolation smoke geçti.
+- [ ] Queue/worker çalışıyor.
+- [ ] Hosted local store kapalı.
+- [ ] Env değerleri server-only.
+- [ ] Rate limit/abuse kararı uygulanmış veya risk kayıtlı.
+- [ ] Incognito smoke geçti.
+
+### Bootcamp belgeleri
+
+- [ ] Takım adı, üyeler, roller.
+- [ ] Ürün adı, açıklama, özellikler, hedef kitle.
+- [ ] Product Backlog URL.
+- [ ] Sprint 1 altı zorunlu madde.
+- [ ] Sprint 2 altı zorunlu madde.
+- [ ] Sprint 3 altı zorunlu madde.
+- [ ] Board screenshotları.
+- [ ] Ürün screenshotları.
+- [ ] Daily kanıtları.
+- [ ] Review/Retro katılımcıları.
+- [ ] Teknik mimari ve AI anlatısı.
+- [ ] Known limitations.
+
+### Video ve form
+
+- [ ] Video 3:00 altında.
+- [ ] YouTube linki incognito çalışıyor.
+- [ ] Canlı URL incognito çalışıyor.
+- [ ] GitHub URL doğru.
+- [ ] Form alanları önceden taslaklandı.
+- [ ] Scrum Master gönderimden sorumlu.
+- [ ] Takım 2 Ağustos 12:00 sign-off verdi.
+- [ ] Form 2 Ağustos 18:00 iç hedefinde gönderildi.
+- [ ] Gönderim kanıtı saklandı.
+
+---
+
+## 27. Referans Projelerden Alınan Dersler
+
+### 27.1 BootcampScrumTemplate
+
+**Ders:** Akademi'nin minimum beklentisi nettir: backlog mantığı, daily,
+board, ürün screenshotı, review ve retro.
+**BuildPixies uygulaması:** README aynı başlık sırasını korur; teknik detaylar
+bu minimumun üstüne eklenir.
+
+### 27.2 Ghost of Anna
+
+**Güçlü yönler:** Takım/ürün anlatısı, hedef kitle, pazarlama planı, her sprintte
+puan mantığı, board, ürün screenshotları, katılımcı isimleri ve taşınan işler.
+**Ders:** Ürün hikâyesi ve sprint hikâyesi birlikte anlatılmalı.
+**BuildPixies uygulaması:** Yalnız commit listesi değil; her sprintin kullanıcı
+ve ürün sonucunu Review'da anlat.
+
+### 27.3 Cherry Chasers
+
+**Güçlü yönler:** Tasarım/development iş bölümü, çok sayıda görsel, puan devri,
+final video ve tamamlanan kapsamın açık özeti.
+**Ders:** Tamamlanmayan iş bir sonraki sprint'e dürüstçe taşınabilir.
+**BuildPixies uygulaması:** BP-008R/BP-031 gibi story'ler bölünür; kısmi iş Done
+gösterilmez.
+
+### 27.4 zaten
+
+**Güçlü yönler:** Yoğun ürün screenshotları, board değişimi, burndown,
+additional documents, persona, navigation map, marka ve teknoloji evriminin
+görünür olması.
+**Ders:** Jüri repo içinde gelişimi görebilmelidir.
+**BuildPixies uygulaması:** Sprint başı/sonu karşılaştırması, architecture
+diagram ve current/future technology ayrımı eklenir.
+
+### 27.5 Planova
+
+**Güçlü yönler:** Her sprintte app screenshot, project management screenshot,
+burndown, günlük kanıt; finalde persona, Lean Canvas, tech tree, FAQ, yasal
+dokümanlar ve iki dilde promo video.
+**Ders:** Son sprint yalnız kod değil, ürünleştirme ve sunum sprintidir.
+**BuildPixies uygulaması:** 25 Temmuz feature freeze; son hafta deploy, user
+test, evidence, README ve video.
+
+### 27.6 Referanslardan alınmayacak kötü alışkanlıklar
+
+- Okunamayacak kadar uzun ve tekrarlı README,
+- bağlamsız onlarca screenshot,
+- sonradan eklenmiş fakat tarihselmiş gibi sunulan daily kayıtları,
+- açıklanmayan yüksek story point sayıları,
+- private/bozuk board linklerine bağımlılık,
+- ürün değeri yerine yalnız görsel kalabalık,
+- Türkçe/İngilizce metni kontrolsüz iki kez tekrarlamak.
+
+BuildPixies README'si kanıt açısından zengin fakat taranabilir olacak;
+`<details>` blokları ve ayrı `docs/evidence/` dosyaları kullanılabilir.
+
+---
+
+## 28. Risk Kaydı ve Kontenjan Planı
+
+| Risk | Olasılık | Etki | Tetikleyici | Önlem | Kontenjan | Owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| Ürün ne olduğu anlaşılmıyor | Yüksek | Çok yüksek | 5-second test başarısız | Landing proof + sample + Command Center | Video curated sample ile açılır | PO |
+| Full generation çok yavaş | Yüksek | Çok yüksek | >180s | Partial progress + batches | Sample project; sabit model bütçesi | Kemal |
+| OpenRouter 429/availability | Orta-yüksek | Yüksek | Provider 429/503 | Retry/backoff, safe error | Sample, alternatif provider/model | Kemal |
+| Invalid output | Orta | Yüksek | Parse/schema fail | Strict schema + section retry | Partial result + retry | Kemal |
+| Route 300s sınırı | Orta | Yüksek | Job >300s | Durable queue + partial output | Fewer/combined demo sections | Kemal |
+| Deploy gecikmesi | Orta | Çok yüksek | 28 Temmuz RC yok | Erken Vercel/Supabase smoke | Deploy-ready video/local kanıt; yine de public URL hedefi | SM |
+| Evidence eksikliği | Orta | Çok yüksek | Sprint sonu altı madde eksik | Günlük arşiv ve evidence owner | Gerçek kaynak varsa backfill, asla icat etme | SM |
+| Team roster belirsiz | Orta | Orta | Form/README farklı | Resmî roster sync | External confirmation notu | SM |
+| Scope creep | Yüksek | Yüksek | 25 Temmuz sonrası feature | Freeze ve P0 gate | P1 drop | PO |
+| Yanlış AI claim'i | Orta | Yüksek | “Agents SDK/pgvector var” ama yok | Dürüst architecture page | Current/future ayrımı | PO + Kemal |
+| Public abuse | Orta | Yüksek | Çoklu generation spam | Rate limit + quota/CAPTCHA | Demo access limit/sample | Kemal |
+| Secret/privacy sızıntısı | Düşük | Çok yüksek | Env/log/screenshot | Ignore, safe logs, redaction | Key revoke/rotate | Ekip |
+| Auth/RLS hatası | Orta | Çok yüksek | Cross-user read | Production isolation test | Public demo sample-only | Kemal |
+| Video geç/uzun | Orta | Çok yüksek | 1 Ağustos video yok | 31 Temmuz script freeze | Basit tek take + curated project | PO + SM |
+| Tasarım polish scope'u yutar | Yüksek | Orta | Yeni component çok, değer az | UX metric-based acceptance | Design freeze | PO |
+| README/repo çelişkisi | Orta | Yüksek | Done ama dosya/kanıt yok | 19/30 Temmuz audits | Durumu Partial yap | SM |
+
+### 28.1 Drop sırası
+
+Zaman daralırsa şu sırayla kapsam düşürülür:
+
+1. Email/OAuth linking,
+2. pgvector memory,
+3. Agents SDK migration,
+4. free-form chat,
+5. Turnstile UI — private demo quota ile geçici çözüm,
+6. Bootcamp area route ayrımı — mevcut form iyileştirilerek kalabilir,
+7. controlled refine çeşitleri — tek regenerate korunur.
+
+Asla düşürülmeyecekler:
+
+- çalışan core journey,
+- sample blueprint,
+- anlaşılır overview,
+- sprint kanıtları,
+- deploy/deploy-ready doğrulama,
+- final video ve form,
+- security baseline,
+- quality gate.
+
+---
+
+## 29. Definition of Ready ve Definition of Done
+
+### 29.1 Story Definition of Ready
+
+Bir story ancak şu şartlarda `Ready` olur:
+
+- kullanıcı sonucu tek cümle,
+- priority ve sprint,
+- owner,
+- acceptance criteria,
+- dependency,
+- risk,
+- test planı,
+- evidence planı,
+- 8 veya daha az story point.
+
+### 29.2 Story Definition of Done
+
+- Acceptance criteria karşılandı.
+- Kod `main` branch'inde.
+- Reviewer onayı var.
+- Lint/typecheck/build ve ilgili testler geçti.
+- Error/loading/empty state değerlendirildi.
+- Mobile/accessibility etkisi kontrol edildi.
+- Security/privacy etkisi değerlendirildi.
+- Dokümantasyon güncellendi.
+- Screenshot/CI/API smoke gibi kanıt hazır.
+- Issue kapatıldı ve PR/commit bağlı.
+
+### 29.3 Sprint Definition of Done
+
+- Sprint goal demo edilebilir.
+- Planlanan/tamamlanan/taşınan story'ler ayrılmış.
+- Board güncel.
+- Altı zorunlu Bootcamp maddesi README'de.
+- Review ve Retro tamamlanmış.
+- Retro aksiyonlarının owner ve tarihi var.
+- Main green ve senkron.
+- Ürün screenshotları güncel.
+
+### 29.4 Release Definition of Done
+
+- Public URL veya doğrulanmış deploy-ready paket,
+- production smoke,
+- no open critical/high known issue,
+- CI green,
+- no secret,
+- README/current screenshots,
+- demo fixture,
+- rollback/contingency,
+- team sign-off.
+
+---
+
+## 30. İletişim ve Scrum Şablonları
+
+### 30.1 Async Daily
 
 ```md
-# BuildPixies
+## Daily — YYYY-MM-DD — İsim
 
-## Team Name
-...
-
-## Team Members & Roles
-...
-
-## Product Name
-BuildPixies
-
-## Product Description
-...
-
-## Product Features
-...
-
-## Target Audience
-...
-
-## Product Backlog
-...
-
-## Sprint 1
-### Sprint Goal
-### Backlog Distribution Logic
-### Daily Scrum Notes
-### Sprint Board Updates
-### Product Status
-### Sprint Review
-### Sprint Retrospective
-
-## Sprint 2
-...
-
-## Sprint 3
-...
-
-## Technical Architecture
-...
-
-## AI Agent Architecture
-...
-
-## Screenshots
-...
-
-## Demo Video
-...
+- Dün: Tamamlanan story/PR/çıktı
+- Bugün: Tek ana hedef
+- Blocker: Yok / açık engel + ihtiyaç
+- Kanıt: PR, commit, screenshot veya test linki
+- Risk: Sprint goal'u etkileyen bir şey var mı?
 ```
 
-### Sprint Board Önerisi
-GitHub Projects kullanılabilir. Kolonlar: Backlog · Todo · In Progress · Review · Done. Ek olarak README'ye screenshot konulmalı.
+### 30.2 Sprint Review
+
+```md
+## Sprint Review — Sprint N
+
+- Sprint goal:
+- Demo edilen kullanıcı yolculuğu:
+- Tamamlanan story'ler:
+- Tamamlanmayan/taşınan story'ler ve nedeni:
+- Test/CI sonucu:
+- Canlı ürün durumu:
+- Alınan ürün/teknik kararlar:
+- Stakeholder/TA geri bildirimi:
+- Katılımcılar:
+```
+
+### 30.3 Retrospective
+
+```md
+## Sprint Retrospective — Sprint N
+
+### İyi gidenler
+- ...
+
+### Zorlayanlar
+- ...
+
+### Bırakacağımız şey
+- ...
+
+### Başlatacağımız şey
+- ...
+
+### Devam edeceğimiz şey
+- ...
+
+| Aksiyon | Owner | Tarih | Başarı ölçütü |
+| --- | --- | --- | --- |
+| ... | ... | ... | ... |
+```
+
+### 30.4 Blocker bildirimi
+
+```md
+BLOCKER: <kısa başlık>
+Story: BP-XXX
+Başlangıç: YYYY-MM-DD HH:MM
+Etkisi: <hangi kabul kriteri/tarih>
+Denenenler: <en fazla 3 madde>
+İhtiyaç: <kimden hangi karar/erişim>
+Kontenjan: <çözülmezse ne düşürülecek>
+```
+
+### 30.5 TA/office hour soru formatı
+
+Teknik çözüm istemek yerine süreç/kural netliği için:
+
+```md
+- Bağlam: BuildPixies, AI Product Planning web uygulaması
+- İlgili resmî kural:
+- Bizim uygulamamız:
+- Belirsiz kalan nokta:
+- İstediğimiz doğrulama:
+```
 
 ---
 
-## 24. Pazar ve Rekabet Anlatısı
+## 31. İlk 72 Saatlik Uygulama Sırası
 
-### Problem
-AI araçları çok güçlü ama yeni başlayanlar için hâlâ dağınık:
-- Kullanıcı ne isteyeceğini bilmiyor
-- Tek prompt ile gelen cevaplar uygulanabilir plana dönüşmüyor
-- Ürün, UX, teknik mimari ve sprint planı ayrı ayrı düşünülüyor
-- Junior kullanıcı "başlangıç kaosu" yaşıyor
+### İlk 24 saat
 
-### Çözüm
-BuildPixies bu kaosu uzman agent'larla bölüyor:
-- Product Pixie fikri netleştirir
-- UX Pixie kullanıcı akışını çıkarır
-- Tech Pixie mimariyi önerir
-- Scrum Pixie backlog ve sprint planı oluşturur
-- Docs Pixie README ve pitch hazırlar
+- [ ] Bu master plan takım tarafından okunur ve owner'lar teyit edilir.
+- [ ] Resmî roster/ekip formu durumu doğrulanır.
+- [ ] GitHub Issues #1–#10 gerçek state'e getirilir.
+- [ ] BP-001R, BP-002R, BP-008R, BP-029–BP-046 issue'ları önceliğe göre açılır.
+- [ ] Sprint 2 board screenshotı alınır.
+- [ ] Evidence klasörü/naming standardı oluşturulur.
+- [ ] Landing sahte sosyal kanıt/CTA düzeltmesi başlar.
+- [ ] Curated sample fixture içeriği PO tarafından kabul edilir.
 
-### Farklılaşma
-BuildPixies bir "kod yazdırma aracı" değil; bir **idea-to-MVP operating workspace**. Bu ayrım önemli.
+### 24–48 saat
 
----
+- [ ] `/sample` veya eşdeğer sample project route tamamlanır.
+- [ ] Landing Before/After ve sample CTA tamamlanır.
+- [ ] Sample schema test ve E2E eklenir.
+- [ ] Progressive event contract teknik tasarımı kabul edilir.
+- [ ] Repo description güncellenir.
+- [ ] Daily kanıtları arşivlenir.
 
-## 25. Jüri Kriterlerine Göre Strateji
+### 48–72 saat
 
-### Çalışan Proje
-Gösterilecek demo:
-1. Landing page açılır
-2. Yeni fikir girilir
-3. Pixie workspace çalışır
-4. Blueprint çıktıları oluşur
-5. Backlog ve README export gösterilir
+- [ ] Job event backend ilk dikey dilimi merge edilir veya Sprint 3'e net story
+  olarak taşınır.
+- [ ] Command Center data mapping prototipi kabul edilir.
+- [ ] Mobile/desktop Sprint 2 screenshots alınır.
+- [ ] Sprint Review ve Retro yapılır.
+- [ ] README altı zorunlu madde tamamlanır.
+- [ ] CI green ve Sprint 2 kapanışı yapılır.
 
-### Özgünlük
-> "BuildPixies combines AI agent orchestration with a beginner-friendly product planning workflow and a playful pixie-based interface."
+### 72 saat sonunda beklenen sonuç
 
-### Ürün Tamamlanma
-- Landing var
-- Dashboard var
-- Project flow var
-- Outputs var
-- Export var
-- Sample fallback var; final curated demo project Sprint 3'te hazırlanacak
-
-### Pazara Uygunluk
-Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, Solo founders.
-
-### AI Öğeleri
-- Role-based AI agents
-- Orchestrator
-- Structured JSON outputs
-- Blueprint persistence ile temel project memory
-- Regeneration by section API
-- Bootcamp-specific documentation agent hedefi
-- Guardrail: realistic MVP scope
-
-> Final değerlendirmede YZ tarafında "yapay zeka öğeleri" 35 puanlık büyük bir alan; ön değerlendirme tarafında da AI agent, hafıza, orkestrasyon gibi teknik yönetimler ayrıca puanlanıyor.
+BuildPixies yalnız güzel bir landing ve boş workspace gibi görünmemeli;
+kullanıcı gerçek sample sonucu görebilmeli, ürün vaadini anlayabilmeli ve
+progressive generation'ın teknik/ürün yolu hazır olmalıdır. Aynı anda Sprint 2
+Bootcamp kanıt paketi eksiksiz kapanmalıdır.
 
 ---
 
-## 26. Riskler ve Önlemler
+## 32. Kaynak Dizini
 
-| Risk | Etki | Önlem |
-| --- | --- | --- |
-| AI output çok uzun olur | UI bozulur | Section-based output |
-| Agent pipeline yavaş olur | Demo kötü görünür | Durable Vercel Queue + dependency-aware paralel batches + polling + sample fallback |
-| Supabase auth vakit alır | Geliştirme yavaşlar | Anonymous Supabase Auth + owner bazlı RLS; email/OAuth roadmap |
-| Takım içi koordinasyon kopukluğu | Geliştirme yavaşlar | Günlük sync + net rol dağılımı |
-| Deploy problemi | Teslim riski | Erken Vercel deploy |
-| Prompt çıktısı tutarsız | Ürün kalitesi düşer | JSON schema + validation |
-| Demo akışı regresyonu | Sunum sırasında temel yolculuk kırılır | Production build üzerinde Playwright E2E + PR/push CI kalite kapısı |
-| Public AI endpoint abuse | Maliyet / kota riski | Rate limit var; Sprint 3'te quota + Turnstile/CAPTCHA |
-| Paket güvenlik uyarıları | Deploy güveni düşer | `npm audit --omit=dev` takip edilir; PostCSS override eklendi |
-| README eksik kalır | Puan kaybı | Her sprint sonunda güncelleme |
-| Tasarım fazla çocuksu olur | Ciddiyet azalır | Cute SaaS dengesi |
+### Bootcamp ana kaynakları
 
----
+- [`docs/bootcamp.md`](bootcamp.md)
+- [`docs/bootcamp bilgilendirme toplantısı.md`](<bootcamp bilgilendirme toplantısı.md>)
+- [Bootcamp ekip bilgileri formu](https://forms.gle/CrMgeK8Ucd8mEmsE9)
+- [Bootcamp takım değiştirme formu](https://forms.gle/KCmRmfQ3PDV2KBhC6)
+- Slack `#bootcamp-2026` — proje yönetimi soruları; kılavuza göre 48 saat
+  içinde dönüş hedefi
 
-## 27. Demo İçin Örnek Kullanıcı Fikri
+### Yerel referanslar
 
-Demo sırasında rastgele fikir girme. Önceden iyi sonuç veren bir fikir hazırla:
+- [`references/BootcampScrumTemplate/README.md`](../references/BootcampScrumTemplate/README.md)
+- [`references/GhostOfAnnaScrumExample/README.md`](../references/GhostOfAnnaScrumExample/README.md)
+- [`references/U-21-Cherry-Chasers/README.md`](../references/U-21-Cherry-Chasers/README.md)
+- [`references/OUA-zaten-Bootcamp-2023/README.md`](../references/OUA-zaten-Bootcamp-2023/README.md)
+- [`references/planova/README.md`](../references/planova/README.md)
 
-> "I want to build a web app for university students who struggle to manage group projects. It should help them create tasks, assign teammates, summarize progress, and prepare sprint reports."
+### BuildPixies proje kaynakları
 
-Bu fikir BuildPixies'in kendi bootcamp bağlamıyla da uyumlu. Çıktılar güzel görünür:
-- Target users: university students
-- Features: project dashboard, task board, AI summary
-- Tech stack: Next.js, Supabase, OpenAI
-- Backlog: çok net
-- Sprint plan: çok net
+- [`README.md`](../README.md)
+- [`docs/decision-log.md`](decision-log.md)
+- [`docs/sprint-1.md`](sprint-1.md)
+- [`docs/sprint-2.md`](sprint-2.md)
+- [`docs/sprint-3.md`](sprint-3.md)
+- [`assets/magical_productivity_system/DESIGN.md`](../assets/magical_productivity_system/DESIGN.md)
+- [GitHub Issues](https://github.com/avanalperen/BuildPixies/issues)
+- [GitHub Actions](https://github.com/avanalperen/BuildPixies/actions)
 
----
+### Son karar
 
-## 28. 3 Dakikalık Video Planı
-
-| Süre | Bölüm | İçerik |
-| --- | --- | --- |
-| 0:00–0:20 | Problem | "Many people have app ideas, but they struggle to turn them into a clear MVP plan." |
-| 0:20–0:40 | Solution | "BuildPixies gives every solo builder a tiny AI product team." |
-| 0:40–1:30 | Product demo | Landing page → New idea → Pixies working → Output Hub |
-| 1:30–2:10 | AI architecture | Pip orchestrator · Product/UX/Tech/Scrum pixies · Structured outputs · Project memory · Regeneration |
-| 2:10–2:40 | Use cases and market | Bootcamp teams · Hackathon participants · Solo founders · Junior developers |
-| 2:40–3:00 | Closing | "BuildPixies turns messy ideas into build-ready MVP blueprints." |
-
----
-
-## 29. Güçlü Ürün Metinleri
-
-### Hero Başlık
-**Turn messy ideas into build-ready MVPs.**
-
-### Hero Alt Metin
-**BuildPixies gives you a tiny AI product team that transforms your rough idea into a product brief, UX flow, backlog, tech plan and launch-ready documentation.**
-
-### CTA
-**Summon your pixies**
-
-Bu CTA çok iyi. Standart "Get started" yerine markaya özel.
-
-Alternatif CTA'lar:
-- Start building
-- Create my MVP blueprint
-- Turn idea into plan
-- Meet my AI product team
-
-### Kısa Açıklama
-**BuildPixies is an AI-powered product planning workspace for solo builders, bootcamp teams and early founders.**
-
----
-
-## 30. İlk 48 Saatlik Aksiyon Planı
-
-### Bugün (4 Temmuz)
-- Repo aç: `buildpixies`
-- README iskeleti oluştur
-- Next.js projesini başlat
-- Landing page copy'sini yaz
-- Product backlog'u README'ye ekle
-- Web pivot kararını decision log olarak yaz
-- Takıma mesaj at
-- Asistana durumu bildir
-
-### Yarın (5 Temmuz)
-- Landing page ilk versiyon
-- New Project form
-- Pixie card component
-- Mock output hub
-- Sprint 1 review/retro
-- İlk ekran görüntüleri
-
-> Bu iki gün sonunda ürün "başlamış ve belgelenmiş" görünmeli.
-
----
-
-## 31. Nihai Revize Karar
-
-> **BuildPixies bir web uygulaması olacak. Kullanıcı fikrini yazacak, sevimli AI pixie agent'ları bu fikri analiz ederek ürün brief'i, MVP scope'u, UX flow'u, teknik mimariyi, backlog'u, test planını ve README export'unu üretecek. Ürün web-first SaaS gibi tasarlanacak, responsive olacak ve ileride mobil uygulamaya genişletilebilecek.**
-
-### Bu pivot doğru çünkü:
-- Bootcamp teslimine daha uygun
-- Canlı link verilebilir
-- Agent ve output deneyimi daha rahat gösterilir
-- Üç kişilik takımla MVP çıkarmak daha mümkün
-- "Cute but useful" marka dili daha güçlü görünür
-- AI agent + hafıza + orkestrasyon puanlarına direkt oynar
-
-**Mobile sadece roadmap'te şöyle geçsin:**
-> "Future roadmap: mobile companion app for reviewing and refining MVP blueprints on the go."
-
----
-
-## 32. Değerlendirme Kriterleriyle Hizalama
-
-Bootcamp değerlendirmesi iki aşamalıdır: **Ön Değerlendirme** (tüm projeler) ve **Final Değerlendirme** (top 7 YZ + top 3 No-Code).
-
-### Ön Değerlendirme Kriterleri — YZ
-
-| Kriter | Max Puan | Bizim Stratejimiz |
-| --- | --- | --- |
-| Yarışmaya hazır, çalışan proje | 10 | Sprint 2 sonunda çalışan MVP; Sprint 3'te Vercel deploy + polish |
-| Özgünlük | 10 | Web-first AI product workspace + pixie karakter konsepti; mevcut coding agent'lerden farklı |
-| Ürün tamamlanma puanı | 10 | MVP kapsamı net; core akış (fikir → pixie → blueprint → export) tam çalışır |
-| Pazara uygun, talep görebilecek uygulama | 10 | Bootcamp/hackathon öğrencileri + solo founder + junior dev net segment |
-
-### Ekstra Puanlar — YZ
-
-| Kriter | Max Puan | Bizim Stratejimiz |
-| --- | --- | --- |
-| YZ Modeli seçimi, kullanımı, geliştirmesi; AI Agent'ların kullanımı, hafıza, orkestrasyon vb. | 20 | OpenAI Agents SDK ile multi-agent orchestration, handoff, project memory (pgvector), structured outputs, guardrails |
-| Kod içerisinde mimari yapı kullanımları, temiz kod prensipleri | 15 | Clean architecture (app/components/lib/types ayrımı), JSON schema validation, typed prompts, separation of concerns |
-| Ürün canlıya alınmış veya canlıya alınabilecek şekilde geliştirilme | 10 | Vercel deploy; Next.js + Supabase tam stack canlıya alınabilir |
-
-### Final Değerlendirme — YZ
-
-| Kriter | Max Puan | Bizim Stratejimiz |
-| --- | --- | --- |
-| İhtiyaç ve Çözüm Eşleşmesi | 20 | Net problem (fikir → MVP planı kaosu) + pixie takımı çözümü |
-| Kullanıcı Değeri ve Deneyimi | 10 | Cute SaaS UI, pixie workspace, structured outputs, export |
-| Pazar Potansiyeli | 10 | Geniş hedef kitle (öğrenci, girişimci, junior dev, freelancer) |
-| Fonksiyonel Yeterlilik | 15 | Core akış tam çalışır; revizyon + memory + bootcamp mode |
-| Ürün bütünlüğü | 10 | Tutarlı tasarım dili, tamamlanmış akış, export, sample project |
-| Yapay zeka öğeleri | 35 | Multi-agent orchestration + memory + structured outputs + guardrails |
-
----
-
-## 33. Referans Repolardan Alınan Dersler
-
-`references/` altındaki örnek repolar incelendi. Aşağıdaki dersler çıkarıldı:
-
-### `OUA-zaten-Bootcamp-2023` (Ödüllü, Flutter + Firebase)
-- **Ders:** README kalitesi ve sprint dokümantasyonu çok detaylı; her sprint için ekran görüntüleri, burndown chart, sprint notes ayrı ayrı.
-- **Ders:** Teknoloji stack listesi README'de net listelenmiş.
-- **Ders:** MVVM mimari + GetX routing + Hive local DB iyi bir mimari örneği.
-- **Uygula:** Bizim README'mizde de teknoloji stack listesi (Next.js, Supabase, OpenAI, Vercel) ve mimari kararları net yazılacak. Mimari diyagramı README'ye konulacak.
-
-### `planova` (Flutter + Gemini AI)
-- **Ders:** AI entegrasyonu Sprint 3'te yapıldı (Gemini API). Biz Sprint 2'de role-based pipeline ile başlayıp Sprint 3'te gerçek agent mimarisine geçeceğiz.
-- **Ders:** Lokalizasyon ve tema özellikleri final sprint'inde eklendi. Bizim için opsiyonel.
-- **Ders:** Sprint puanlama mantığı net belgelenmiş (300/450/450 toplam 1200 puan).
-- **Uygula:** Bootcamp Mode fikri (sprint notlarını düzenleme) planova'nın AI story generator'ünden ilham aldı.
-
-### `GhostOfAnnaScrumExample` (Sprint döküman örneği)
-- **Ders:** Sprint Review ve Retrospective yazımı kısa, net ve yapılandırılmış.
-- **Ders:** Backlog düzeni açıklaması renk kodlu.
-- **Uygula:** Sprint review/retro yazımında bu net yapıyı kullanacağız.
-
-### `U-21-Cherry-Chasers` (Sprint puanlama örneği)
-- **Ders:** Sprint puan hedefleri net (10/12/15 = 36 toplam puan).
-- **Ders:** Tasarım grubu ayrımı (tasarım + developing).
-- **Uygula:** Backlog puanlama stratejisini net belirleyeceğiz.
-
-### `BootcampScrumTemplate` (Resmi şablon)
-- **Ders:** README yapısı tam olarak bu formatta olmalı: Takım İsmi → Ürün İle İlgili Bilgiler → Sprint 1/2/3.
-- **Ders:** Her sprint için 6 madde (backlog, daily, board, ürün durumu, review, retro) zorunlu.
-- **Uygula:** README'mizi tam bu formatta hazırlayacağız (Bölüm 23'te).
-
----
-
-## 34. Faydalı Linkler
-
-- [OpenAI Agents SDK](https://developers.openai.com/api/docs/guides/agents)
-- [OpenAI Agents SDK — Handoffs](https://openai.github.io/openai-agents-python/handoffs/)
-- [Next.js Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers)
-- [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs)
-- [Supabase AI & Vectors](https://supabase.com/docs/guides/ai)
-- [Supabase pgvector](https://supabase.com/docs/guides/database/extensions/pgvector)
-- [GitHub Copilot](https://github.com/features/copilot) (referans/konumlandırma için)
-- [BootcampScrumTemplate](https://github.com/YapayZekaveTeknolojiAkademisi/BootcampScrumTemplate) (README formatı için — `references/` altında)
-- [Bootcamp Slack kanalı: #bootcamp-2026](https://app.slack.com/) (sorular için, 48 saat içinde dönüş)
+> **BuildPixies final teslim stratejisi; daha çok agent, daha çok sekme veya daha
+> çok animasyon eklemek değildir. Strateji; ürün değerini ilk 30 saniyede
+> kanıtlamak, uzun AI işini kademeli ve dürüst göstermek, sonucu eyleme dönük bir
+> Command Center'da toplamak, çalışan ürünü production kalitesiyle doğrulamak ve
+> altı haftalık gerçek Scrum gelişimini eksiksiz kanıtlamaktır.**
