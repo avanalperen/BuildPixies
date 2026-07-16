@@ -16,7 +16,7 @@ import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
 import { getErrorStatus, ServiceUnavailableError } from "@/lib/errors";
 import { getSupabaseAdminConfig } from "@/lib/supabase/config";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   const limited = await checkRateLimit(request, "ai:generation-jobs");

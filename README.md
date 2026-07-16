@@ -355,8 +355,8 @@ semantiği düzeltildi ve aynı kalite zinciri GitHub Actions'a bağlandı.
 
 **Current stack:** Next.js 16 App Router · TypeScript · Tailwind CSS v4 ·
 shadcn/ui/base-ui · Supabase Postgres · Supabase Auth anonymous owner mode +
-RLS · OpenAI API role-based prompt pipeline · Vercel Queues · generation job
-polling · local JSON fallback for development.
+RLS · OpenRouter Free/OpenAI-compatible role-based prompt pipeline · Vercel
+Queues · generation job polling · local JSON fallback for development.
 
 **Roadmap stack:** OpenAI Agents SDK handoff · pgvector project memory · durable
 workflow steps/SSE streaming · account linking · Vercel deploy hardening.
@@ -417,10 +417,12 @@ BuildPixies, fikri uzman pixie rollerine bölerek işler:
 **Pipeline:** Raw idea → durable queue → dependency-aware pixie batches →
 validated Blueprint → atomic project/job completion.
 
-Sprint 1 sonunda çalışan mimari role-based prompt pipeline'dır. OpenAI anahtarı
-yoksa uygulama sample blueprint ile çalışır; bu fallback demo güvenliği içindir
-ve gerçek AI çıktısı gibi sunulmamalıdır. Sprint 3 hedefi OpenAI Agents SDK
-handoff, project memory ve guardrail katmanını güçlendirmektir.
+Çalışan mimari role-based prompt pipeline'dır. `OPENROUTER_API_KEY` varsa
+OpenRouter'ın `openrouter/free` router'ı kullanılır. OpenRouter yapılandırılmamışsa
+OpenAI geriye uyumluluğu korunur; iki sağlayıcı da yoksa uygulama sample
+blueprint ile çalışır. Bu fallback demo güvenliği içindir ve gerçek AI çıktısı
+gibi sunulmamalıdır. Sprint 3 hedefi Agents SDK handoff, project memory ve
+guardrail katmanını güçlendirmektir.
 
 # Local Setup
 
@@ -432,6 +434,30 @@ nvm use
 npm install
 npm run dev
 ```
+
+Gerçek AI üretimini ücretsiz OpenRouter router'ıyla açmak için
+[OpenRouter API Keys](https://openrouter.ai/settings/keys) sayfasından bir anahtar
+oluşturup ignore edilen `.env.local` dosyasına ekleyin:
+
+```bash
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL=openrouter/free
+OPENROUTER_SITE_URL=http://localhost:3000
+```
+
+OpenRouter OpenAI uyumlu endpoint kullandığı için ek SDK gerekmez. Uygulama
+`OPENROUTER_API_KEY` tanımlıysa OpenRouter'ı, yalnızca `OPENAI_API_KEY` tanımlıysa
+OpenAI'ı seçer. API anahtarları server-only tutulmalı ve `NEXT_PUBLIC_` önekiyle
+tanımlanmamalıdır. Ücretsiz router düşük trafik ve demo için uygundur; model
+seçimi istek başına değişebilir ve ücretsiz kota/erişilebilirlik sınırlıdır.
+BuildPixies varsayılan olarak yalnızca request parametrelerini destekleyen ve
+prompt verisi toplamayan provider'lara izin verir. Bu güvenli varsayılanı
+genişletmek gerekiyorsa veri etkisi değerlendirilerek
+`OPENROUTER_ALLOW_DATA_COLLECTION=1` kullanılabilir.
+Güncel ayrıntılar için
+[Free Models Router](https://openrouter.ai/docs/guides/routing/routers/free-router),
+[provider routing](https://openrouter.ai/docs/guides/routing/provider-selection)
+ve [rate limits](https://openrouter.ai/docs/api/reference/limits) belgelerine bakın.
 
 Production build üzerinde izole kritik kullanıcı yolculuğunu çalıştırmak için:
 

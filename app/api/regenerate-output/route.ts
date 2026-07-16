@@ -7,7 +7,7 @@ import { blueprintSchema } from "@/lib/ai/schemas";
 import { getErrorStatus } from "@/lib/errors";
 import { getProject, saveProjectBlueprint } from "@/lib/projects";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export async function POST(request: NextRequest) {
   const limited = await checkRateLimit(request, "ai:regenerate");

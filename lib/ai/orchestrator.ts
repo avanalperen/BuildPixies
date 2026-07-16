@@ -1,6 +1,6 @@
 import type { CreateProjectInput } from "@/types/project";
 import type { Blueprint, BlueprintSection } from "@/types/output";
-import { isOpenAIConfigured, runJsonCompletion, runTextCompletion } from "@/lib/ai/client";
+import { isAIConfigured, runJsonCompletion, runTextCompletion } from "@/lib/ai/client";
 import { buildSampleBlueprint } from "@/lib/ai/sample";
 import { blueprintSchema, validateSection } from "@/lib/ai/schemas";
 import {
@@ -81,7 +81,7 @@ export async function generateBlueprint(
   input: CreateProjectInput,
   onEvent?: OrchestratorListener,
 ): Promise<Blueprint> {
-  if (!isOpenAIConfigured()) {
+  if (!isAIConfigured()) {
     const sample = buildSampleBlueprint(input.rawIdea);
     pipeline.forEach((step) =>
       onEvent?.({ pixie: step.pixie, section: step.section, status: "done" }),
@@ -121,7 +121,7 @@ export async function regenerateSection(
   section: BlueprintSection,
   previousOutputs?: Partial<Record<BlueprintSection, unknown>>,
 ): Promise<unknown> {
-  if (!isOpenAIConfigured()) {
+  if (!isAIConfigured()) {
     return buildSampleBlueprint(input.rawIdea)[section];
   }
   const ctx = { input, previousOutputs };

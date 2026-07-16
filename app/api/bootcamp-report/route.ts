@@ -6,7 +6,7 @@ import { bootcampReportRequestSchema } from "@/lib/api/schemas";
 import { getErrorStatus } from "@/lib/errors";
 import { getProject, saveProjectBootcampReport } from "@/lib/projects";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export async function POST(request: NextRequest) {
   const limited = await checkRateLimit(request, "ai:bootcamp");

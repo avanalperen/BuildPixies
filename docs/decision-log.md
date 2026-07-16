@@ -197,3 +197,39 @@ owner ve sabit bucket politikalarıyla Postgres'te atomik tüketilecek.
 - Production instance'ları ortak rate-limit state'i kullanır; local demo bellek
   fallback'iyle çalışmaya devam eder.
 - Hosted worker için server-only `SUPABASE_SERVICE_ROLE_KEY` gerekir.
+
+---
+
+## ADR-008 — OpenRouter Free birincil AI sağlayıcısı
+
+**Tarih:** 16 Temmuz 2026
+**Durum:** Kabul edildi
+
+### Bağlam
+
+Role-based pixie pipeline OpenAI uyumlu chat completions kullanıyordu ancak
+demo ortamında ücretli model anahtarına bağımlılık gerçek AI üretimini
+zorlaştırıyordu. Ücretsiz model erişimi eklenirken mevcut OpenAI uyumluluğu ve
+anahtarsız deterministic demo güvenliği korunmalıydı.
+
+### Karar
+
+`OPENROUTER_API_KEY` tanımlandığında `https://openrouter.ai/api/v1` endpoint'i
+ve varsayılan `openrouter/free` modeli kullanılacak. Mevcut `openai` istemcisi
+OpenRouter'ın OpenAI uyumlu API'si üzerinden yeniden kullanılacak. OpenRouter
+OpenAI'dan önce seçilecek; yalnızca `OPENAI_API_KEY` varsa eski sağlayıcı yolu,
+iki anahtar da yoksa sample blueprint/classification fallback'i çalışacak.
+Provider anahtarları yalnızca server environment'ta tutulacak.
+
+### Sonuçlar
+
+- Demo ortamı sıfır model maliyetiyle gerçek structured output üretebilir.
+- OpenAI kullanan mevcut deployment'lar kırılmadan çalışmaya devam eder.
+- OpenRouter'ın rastgele ücretsiz model seçimi, düşük günlük kota, yoğun saatte
+  gecikme ve geçici erişilemezlik riskleri kabul edilir.
+- İstek timeout'ları ve Route Handler süreleri ücretsiz modellerin daha yüksek
+  gecikmesine göre genişletilir; upstream hata ayrıntıları client'a sızdırılmaz.
+- Request bazında parameter support zorunlu tutulur ve varsayılan olarak prompt
+  data collection'a izin vermeyen provider'larla sınırlandırılır.
+- Production güvenilirliği gerektiğinde `OPENROUTER_MODEL` ile sabit/ücretli bir
+  model seçilebilir.

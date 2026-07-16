@@ -1,7 +1,7 @@
 import type { z } from "zod";
 import type { Project } from "@/types/project";
 import type { BootcampReport } from "@/types/output";
-import { isOpenAIConfigured, runJsonCompletion } from "@/lib/ai/client";
+import { isAIConfigured, runJsonCompletion } from "@/lib/ai/client";
 import { bootcampReportPrompt } from "@/lib/ai/prompts";
 import {
   bootcampClassificationSchema,
@@ -203,7 +203,7 @@ export async function generateBootcampReport(
   const notes = sourceNotes(input.progressNotes);
   let classification: BootcampClassification;
 
-  if (isOpenAIConfigured()) {
+  if (isAIConfigured()) {
     const { system, user } = bootcampReportPrompt({
       project: {
         title: input.project.title,
