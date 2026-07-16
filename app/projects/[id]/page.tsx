@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Navbar } from "@/components/landing/navbar";
-import { Footer } from "@/components/landing/footer";
+import { ChevronRight } from "lucide-react";
+import { AppShell } from "@/components/layout/app-shell";
 import { Workspace } from "@/components/project/workspace";
-import { Button } from "@/components/ui/button";
 import { getProject } from "@/lib/projects";
 
 export const dynamic = "force-dynamic";
@@ -18,15 +17,15 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   return (
-    <>
-      <Navbar />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <Button asChild variant="ghost" size="sm" className="mb-4">
-          <Link href="/dashboard">← Back to dashboard</Link>
-        </Button>
+    <AppShell active="projects">
+      <div className="mx-auto w-full max-w-[1640px] px-4 py-6 md:px-10 md:py-10">
+        <nav className="mb-6 flex items-center gap-2 text-sm font-semibold text-muted-foreground" aria-label="Breadcrumb">
+          <Link href="/dashboard" className="transition-colors hover:text-primary">Dashboard</Link>
+          <ChevronRight className="size-4" />
+          <span className="max-w-[60vw] truncate text-foreground">{project.title}</span>
+        </nav>
         <Workspace project={project} />
-      </main>
-      <Footer />
-    </>
+      </div>
+    </AppShell>
   );
 }

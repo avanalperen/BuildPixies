@@ -1,10 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import {
+  Copy,
+  Download,
+  FileText,
+  Lightbulb,
+  Share2,
+  Sparkles,
+  UsersRound,
+} from "lucide-react";
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { OutputHub } from "@/components/outputs/output-hub";
 import { BootcampMode } from "@/components/project/bootcamp-mode";
+import { exportMarkdown } from "@/lib/export/markdown";
 import type { Project } from "@/types/project";
 import type { GenerationJob } from "@/types/generation-job";
 import type { Blueprint, BlueprintSection } from "@/types/output";
@@ -159,6 +168,22 @@ export function Workspace({ project }: { project: Project }) {
     }
   }
 
+  async function handleShare() {
+    setError(null);
+    const shareData = {
+      title: project.title,
+      text: `BuildPixies blueprint for ${project.title}`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) await navigator.share(shareData);
+      else await navigator.clipboard.writeText(window.location.href);
+    } catch (caught) {
+      if (caught instanceof DOMException && caught.name === "AbortError") return;
+      setError("Share failed. Copy the page URL and try again.");
+    }
+  }
+
   async function handleRegenerate(section: BlueprintSection) {
     if (!blueprint || loading || regeneratingSection) return;
     setError(null);
@@ -186,77 +211,97 @@ export function Workspace({ project }: { project: Project }) {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-      <aside className="flex flex-col gap-4 rounded-2xl border bg-card p-5">
-        <div className="min-w-0">
-          <h2 className="break-words font-heading font-semibold">
-            {project.title}
-          </h2>
-          <p className="break-words text-sm text-muted-foreground">
-            {project.rawIdea}
-          </p>
-        </div>
-        <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-          <span>Goal: {project.goal}</span>
-          <span>Platform: {project.platform}</span>
-          <span>Audience: {project.targetAudience}</span>
-        </div>
-        <Button
-          onClick={handleGenerate}
-          disabled={loading || regeneratingSection !== null}
-          className="pixie-glow"
-        >
-          {loading
-            ? "Pixies are working..."
-            : blueprint
-              ? "Regenerate all"
-              : "Generate blueprint"}
-        </Button>
-        {error && (
-          <p role="alert" className="text-sm text-destructive">
-            {error}
-          </p>
-        )}
-      </aside>
-
-      <div className="min-w-0 flex flex-col gap-6" aria-live="polite">
-        <section>
-          <h3 className="mb-3 font-heading text-sm font-medium text-muted-foreground">
-            Pixie team
-          </h3>
-          <PixieTeam statuses={statuses} />
+    <div className="flex min-w-0 flex-col gap-8" aria-live="polite">
+      <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(240px,0.8fr)_minmax(290px,0.95fr)_minmax(390px,1.35fr)]">
+        <section className="app-card flex min-h-[620px] min-w-0 flex-col overflow-hidden">
+          <header className="flex items-center gap-2 border-b border-outline-variant/30 bg-surface px-6 py-4">
+            <Lightbulb className="size-5 text-primary" />
+            <h2 className="font-heading text-2xl leading-8 font-medium">Your Idea</h2>
+          </header>
+          <div className="flex flex-1 flex-col gap-5 p-6">
+            <h1 className="break-words font-heading text-xl leading-7 font-semibold">{project.title}</h1>
+            <p className="flex-1 whitespace-pre-wrap break-words text-base leading-7 text-muted-foreground">{project.rawIdea}</p>
+            <dl className="grid gap-2 border-t border-outline-variant/30 pt-4 text-xs">
+              <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Goal</dt><dd className="font-semibold capitalize">{project.goal}</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Platform</dt><dd className="font-semibold capitalize">{project.platform.replace("-", " ")}</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Audience</dt><dd className="max-w-[60%] truncate font-semibold">{project.targetAudience}</dd></div>
+            </dl>
+            <button onClick={handleGenerate} disabled={loading || regeneratingSection !== null} className="magic-button inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50">
+              <Sparkles className="size-4" />
+              {loading ? "Pixies are working..." : blueprint ? "Regenerate all" : "Generate blueprint"}
+            </button>
+            {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+          </div>
         </section>
 
-        {blueprint ? (
-          <section>
-            <h3 className="mb-3 font-heading text-sm font-medium text-muted-foreground">
-              Blueprint
-            </h3>
-            <OutputHub
-              project={project}
-              blueprint={blueprint}
-              onExport={handleExport}
-              onExportJson={handleExportJson}
-              onCopyMarkdown={handleCopyMarkdown}
-              onRegenerate={handleRegenerate}
-              regeneratingSection={regeneratingSection}
-            />
-          </section>
-        ) : (
-          <section className="rounded-2xl border border-dashed bg-card p-6">
-            <h3 className="font-heading text-lg font-semibold">
-              No blueprint yet
-            </h3>
-            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-              Generate a blueprint to create the product brief, market angle,
-              MVP scope, UX flow, tech plan, code skeleton, backlog, tests and
-              README export for this idea.
-            </p>
-          </section>
-        )}
+        <section className="flex min-h-[620px] min-w-0 flex-col">
+          <header className="mb-4 flex items-center justify-between gap-3">
+            <h2 className="flex items-center gap-2 font-heading text-2xl leading-8 font-medium">
+              <UsersRound className="size-5 text-secondary" />
+              The Pixie Team
+            </h2>
+            <span className="inline-flex items-center gap-1 rounded-full bg-surface-high px-3 py-1 text-xs font-medium text-primary">
+              <Sparkles className="size-3.5" />
+              {loading ? "Processing" : blueprint ? "Ready" : "Waiting"}
+            </span>
+          </header>
+          <div className="custom-scrollbar max-h-[680px] overflow-y-auto pr-1 pb-2">
+            <PixieTeam statuses={statuses} variant="compact" />
+          </div>
+        </section>
 
-        <BootcampMode project={project} />
+        <section className="app-card relative min-h-[620px] min-w-0 overflow-hidden">
+          <div className="pointer-events-none absolute top-0 right-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full bg-primary/5 blur-3xl" />
+          <header className="relative z-10 flex items-center justify-between gap-3 border-b border-outline-variant/30 bg-white/50 px-6 py-4 backdrop-blur-md">
+            <h2 className="flex items-center gap-2 font-heading text-2xl leading-8 font-medium">
+              <FileText className="size-5 text-tertiary" />
+              MVP Scope
+            </h2>
+            <span className="rounded-md bg-surface-container px-2 py-1 text-xs font-medium text-muted-foreground">
+              {loading ? "Drafting..." : blueprint ? "Auto-saved" : "Not started"}
+            </span>
+          </header>
+          <div className="relative z-10 min-w-0 p-4 md:p-6">
+            {blueprint ? (
+              <OutputHub
+                project={project}
+                blueprint={blueprint}
+                onExport={handleExport}
+                onExportJson={handleExportJson}
+                onCopyMarkdown={handleCopyMarkdown}
+                onRegenerate={handleRegenerate}
+                regeneratingSection={regeneratingSection}
+              />
+            ) : (
+              <div className="flex min-h-[480px] flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant bg-surface/55 p-8 text-center">
+                <span className="mb-5 flex size-14 items-center justify-center rounded-full bg-primary-fixed text-primary"><FileText className="size-6" /></span>
+                <h3 className="font-heading text-lg font-semibold">No blueprint yet</h3>
+                <p className="mt-2 max-w-sm text-sm leading-5 text-muted-foreground">
+                  Generate a blueprint to create the product brief, market angle, MVP scope, UX flow, tech plan, code skeleton, backlog, tests and exports.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
       </div>
+
+      <BootcampMode project={project} />
+
+      {blueprint && (
+        <nav className="glass-panel fixed bottom-8 left-1/2 z-40 hidden -translate-x-1/2 items-center gap-4 rounded-full px-6 py-3 shadow-xl md:flex lg:ml-[140px]" aria-label="Blueprint actions">
+          <button type="button" onClick={handleExport} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-all hover:bg-surface-container hover:text-primary">
+            <Download className="size-4" />Download Blueprint
+          </button>
+          <span className="h-6 w-px bg-outline-variant/30" />
+          <button type="button" onClick={() => handleCopyMarkdown(exportMarkdown(project, blueprint))} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-all hover:bg-surface-container hover:text-primary">
+            <Copy className="size-4" />Copy Markdown
+          </button>
+          <span className="h-6 w-px bg-outline-variant/30" />
+          <button type="button" onClick={handleShare} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-all hover:bg-surface-container hover:text-primary">
+            <Share2 className="size-4" />Share
+          </button>
+        </nav>
+      )}
     </div>
   );
 }

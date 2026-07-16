@@ -10,7 +10,7 @@ test("completes the Sprint 2 demo journey", async ({ page }) => {
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Turn messy ideas into build-ready MVPs",
+      name: "Turn messy ideas into build-ready MVPs.",
     }),
   ).toBeVisible();
 
@@ -20,18 +20,19 @@ test("completes the Sprint 2 demo journey", async ({ page }) => {
     .click();
   await expect(page).toHaveURL(/\/projects\/new$/);
 
-  await page.getByLabel("What do you want to build?").fill(idea);
+  await page.getByLabel("What are we building?").fill(idea);
+  await page.getByRole("button", { name: "Goal", exact: true }).click();
   await page.getByLabel("Who is it for?").fill("university project teams");
-  await page.getByLabel("Goal").selectOption("bootcamp");
-  await page.getByLabel("Platform").selectOption("web");
-  await page.getByRole("button", { name: "Summon your pixies" }).click();
+  await page.getByRole("button", { name: "Platform", exact: true }).click();
+  await page.getByRole("button", { name: "Web App", exact: true }).click();
+  await page.getByRole("button", { name: "Summon the Team" }).click();
 
   await expect(page).toHaveURL(/\/projects\/[0-9a-f-]+$/);
-  await expect(page.getByRole("heading", { level: 2, name: idea })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Pixie team" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: idea })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "The Pixie Team" })).toBeVisible();
 
   await page.getByRole("button", { name: "Generate blueprint" }).click();
-  await expect(page.getByRole("heading", { name: "Blueprint" })).toBeVisible({
+  await expect(page.getByRole("heading", { name: "MVP Scope" })).toBeVisible({
     timeout: 45_000,
   });
 
@@ -64,10 +65,36 @@ test("completes the Sprint 2 demo journey", async ({ page }) => {
   );
   await expect(page.getByText(/^Saved \d{4}-\d{2}-\d{2}/)).toBeVisible();
 
-  await page.getByRole("link", { name: "Back to dashboard" }).click();
-  await expect(page.getByRole("heading", { name: "Your projects" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: idea })).toBeVisible();
-  await expect(page.getByText("ready", { exact: true })).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Breadcrumb" })
+    .getByRole("link", { name: "Dashboard" })
+    .click();
+  await expect(page.getByRole("heading", { name: "My Projects" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: idea })).toBeVisible();
+  await expect(page.getByText("Blueprint Ready", { exact: true })).toBeVisible();
+});
+
+test("keeps the main journey responsive on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const path of ["/", "/projects/new", "/dashboard"]) {
+    await page.goto(path);
+    await expect(page.locator("body")).toBeVisible();
+    const hasHorizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth + 1,
+    );
+    expect(hasHorizontalOverflow, `${path} should not overflow horizontally`).toBe(false);
+  }
+
+  await expect(page.getByRole("heading", { name: "My Projects" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
+
+  await page.locator("article a").first().click();
+  await expect(page.getByRole("heading", { name: "The Pixie Team" })).toBeVisible();
+  const workspaceHasHorizontalOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth + 1,
+  );
+  expect(workspaceHasHorizontalOverflow, "workspace should not overflow horizontally").toBe(false);
 });
 
 test("rejects invalid project input", async ({ request }) => {
