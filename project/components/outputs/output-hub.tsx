@@ -34,10 +34,14 @@ export function OutputHub({
   project,
   blueprint,
   onExport,
+  onExportJson,
+  onCopyMarkdown,
 }: {
   project: Project;
   blueprint: Blueprint;
   onExport?: () => void;
+  onExportJson?: () => void;
+  onCopyMarkdown?: (markdown: string) => void;
 }) {
   const b = blueprint;
   const readmeMarkdown = exportMarkdown(project, blueprint);
@@ -173,7 +177,17 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="readme" className="rounded-xl border bg-card p-5">
-        <div className="flex justify-end pb-3">
+        <div className="flex justify-end gap-2 pb-3">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onCopyMarkdown?.(readmeMarkdown)}
+          >
+            Copy Markdown
+          </Button>
+          <Button size="sm" variant="outline" onClick={onExportJson}>
+            Download JSON
+          </Button>
           <Button size="sm" variant="outline" onClick={onExport}>
             Download README.md
           </Button>
