@@ -80,6 +80,9 @@ formatlarda hazırlanır.
 - Supabase veya local JSON fallback ile proje/blueprint saklama
 - Supabase Auth anonymous owner mode + `owner_id` bazlı RLS temeli
 - Uzun AI üretimi için `generation_jobs` durum modeli ve UI polling
+- Vercel Queues ile kalıcı üretim kuyruğu, lease tabanlı tekrar deneme ve
+  idempotent job tamamlama
+- Supabase üzerinde owner bazlı atomik API rate limit
 
 ### Roadmap
 
@@ -87,7 +90,7 @@ formatlarda hazırlanır.
 - OpenAI Agents SDK handoff, tracing ve guardrail katmanı
 - pgvector ile project memory ve decision memory
 - Email/OAuth account linking
-- Durable queue veya SSE streaming
+- SSE streaming ve gerçek per-pixie event görünürlüğü
 - Vercel canlı deploy, quota, Turnstile/CAPTCHA ve abuse prevention
 
 ## Hedef Kitle
@@ -265,8 +268,9 @@ Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görünt�
 | Landing / dashboard / new project / workspace | `project/app/page.tsx`, `project/app/dashboard/page.tsx`, `project/app/projects/new/page.tsx`, `project/app/projects/[id]/page.tsx` | Done |
 | Project create/list/detail | `project/app/api/projects/*`, `project/lib/projects.ts` | Done |
 | Blueprint pipeline | `project/lib/ai/orchestrator.ts`, `project/lib/ai/prompts.ts`, `project/lib/ai/schemas.ts` | Done |
-| Job + polling | `project/app/api/generation-jobs/*`, `project/lib/generation-jobs.ts`, `project/components/project/workspace.tsx` | Done |
+| Durable job + polling | `project/app/api/generation-jobs/*`, `project/app/api/queues/*`, `project/lib/generation-worker.ts`, `project/components/project/workspace.tsx` | Done |
 | Supabase owner/RLS | `project/proxy.ts`, `project/components/auth/session-bootstrap.tsx`, `project/supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
+| Distributed rate limit | `project/lib/api/rate-limit.ts`, `project/supabase/migrations/202607160001_durable_jobs_and_rate_limits.sql` | Done |
 | README export | `project/app/api/export-readme/route.ts`, `project/lib/export/markdown.ts` | Done |
 | Output controls | `project/app/api/export-json/route.ts`, `project/app/api/regenerate-output/route.ts`, `project/components/outputs/output-hub.tsx` | Done |
 | Audit | `project/package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
@@ -340,11 +344,11 @@ Plan sekmesi eklendi.
 
 **Current stack:** Next.js 16 App Router · TypeScript · Tailwind CSS v4 ·
 shadcn/ui/base-ui · Supabase Postgres · Supabase Auth anonymous owner mode +
-RLS · OpenAI API role-based prompt pipeline · generation job polling · local
-JSON fallback for development.
+RLS · OpenAI API role-based prompt pipeline · Vercel Queues · generation job
+polling · local JSON fallback for development.
 
 **Roadmap stack:** OpenAI Agents SDK handoff · pgvector project memory · durable
-queue/SSE streaming · account linking · Vercel deploy hardening.
+workflow steps/SSE streaming · account linking · Vercel deploy hardening.
 
 ## Klasör Yapısı
 
@@ -358,6 +362,7 @@ project/
     api/
       projects/
       generation-jobs/
+      queues/
       generate-blueprint/
       regenerate-output/
       export-json/
@@ -397,8 +402,8 @@ BuildPixies, fikri uzman pixie rollerine bölerek işler:
 - **Sprinta** — Backlog ve sprint planı üretir.
 - **Quill** — README ve dokümantasyon çıktısını üretir.
 
-**Pipeline:** Raw idea → Pip → Pria → Moxie → Luma → Tinker → Bitsy → Bugsy →
-Sprinta → Quill → Blueprint.
+**Pipeline:** Raw idea → durable queue → dependency-aware pixie batches →
+validated Blueprint → atomic project/job completion.
 
 Sprint 1 sonunda çalışan mimari role-based prompt pipeline'dır. OpenAI anahtarı
 yoksa uygulama sample blueprint ile çalışır; bu fallback demo güvenliği içindir
@@ -427,13 +432,17 @@ Gerekli ortam değişkenleri:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 # Legacy projelerde NEXT_PUBLIC_SUPABASE_ANON_KEY de desteklenir.
 ```
 
 Hosted deploy'larda `BUILDPIXIES_REQUIRE_SUPABASE=1` kullanın. Local geliştirmede
 Supabase yoksa `project/.local/buildpixies-projects.json` ve
 `project/.local/buildpixies-generation-jobs.json` fallback'i devreye girer. Şifresiz
-demo akışı için Supabase Auth > Anonymous Sign-Ins açık olmalıdır.
+demo akışı için Supabase Auth > Anonymous Sign-Ins açık olmalıdır. Service role
+anahtarı yalnızca server environment'ta tutulmalı; `NEXT_PUBLIC_` önekiyle
+tanımlanmamalıdır. Vercel Queue consumer'ı `project/vercel.json` üzerinden
+deploy sırasında bağlanır.
 
 # Screenshots
 
