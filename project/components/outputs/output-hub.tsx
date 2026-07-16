@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { exportMarkdown } from "@/lib/export/markdown";
-import type { Blueprint } from "@/types/output";
+import type { Blueprint, BlueprintSection } from "@/types/output";
 import type { Project } from "@/types/project";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -30,18 +30,46 @@ function List({ items }: { items: string[] }) {
   );
 }
 
+function SectionHeader({
+  section,
+  regeneratingSection,
+  onRegenerate,
+}: {
+  section: BlueprintSection;
+  regeneratingSection?: BlueprintSection | null;
+  onRegenerate?: (section: BlueprintSection) => void;
+}) {
+  const isRegenerating = regeneratingSection === section;
+  return (
+    <div className="flex justify-end pb-2">
+       <Button
+        size="sm"
+        variant="default"
+        disabled={isRegenerating}
+        onClick={() => onRegenerate?.(section)}
+      >
+        {isRegenerating ? "Regenerating..." : "Regenerate"}
+      </Button>
+    </div>
+  );
+}
+
 export function OutputHub({
   project,
   blueprint,
   onExport,
   onExportJson,
   onCopyMarkdown,
+  onRegenerate,
+  regeneratingSection,
 }: {
   project: Project;
   blueprint: Blueprint;
   onExport?: () => void;
   onExportJson?: () => void;
   onCopyMarkdown?: (markdown: string) => void;
+  onRegenerate?: (section: BlueprintSection) => void;
+  regeneratingSection?: BlueprintSection | null;
 }) {
   const b = blueprint;
   const readmeMarkdown = exportMarkdown(project, blueprint);
@@ -61,6 +89,11 @@ export function OutputHub({
       </TabsList>
 
       <TabsContent value="plan" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="orchestrationPlan"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Summary">{b.orchestrationPlan.summary}</Row>
         <Row label="Missing information">
           <List items={b.orchestrationPlan.missingInformation} />
@@ -74,6 +107,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="product" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="productBrief"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Project name">{b.productBrief.projectName}</Row>
         <Row label="One liner">{b.productBrief.oneLiner}</Row>
         <Row label="Problem">{b.productBrief.problem}</Row>
@@ -84,6 +122,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="market" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="marketAnalysis"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Competitors"><List items={b.marketAnalysis.competitors} /></Row>
         <Row label="Positioning">{b.marketAnalysis.positioning}</Row>
         <Row label="Differentiation">
@@ -93,6 +136,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="scope" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="mvpScope"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Must have">
           <List items={b.mvpScope.mustHave.map((f) => `${f.feature} — ${f.why}`)} />
         </Row>
@@ -105,6 +153,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="ux" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="uxFlow"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Journey">{b.uxFlow.journey}</Row>
         <Row label="Screens">
           <div className="flex flex-col gap-2">
@@ -120,6 +173,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="tech" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="techPlan"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Architecture">{b.techPlan.architecture}</Row>
         <Row label="Stack">
           <List
@@ -134,6 +192,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="code" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="codeSkeleton"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="File tree">
           <div className="flex flex-col gap-2">
             {b.codeSkeleton.fileTree.map((file, i) => (
@@ -149,6 +212,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="backlog" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="backlog"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <div className="flex flex-col gap-2">
           {b.backlog.items.map((item, i) => (
             <div key={i} className="min-w-0 rounded-lg border p-3">
@@ -164,6 +232,11 @@ export function OutputHub({
       </TabsContent>
 
       <TabsContent value="tests" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="testPlan"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
         <Row label="Happy path">
           <List items={b.testPlan.happyPath.map((t) => t.name)} />
         </Row>
