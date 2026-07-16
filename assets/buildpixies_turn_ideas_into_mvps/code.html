@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BuildPixies - Magical MVP Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#b4136d",
+                        "secondary-fixed-dim": "#ffb0cd",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#8c0053",
+                        "tertiary-container": "#a36700",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#600037",
+                        "outline": "#767586",
+                        "tertiary": "#825100",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-fixed": "#ffd9e4",
+                        "surface-container-high": "#dce9ff",
+                        "surface-tint": "#494bd6",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c0c1ff",
+                        "on-surface-variant": "#464554",
+                        "surface-variant": "#d3e4fe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c7c4d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed": "#e1e0ff",
+                        "secondary-container": "#fd56a7",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-background": "#0b1c30",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6063ee",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "on-error": "#ffffff",
+                        "primary": "#4648d4",
+                        "on-primary-fixed": "#07006c",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#3e0022",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "24px",
+                        "stack-gap": "12px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.04);
+        }
+        .pixie-sparkle {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.8; transform: scale(1); box-shadow: 0 0 10px rgba(70, 72, 212, 0.4); }
+            50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 20px rgba(70, 72, 212, 0.8); }
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #4648d4, #b4136d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pixie-card {
+            transition: all 0.3s ease;
+        }
+        .pixie-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-color: rgba(70, 72, 212, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col antialiased relative overflow-x-hidden">
+<!-- Ambient Background Elements -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[120px]"></div>
+</div>
+<!-- Top Navigation (No shell logic needed as this is a linear landing page, but providing a simple header) -->
+<header class="w-full px-margin-mobile md:px-margin-desktop h-20 flex justify-between items-center z-40 fixed top-0 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">BuildPixies</span>
+</div>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#features">Features</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#how-it-works">How it Works</a>
+</nav>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2.5 rounded-full shadow-[0_4px_14px_0_rgba(70,72,212,0.39)] hover:shadow-[0_6px_20px_rgba(70,72,212,0.23)] hover:-translate-y-0.5 transition-all duration-200">
+            Sign In
+        </button>
+</header>
+<main class="flex-grow pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-[container-max-width] mx-auto w-full flex flex-col gap-24">
+<!-- Hero Section -->
+<section class="flex flex-col lg:flex-row items-center gap-12 lg:gap-gutter min-h-[70vh]">
+<!-- Hero Content -->
+<div class="flex-1 flex flex-col gap-6 items-start z-10">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+                    The Magic of AI
+                </div>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface max-w-2xl leading-tight">
+                    Turn messy ideas into <br class="hidden md:block"/> <span class="gradient-text">build-ready MVPs.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                    BuildPixies gives you a tiny AI product team that transforms your rough idea into a product brief, UX flow, backlog, tech plan and launch-ready documentation.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
+<button class="bg-gradient-to-b from-primary to-[#3a3baf] text-on-primary font-label-md text-label-md px-8 py-4 rounded-full shadow-[0_8px_30px_rgb(70,72,212,0.3)] hover:shadow-[0_8px_30px_rgb(70,72,212,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 border-t border-white/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                        Summon your pixies
+                    </button>
+<button class="glass-panel text-on-surface font-label-md text-label-md px-8 py-4 rounded-full hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+                        View Demo
+                    </button>
+</div>
+<div class="flex items-center gap-4 mt-6 text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-surface object-cover" data-alt="A portrait of a smiling software developer in a modern, brightly lit office environment. The lighting is soft and natural, highlighting a clean, professional aesthetic suitable for a high-end SaaS product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrfEVG2fbQ5h2eww_T385kmF2-6wNlhFyCWhQZgPyy3SfWiHZkmqmFp_O5PR9ldwbnv8Eej1h-h-AwsER3AKwfiqbHHYM4albAgJ5c6zmsHmOPNKIdDr8Q0Z1fn6pE985wPubY8W3qpou34JCfxFrFC4Fd1ckYHZueo9dnKb7WdiAE3f0ipFVsbtVkRXoXy2C0j_ZT8bdNVfWMrSXXPV2zTkWgkdJQ_24NLexxDtGwU_IGSJHiaW8"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface object-cover" data-alt="A portrait of an organized product manager looking confident, set against a minimalist white background. The image has a light, airy feel typical of modern tech company branding, with soft, diffuse lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMsUiLRccHqjf5T0YBk7ehUB70gC7MpBQkQ7snZJ32S2oYJ8saFRYq3abkVQMXOrKAUh5pWkVSCIyFSF_iCfL1MGXL7WhiZ01-Jb77HQTLjBnRCK6qTk57zfKd-SpGfvWKMgtuYMMbk90OM806hYGz3noavx7BKIenpioHhgc9vODfEw_7NdqmOX0iE-r3PGGcIZDg1V_rT1KAVLkDKMD0NQGWPWPmMsxUjX1a0wM08vL196mF6e0"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface object-cover" data-alt="A portrait of a creative designer with glasses, working in a sunlit studio space. The visual style is crisp and modern, featuring bright whites and subtle pastel tones to match a clean software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdU2cCSOI6UabdoK1z2kSDMgCf25Sugjn8n2frQMjAXq1v2PyIRpd45adkAKzjcnYimMXTDUV5_LQ_y07cqoAm91PFUzZKPM6zPNYs6EHiR9V7DRFnkZpji-S6aFHSNwB-fNfzi5iio8cU5Q4h8tnyNpj___m4pkMX9N01hxT8qroOh6D-YBRa5joQHAXCn4TLVWjac9NVf35TqkfvtHuz9X785A70Cc4nUPTDMp-Zw_AodTw6nzY"/>
+</div>
+<span>Loved by 1,000+ creators</span>
+</div>
+</div>
+<!-- Hero Visual (Interactive Demo Mockup) -->
+<div class="flex-1 w-full max-w-2xl relative z-10">
+<div class="glass-panel rounded-2xl p-4 md:p-6 w-full flex flex-col md:flex-row gap-6 border border-white/40 shadow-2xl">
+<!-- Left: Input Side -->
+<div class="flex-1 flex flex-col gap-4">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-3 h-3 rounded-full bg-error/80"></div>
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim/80"></div>
+<div class="w-3 h-3 rounded-full bg-secondary-fixed-dim/80"></div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/30 h-full min-h-[200px] flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-2">Your Idea</span>
+<p class="font-body-sm text-body-sm text-on-surface flex-grow">
+                                "I want an app for dog walkers where they can track their routes and get paid automatically..."
+                            </p>
+<div class="mt-auto flex justify-between items-center border-t border-outline-variant/20 pt-3">
+<span class="material-symbols-outlined text-outline text-[18px]">attach_file</span>
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[14px]">send</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Pixie Team Processing -->
+<div class="flex-[1.5] flex flex-col gap-3">
+<div class="font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary pixie-sparkle" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                            Pixies Working
+                        </div>
+<!-- Status Items -->
+<div class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/30 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[16px]">edit_document</span>
+</div>
+<div class="flex-1">
+<div class="font-label-sm text-label-sm text-on-surface">Product Brief</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-primary h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[16px]">check_circle</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/30 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[16px]">account_tree</span>
+</div>
+<div class="flex-1">
+<div class="font-label-sm text-label-sm text-on-surface">UX Flow</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-secondary h-full w-[45%] rounded-full"></div>
+</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-secondary pixie-sparkle"></div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/30 flex items-center gap-3 opacity-60">
+<div class="w-8 h-8 rounded-full bg-outline/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[16px]">terminal</span>
+</div>
+<div class="flex-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant">Tech Plan</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-1.5"></div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">pending</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="flex flex-col gap-12 mt-12" id="features">
+<div class="text-center max-w-2xl mx-auto flex flex-col gap-4">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Magical capabilities, grounded results.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Stop staring at a blank page. Our specialized AI agents work in parallel to define your product's foundation.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Feature 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/30 shadow-[0px_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-4 pixie-card col-span-1 md:col-span-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/10 transition-colors"></div>
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2 z-10 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-[24px]">group_work</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface z-10">Multi-Agent Planning</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md z-10">
+                        Instead of one general AI struggling to do it all, we dispatch specialized 'Pixies'—a Product Manager, UX Designer, and Tech Lead—who collaborate to build a cohesive plan.
+                    </p>
+<div class="mt-4 bg-surface rounded-xl p-4 border border-outline-variant/20 flex gap-4 overflow-hidden relative z-10">
+<div class="flex-1 bg-surface-container-lowest rounded-lg p-3 text-center border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary mb-1">psychology</span>
+<div class="font-label-sm text-[10px] text-on-surface-variant">PM Agent</div>
+</div>
+<div class="flex-1 bg-surface-container-lowest rounded-lg p-3 text-center border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary mb-1">design_services</span>
+<div class="font-label-sm text-[10px] text-on-surface-variant">UX Agent</div>
+</div>
+<div class="flex-1 bg-surface-container-lowest rounded-lg p-3 text-center border border-outline-variant/10">
+<span class="material-symbols-outlined text-tertiary mb-1">code</span>
+<div class="font-label-sm text-[10px] text-on-surface-variant">Dev Agent</div>
+</div>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/30 shadow-[0px_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-4 pixie-card col-span-1 relative overflow-hidden group">
+<div class="absolute bottom-0 right-0 w-48 h-48 bg-secondary/5 rounded-full blur-[50px] group-hover:bg-secondary/10 transition-colors"></div>
+<div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center mb-2 z-10 border border-secondary/20">
+<span class="material-symbols-outlined text-secondary text-[24px]">view_kanban</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface z-10">Structured Outputs</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant z-10">
+                        No more walls of text. Get organized Markdown, JSON, and Mermaid diagrams ready for Jira or Notion.
+                    </p>
+<div class="mt-auto bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-3 flex flex-col gap-2 z-10">
+<div class="w-3/4 h-2 bg-surface-variant rounded-full"></div>
+<div class="w-full h-2 bg-surface-variant rounded-full"></div>
+<div class="w-5/6 h-2 bg-surface-variant rounded-full"></div>
+</div>
+</div>
+<!-- Feature 3 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/30 shadow-[0px_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-4 pixie-card col-span-1 md:col-span-3 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex flex-col md:flex-row items-center gap-8 z-10">
+<div class="flex-1 flex flex-col gap-4">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container/10 flex items-center justify-center mb-2 border border-tertiary-container/20">
+<span class="material-symbols-outlined text-tertiary-container text-[24px]">rocket_launch</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Bootcamp Mode</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                Need tough love? Bootcamp Mode challenges your assumptions, asking hard questions about market fit and technical feasibility before a single line of code is written.
+                            </p>
+</div>
+<div class="flex-1 w-full bg-surface rounded-xl border border-outline-variant/30 p-6 flex flex-col gap-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary-container text-[14px]">warning</span>
+</div>
+<div class="bg-surface-container-lowest rounded-lg rounded-tl-none p-3 border border-outline-variant/10 text-label-sm font-label-sm text-on-surface">
+                                     "You mentioned recurring billing, but haven't defined the pricing tiers. How will you handle failed payments?"
+                                 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="border-t border-outline-variant/20 py-8 text-center text-on-surface-variant font-label-sm text-label-sm mt-12 bg-surface">
+<p>© 2024 BuildPixies. Magical Productivity.</p>
+</footer>
+</body></html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard - BuildPixies</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#b4136d",
+                        "secondary-fixed-dim": "#ffb0cd",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#8c0053",
+                        "tertiary-container": "#a36700",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#600037",
+                        "outline": "#767586",
+                        "tertiary": "#825100",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-fixed": "#ffd9e4",
+                        "surface-container-high": "#dce9ff",
+                        "surface-tint": "#494bd6",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c0c1ff",
+                        "on-surface-variant": "#464554",
+                        "surface-variant": "#d3e4fe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c7c4d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed": "#e1e0ff",
+                        "secondary-container": "#fd56a7",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-background": "#0b1c30",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6063ee",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "on-error": "#ffffff",
+                        "primary": "#4648d4",
+                        "on-primary-fixed": "#07006c",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#3e0022",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "16px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "24px",
+                        "stack-gap": "12px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .magic-pulse {
+            animation: magicPulse 3s infinite alternate;
+        }
+        
+        @keyframes magicPulse {
+            0% {
+                box-shadow: 0 0 0 1px rgba(70, 72, 212, 0.2), 0 0 10px rgba(70, 72, 212, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 0 1px rgba(70, 72, 212, 0.6), 0 0 20px rgba(70, 72, 212, 0.3);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-margin-desktop fixed w-[280px] left-0 top-0 bg-surface dark:bg-inverse-surface shadow-sm z-30 shadow-[0px_10px_30px_rgba(0,0,0,0.04)]">
+<div class="px-margin-desktop mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">BuildPixies</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Magical MVP Builder</p>
+</div>
+<ul class="flex flex-col gap-2 px-4 mt-4">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary dark:text-inverse-primary font-bold border-r-4 border-primary hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- TopAppBar (Mobile & Desktop) -->
+<header class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 z-40 fixed top-0 w-full md:w-[calc(100%-280px)] md:right-0 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl md:border-none border-b border-outline-variant shadow-sm md:shadow-none">
+<div class="flex items-center gap-4 md:hidden">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">BuildPixies</span>
+</div>
+<div class="hidden md:flex flex-1 justify-center">
+<!-- Search bar is hidden as per JSON -->
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-gradient-to-b from-primary to-primary-container text-on-primary font-label-md text-label-md px-4 py-2 rounded-lg shadow-sm hover:opacity-90 transition-opacity border border-white/20 hidden md:block">
+                Summon
+            </button>
+<div class="flex items-center gap-3 text-on-surface-variant dark:text-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">help</span>
+<img alt="User Avatar" class="w-8 h-8 rounded-full ml-2 border border-outline-variant object-cover" data-alt="A small, stylized circular avatar image showing a cute digital pixie character with glowing blue and purple accents, set against a clean white background. High-end modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9iyiTgCQtz_rPdyddKZNZ8JpbfmtETdddeQE8HkPLnFy4viB5BNUrNTp0E6UtFVhsY-kx6Twgaj713aoVJmlgYI56XyYJx2BMKPVnvz3FI0rM6EOrhgiET7Y8pdUCMsvL-fe-o0RKTX0qlL0r8NMRT6tx7-Lacx_3KsK3XaEQx7esZwT8UjSUEBVCBAyIRd7Xcaa2IqKtpfOngsaYdBG-9DGsXm7EYAnYpn-iyO3mhR5Q0-fBw7k"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 md:pt-24 pb-20 px-margin-mobile md:px-margin-desktop md:ml-[280px] max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">My Projects</h2>
+<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Manage and track your active pixie teams.</p>
+</div>
+<button class="bg-gradient-to-b from-primary to-primary-container text-on-primary font-label-md text-label-md px-6 py-3 rounded-xl shadow-[0_4px_14px_rgba(70,72,212,0.3)] hover:shadow-[0_6px_20px_rgba(70,72,212,0.4)] transition-all flex items-center gap-2 border border-white/20 w-full md:w-auto justify-center">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                Summon New Team
+            </button>
+</div>
+<!-- Project Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1: Blueprint Ready (Active AI) -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] relative overflow-hidden magic-pulse group hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="mb-4">
+<span class="inline-block px-2.5 py-1 rounded-md bg-surface-container-high text-primary font-label-sm text-label-sm mb-2">Web App</span>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">University Group Manager</h3>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pixies Assembled</span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">5/7</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-primary-container to-primary h-full rounded-full" style="width: 71%"></div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant/30 pt-4 mt-auto">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Status</span>
+<span class="font-label-md text-label-md text-on-surface flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim shadow-[0_0_8px_rgba(255,185,95,0.8)]"></span>
+                            Blueprint Ready
+                        </span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Card 2: In Progress -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] hover:shadow-[0px_15px_40px_rgba(0,0,0,0.08)] transition-all group hover:-translate-y-1">
+<div class="mb-4">
+<span class="inline-block px-2.5 py-1 rounded-md bg-surface-container-high text-primary font-label-sm text-label-sm mb-2">Mobile App</span>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">AI Habit Tracker</h3>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pixies Assembled</span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">2/7</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary/50 h-full rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant/30 pt-4 mt-auto">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Status</span>
+<span class="font-label-md text-label-md text-on-surface flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+                            Drafting UX Flow
+                        </span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Waiting -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] hover:shadow-[0px_15px_40px_rgba(0,0,0,0.08)] transition-all group hover:-translate-y-1 opacity-80 hover:opacity-100">
+<div class="mb-4">
+<span class="inline-block px-2.5 py-1 rounded-md bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm mb-2">Concept</span>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Freelance Scope Tool</h3>
+</div>
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pixies Assembled</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">0/7</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-outline-variant h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant/30 pt-4 mt-auto">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Status</span>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+                            Waiting for Idea
+                        </span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest border border-outline-variant/50 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Optional Empty State Example (Hidden visually in this layout, but provided in DOM) -->
+<div class="hidden flex-col items-center justify-center py-20 px-4 text-center">
+<div class="w-24 h-24 bg-surface-container-low rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-primary opacity-50">magic_button</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">No ideas yet</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mb-8">Your workspace is quiet. Summon your first pixie team to start building magical experiences.</p>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                Summon your first team
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-gutter items-center bg-surface/90 backdrop-blur-xl border border-outline-variant/30 rounded-full px-6 py-3 shadow-xl w-max">
+<a class="flex flex-col items-center gap-1 min-w-[64px]" href="#">
+<span class="material-symbols-outlined text-primary font-bold" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm text-primary">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 min-w-[64px]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant hover:scale-105 transition-transform">folder_open</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Projects</span>
+</a>
+<a class="flex flex-col items-center gap-1 min-w-[64px]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant hover:scale-105 transition-transform">settings</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Settings</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pixie Workspace - Project Details</title>
+<!-- Google Fonts: Inter & Lexend -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#b4136d",
+                        "secondary-fixed-dim": "#ffb0cd",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#8c0053",
+                        "tertiary-container": "#a36700",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#600037",
+                        "outline": "#767586",
+                        "tertiary": "#825100",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-fixed": "#ffd9e4",
+                        "surface-container-high": "#dce9ff",
+                        "surface-tint": "#494bd6",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c0c1ff",
+                        "on-surface-variant": "#464554",
+                        "surface-variant": "#d3e4fe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c7c4d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed": "#e1e0ff",
+                        "secondary-container": "#fd56a7",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-background": "#0b1c30",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6063ee",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "on-error": "#ffffff",
+                        "primary": "#4648d4",
+                        "on-primary-fixed": "#07006c",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#3e0022",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary": "#ffffff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "container-max-width": "1440px",
+                        "gutter": "24px",
+                        "stack-gap": "12px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    fontFamily: {
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Lexend"]
+                    },
+                    fontSize: {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Animations & Styles */
+        @keyframes magic-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(96, 99, 238, 0.4); border-color: #6063ee; }
+            70% { box-shadow: 0 0 0 12px rgba(96, 99, 238, 0); border-color: #c0c1ff; }
+            100% { box-shadow: 0 0 0 0 rgba(96, 99, 238, 0); border-color: #6063ee; }
+        }
+        
+        .pixie-thinking {
+            animation: magic-pulse 2s infinite;
+            border: 2px solid #6063ee;
+        }
+
+        /* Subtle scrollbar for markdown area */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #c7c4d7;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-screen overflow-hidden flex font-body-md text-body-md">
+<!-- SIDENAV BAR -->
+<nav class="fixed h-full w-[280px] left-0 top-0 bg-surface shadow-[0px_10px_30px_rgba(0,0,0,0.04)] flex flex-col py-margin-desktop z-50">
+<!-- Brand Header -->
+<div class="px-6 mb-12 flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">BuildPixies</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Magical MVP Builder</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 px-4 space-y-2">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Projects (Active based on context) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-surface-container-low text-primary font-bold border-r-4 border-primary scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<!-- Settings (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors group mt-auto" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- Bottom spacing for absolute bottom nav -->
+<div class="h-24"></div>
+</nav>
+<!-- TOP APP BAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] flex justify-between items-center px-margin-desktop h-16 z-40 bg-surface/80 backdrop-blur-xl border-b border-outline-variant">
+<!-- Left empty to allow breadcrumbs below to breathe, or optional context -->
+<div></div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 bg-gradient-to-b from-primary to-primary-container text-on-primary px-5 py-2 rounded-full font-label-md text-label-md shadow-sm border border-white/20 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">auto_fix</span>
+                Summon
+            </button>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">help</span></button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden ml-2 border border-outline-variant/50">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A minimal, high-key portrait illustration of a generic user avatar in soft pastel colors, conveying a professional yet friendly tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC65emgt79qs1CLnu-o8iCv2LuBSu3Be-gAPGor3TYWX_YNtzZSezuKybsRET3zia_xunJHLfMXFyb6J8amagCzZuJeklbwecvuRSd3SEI5DXVB0n7V1n2cHkO_vI7wZtrab2u5NJs7VYs_kpPBcP61i0cEoMkZxCZepzfj5Hj9a61BVbz08ehoRHdYKAmDnmffUuAgRM1Eyt0PPCwAGxtZd0yKnL3w2NWgxB7gB4pi2F-rrCdwiM4"/>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="ml-[280px] mt-16 w-[calc(100%-280px)] h-[calc(100vh-64px)] flex flex-col p-margin-desktop bg-background relative z-0">
+<!-- Breadcrumbs -->
+<div class="mb-6 flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span class="hover:text-primary cursor-pointer transition-colors">Dashboard</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface">University Group Manager</span>
+</div>
+<!-- Split View Layout -->
+<div class="flex-1 flex gap-gutter min-h-0">
+<!-- LEFT PANEL: Your Idea -->
+<section class="w-[30%] flex flex-col bg-surface rounded-xl border border-outline-variant/50 shadow-[0px_10px_30px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant/30 bg-surface-bright flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">lightbulb</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Your Idea</h2>
+</div>
+<div class="p-6 flex-1 bg-surface flex flex-col">
+<textarea class="w-full flex-1 bg-surface-container-lowest border-none focus:ring-0 resize-none text-on-surface-variant font-body-md text-body-md placeholder-outline p-0 leading-relaxed custom-scrollbar" placeholder="Describe your app idea here...">I need a platform for university students to find and join study groups. It should connect people taking the same courses. Needs a chat feature and a shared calendar for scheduling meetups. Maybe integrate with the university syllabus? The vibe should be academic but approachable.</textarea>
+</div>
+</section>
+<!-- CENTER PANEL: The Pixie Team -->
+<section class="w-[35%] flex flex-col">
+<div class="mb-4 flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">group_work</span>
+                        The Pixie Team
+                    </h2>
+<span class="px-3 py-1 bg-surface-container-high text-primary rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">sync</span> Processing
+                    </span>
+</div>
+<div class="flex flex-col gap-stack-gap flex-1 overflow-y-auto custom-scrollbar pr-2 pb-24">
+<!-- Card 1: Pip (Done) -->
+<div class="bg-surface p-4 rounded-xl border border-outline-variant/50 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A whimsical, minimalist 3D icon of a tiny, friendly robot conductor holding a tiny baton, set against a soft blue background. Soft lighting, high-end SaaS aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLSmgJmo5gfS1Y9UfOEfDMgCqWQgU3-XV9cgoUv5P9o2nsiBaRSE2QsB7uRWoVJT5sOZk7aOTDFf_WnOt6N5tZ-MVt0VEKKoCQFtAiZ_m_cJbA-Pl_Mt-t739UvUaV8AXBsRL4a0-blaMOwmsrj7sg58yYgnHV5exZXCafFDkaEbhrDmOBodh3zxtVuFFqnV-c4tPSNZCYlhOjBZHdJFR7M2EeEnw1tTa7O0smEJD4writ4oDJxt8"/>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Pip</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Orchestrator</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Card 2: Pria (Done) -->
+<div class="bg-surface p-4 rounded-xl border border-outline-variant/50 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A whimsical, minimalist 3D icon of a tiny, clever fox wearing small glasses, reading a blueprint, set against a soft warm background. High-end clean UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSPWz2HuBdbiax1FIfocH6pNQ99N2NXifJ9i6j91x84ra5GGZWLxikzLWdt2gxs23Cc8rfBMOXDKOIV4XqyctKuS22QrfbieiFqG1zadWqFLBHpVkMSJcPLSzViT1QJj0uNJoJ1AElTw7dUviJZZZlNODn9ubQnTbgW_edfLnkeLCo8ZiYbbcFt_nz89civDf-STmhWQ4pGLRU-0bb9fwomyXp7XdqlV-W0zgOR2QUBq6uyN91W6o"/>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Pria</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Product Manager</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Card 3: Luma (Thinking - Active) -->
+<div class="bg-surface p-4 rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.06)] flex items-center gap-4 pixie-thinking relative z-10">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A beautiful, minimalist 3D icon of an elegant owl made of smooth white ceramic with glowing violet eyes, set against a violet gradient background. Magical productivity aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRyOQqplXN2uJ71TbzGhK5IBwd79LHcL5ZjKil7odtyfyB8lxvXgI3dBuwsXPt14LApySFMKOAhHHXN03cOjzb2MyJg8T_nIGYZ1Zih5mXvMfHQ-IyeD9tbRvjiitOcjotOwQerAf-OwFwwclg-oIN1pYAzaW_nGpjHxfykLsBDbj56G8cZ9KlH2-BnpK6zVxUH_DQZvsDHx1XmS1nC1dZupKM21aXTX9JxAdwSnOHqhsAzcmjAmg"/>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface font-bold">Luma</h3>
+<p class="font-body-sm text-body-sm text-primary">UX Designer • Drafting flows...</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-primary animate-spin">autorenew</span>
+</div>
+</div>
+<!-- Card 4: Tinker (Waiting) -->
+<div class="bg-surface/50 p-4 rounded-xl border border-outline-variant/30 flex items-center gap-4 opacity-60 grayscale-[50%]">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized, minimalist 3D icon of a cute mechanical arm holding a tiny wrench, neutral soft gray lighting, clean UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIY_1raXy8CpMQ3VJotZqUMEDnPoxd3YV5IK1gF1MC9YND5EwBDPxzhU_SlVkgVq4ozrXI3Fe-gAUefYsphY8gD-BWqGzx5pelPY_y3QzZ-9-1NmSiIK1X_z8Kx2Wgyh9QsC3ZUhPEo_UoPxcNiTeN9hqLpid4Da2WwSYA41B0Y7kPMGSstCmHTCzWEK0jm6S25RlktVOiHUxaZNMe1qLQWJXH87LjPmWQ1qZCynvsoBgNdJ4TBpE"/>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Tinker</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tech Lead</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-outline">hourglass_empty</span>
+</div>
+</div>
+<!-- Card 5: Sprinta (Waiting) -->
+<div class="bg-surface/50 p-4 rounded-xl border border-outline-variant/30 flex items-center gap-4 opacity-60 grayscale-[50%]">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized, minimalist 3D icon of a sleek stopwatch with tiny wings, soft neutral lighting, high fidelity clean UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIe-83NFpRE86OM0_1Upb9Sli5W2ACbFeqcH_3zDkFNEoZlpW8JkAKrLvBo19uLbMKME6dYITHBOkAXSMa0NZk5JkpWWAuBy2N-42k2118INsV_Rm3f_iiih9-7iPsRFaJmzQUvS0-EkPUUTDjXztiIgMwx_gpj4wGgVw-wUoo2NpfenclxhgZTB2E_D9Psq598gcdTOczfiQYObE5rEWsvseFo1Hg6B6juquka2BvlY56FtrTSPU"/>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Sprinta</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Scrum Master</p>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-outline">hourglass_empty</span>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT PANEL: Live Output Preview -->
+<section class="w-[35%] flex flex-col bg-surface rounded-xl border border-outline-variant/50 shadow-[0px_10px_30px_rgba(0,0,0,0.04)] overflow-hidden relative">
+<!-- Background subtle decorative element -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+<div class="px-6 py-4 border-b border-outline-variant/30 bg-surface/50 backdrop-blur-md flex items-center justify-between z-10">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">edit_document</span>
+                        MVP Scope
+                    </h2>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">Auto-saving...</span>
+</div>
+<div class="p-6 flex-1 overflow-y-auto custom-scrollbar z-10">
+<div class="prose prose-sm max-w-none text-on-surface-variant pb-24">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-4">StudyGroup Connect</h1>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-6 mb-2">1. Core Objective</h2>
+<p class="font-body-md text-body-md mb-4">Provide a seamless platform for university students to discover, join, and manage course-specific study groups to enhance collaborative learning.</p>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-6 mb-2">2. Key Features (MVP)</h2>
+<ul class="list-disc pl-5 space-y-2 font-body-md text-body-md mb-6">
+<li><strong>Course Integration:</strong> Ability to search and filter groups based on standardized university course codes (e.g., CS101).</li>
+<li><strong>Group Discovery:</strong> Browsable directory of open study groups with current member count and next meeting time.</li>
+<li><strong>Real-time Chat:</strong> Basic text channel for each group to facilitate discussion and sharing quick links.</li>
+<li><strong>Shared Calendar:</strong> Integrated scheduling tool to propose and confirm meetup times (virtual or physical locations).</li>
+</ul>
+<div class="border-l-4 border-primary pl-4 py-1 my-6 bg-primary/5 rounded-r-lg">
+<p class="font-body-sm text-body-sm italic text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px] animate-pulse">auto_awesome</span>
+                                Luma is currently defining the user flow for the 'Group Discovery' feature...
+                            </p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BOTTOM NAV BAR (Contextual Actions) -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-gutter items-center bg-surface/80 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 w-max shadow-xl">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all hover:scale-105 active:scale-95 duration-100 group">
+<span class="material-symbols-outlined group-hover:text-primary">download</span>
+<span class="font-label-sm text-label-sm">Download Blueprint</span>
+</button>
+<div class="w-px h-6 bg-outline-variant/30"></div>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all hover:scale-105 active:scale-95 duration-100 group">
+<span class="material-symbols-outlined group-hover:text-primary">content_copy</span>
+<span class="font-label-sm text-label-sm">Copy Markdown</span>
+</button>
+<div class="w-px h-6 bg-outline-variant/30"></div>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all hover:scale-105 active:scale-95 duration-100 group">
+<span class="material-symbols-outlined group-hover:text-primary">share</span>
+<span class="font-label-sm text-label-sm">Share</span>
+</button>
+</nav>
+</body></html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BuildPixies - New Project</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Lexend:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#b4136d",
+                        "secondary-fixed-dim": "#ffb0cd",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#8c0053",
+                        "tertiary-container": "#a36700",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#600037",
+                        "outline": "#767586",
+                        "tertiary": "#825100",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-fixed": "#ffd9e4",
+                        "surface-container-high": "#dce9ff",
+                        "surface-tint": "#494bd6",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c0c1ff",
+                        "on-surface-variant": "#464554",
+                        "surface-variant": "#d3e4fe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c7c4d7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed": "#e1e0ff",
+                        "secondary-container": "#fd56a7",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-background": "#0b1c30",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6063ee",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "on-error": "#ffffff",
+                        "primary": "#4648d4",
+                        "on-primary-fixed": "#07006c",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#3e0022",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "24px",
+                        "stack-gap": "12px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Magical Gradient Background */
+        .magical-bg {
+            background: linear-gradient(135deg, theme('colors.surface-container-low') 0%, theme('colors.surface-container') 50%, theme('colors.surface-container-high') 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .magical-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, theme('colors.primary-fixed-dim') 0%, transparent 40%);
+            opacity: 0.3;
+            animation: pulse 15s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.1) translate(5%, 5%); }
+        }
+
+        /* Pixie Card Glow */
+        .pixie-card-focus-within:focus-within {
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 15px rgba(70, 72, 212, 0.2);
+        }
+        
+        /* Step Indicator Styles */
+        .step-active .step-icon {
+            background-color: theme('colors.primary-container');
+            color: theme('colors.on-primary-container');
+            box-shadow: 0 0 10px rgba(96, 99, 238, 0.4);
+        }
+        .step-completed .step-icon {
+            background-color: theme('colors.primary');
+            color: theme('colors.on-primary');
+        }
+        .step-inactive .step-icon {
+            background-color: theme('colors.surface-variant');
+            color: theme('colors.on-surface-variant');
+        }
+        .step-line {
+            height: 2px;
+            background-color: theme('colors.outline-variant');
+        }
+        .step-line-completed {
+            background-color: theme('colors.primary');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center p-margin-mobile md:p-margin-desktop magical-bg">
+<!-- Main Wizard Container -->
+<main class="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.04)] border border-outline-variant overflow-hidden relative z-10 flex flex-col">
+<!-- TopAppBar (Wizard Header) -->
+<header class="flex justify-between items-center px-gutter py-stack-gap border-b border-outline-variant bg-surface/80 backdrop-blur-xl">
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-primary text-[28px] filled">auto_awesome</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">BuildPixies</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-1 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Wizard Content Area -->
+<div class="p-gutter md:p-margin-desktop flex flex-col gap-10">
+<!-- Header Text -->
+<div class="text-center max-w-xl mx-auto">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-stack-gap">Let's craft your next masterpiece</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Share your vision, and we'll assemble the perfect magical workspace for you.</p>
+</div>
+<!-- Progress Steps -->
+<div class="flex items-center justify-between relative px-4 md:px-12">
+<!-- Step 1: Active -->
+<div class="flex flex-col items-center gap-2 relative z-10 step-active group">
+<div class="step-icon w-10 h-10 rounded-full flex items-center justify-center font-label-md text-label-md transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary absolute -bottom-6 whitespace-nowrap">Idea</span>
+</div>
+<div class="flex-1 step-line mx-2 rounded-full relative z-0"></div>
+<!-- Step 2: Inactive -->
+<div class="flex flex-col items-center gap-2 relative z-10 step-inactive group">
+<div class="step-icon w-10 h-10 rounded-full flex items-center justify-center font-label-md text-label-md transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]">target</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant absolute -bottom-6 whitespace-nowrap opacity-50 group-hover:opacity-100 transition-opacity">Goal</span>
+</div>
+<div class="flex-1 step-line mx-2 rounded-full relative z-0"></div>
+<!-- Step 3: Inactive -->
+<div class="flex flex-col items-center gap-2 relative z-10 step-inactive group">
+<div class="step-icon w-10 h-10 rounded-full flex items-center justify-center font-label-md text-label-md transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]">devices</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant absolute -bottom-6 whitespace-nowrap opacity-50 group-hover:opacity-100 transition-opacity">Platform</span>
+</div>
+<div class="flex-1 step-line mx-2 rounded-full relative z-0"></div>
+<!-- Step 4: Inactive -->
+<div class="flex flex-col items-center gap-2 relative z-10 step-inactive group">
+<div class="step-icon w-10 h-10 rounded-full flex items-center justify-center font-label-md text-label-md transition-all duration-300">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant absolute -bottom-6 whitespace-nowrap opacity-50 group-hover:opacity-100 transition-opacity">Constraints</span>
+</div>
+</div>
+<!-- Active Step Content (Idea) -->
+<div class="flex flex-col gap-gutter mt-4">
+<!-- Main Input Area -->
+<div class="flex flex-col gap-unit">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-2" for="project-idea">
+                        What are we building?
+                        <span class="material-symbols-outlined text-secondary text-[16px] filled">auto_awesome</span>
+</label>
+<div class="relative group pixie-card-focus-within transition-all duration-300 rounded-lg border border-outline-variant bg-surface-bright">
+<textarea class="w-full bg-transparent border-none focus:ring-0 resize-none p-4 font-body-lg text-body-lg text-on-surface placeholder-on-surface-variant/50 rounded-lg" id="project-idea" placeholder="I want to build a web app for tracking local coffee shop ratings..." rows="5"></textarea>
+<!-- Sparkle decoration -->
+<div class="absolute bottom-3 right-3 text-primary/30 group-focus-within:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined">edit</span>
+</div>
+</div>
+</div>
+<!-- Goals (Sneak peek of next steps for context, styled softly) -->
+<div class="flex flex-col gap-stack-gap opacity-60 pointer-events-none filter grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0 hover:pointer-events-auto">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Quick Select Goal (Optional Preview)</span>
+<div class="flex flex-wrap gap-stack-gap">
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-md text-label-md bg-surface hover:bg-surface-variant transition-colors">Bootcamp Project</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-md text-label-md bg-surface hover:bg-surface-variant transition-colors">Startup MVP</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-md text-label-md bg-surface hover:bg-surface-variant transition-colors">Portfolio</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-md text-label-md bg-surface hover:bg-surface-variant transition-colors">Client Project</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<footer class="p-gutter border-t border-outline-variant bg-surface-container-lowest flex items-center justify-between mt-auto">
+<button class="text-on-surface-variant hover:text-primary font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                Back
+            </button>
+<button class="bg-gradient-to-b from-primary to-primary-fixed-variant text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg shadow-[0_4px_14px_0_rgba(96,99,238,0.39)] hover:shadow-[0_6px_20px_rgba(96,99,238,0.23)] hover:-translate-y-0.5 transition-all duration-200 border-t border-white/20 flex items-center gap-2 group relative overflow-hidden">
+<span class="relative z-10 flex items-center gap-2">
+                    Summon the Team
+                    <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+<!-- Magical highlight sweep -->
+<div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] skew-x-12"></div>
+</button>
+</footer>
+</main>
+<style>
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</body></html>
