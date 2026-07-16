@@ -1160,7 +1160,7 @@ Bootcamp takvimi:
 | İyileştirme | Neden önemli | Önerilen sprint |
 | --- | --- | --- |
 | Bootcamp Mode basic | Ürünün akademi bağlamındaki özgünlüğünü artırır | Sprint 3 |
-| Durable queue veya SSE streaming | Next `after()` iyi temel; public production için daha dayanıklı job altyapısı gerekir | Sprint 3 |
+| SSE streaming / per-pixie events | Durable Vercel Queue tamamlandı; UI gerçek pipeline event'lerini henüz göstermiyor | Sprint 3 |
 | Email/OAuth account linking | Anonymous auth demo için iyi; kalıcı kullanıcı hesabı için yükseltme gerekir | Sprint 3 |
 | Quota, Turnstile/CAPTCHA, usage limit | Public AI endpoint maliyeti ve abuse riskini azaltır | Sprint 3 |
 | Vercel + canlı Supabase smoke | Local build yetmez; final teslim canlı link ister | Sprint 3 |
@@ -1326,7 +1326,7 @@ Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, S
 | Risk | Etki | Önlem |
 | --- | --- | --- |
 | AI output çok uzun olur | UI bozulur | Section-based output |
-| Agent pipeline yavaş olur | Demo kötü görünür | `generation_jobs` + polling + sample fallback; harici queue/streaming roadmap |
+| Agent pipeline yavaş olur | Demo kötü görünür | Durable Vercel Queue + dependency-aware paralel batches + polling + sample fallback |
 | Supabase auth vakit alır | Geliştirme yavaşlar | Anonymous Supabase Auth + owner bazlı RLS; email/OAuth roadmap |
 | Takım içi koordinasyon kopukluğu | Geliştirme yavaşlar | Günlük sync + net rol dağılımı |
 | Deploy problemi | Teslim riski | Erken Vercel deploy |

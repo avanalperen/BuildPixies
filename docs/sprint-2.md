@@ -39,6 +39,10 @@ gerçek blueprint çıktısı üretilsin. Çalışan MVP.
 - Aynı anda birden fazla regenerate/full generation isteği engellendi.
 - Output Hub'a Sprint Plan sekmesi eklendi.
 - Lint, typecheck, production build ve HTTP persistence smoke testi geçti.
+- Generation işleri Vercel Queues'a taşındı; lease, retry ve atomik tamamlama
+  eklendi.
+- API rate limit state'i Supabase'te owner bazlı ve atomik hale getirildi.
+- AI pipeline bağımlılık koruyan paralel gruplarla function süresine uyarlandı.
 
 ## Bootcamp Gereksinimleri (Sprint sonunda README'ye)
 

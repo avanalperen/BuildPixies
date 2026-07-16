@@ -166,3 +166,34 @@ işlemine izin verecek.
 - Client'ın gönderdiği eski veya değiştirilmiş proje bağlamı kalıcı kaydı ezmez.
 - Paralel UI isteklerinden doğan son-yazan-kazan veri kaybı önlenir.
 - Sprint Plan çıktısı Output Hub içinde görünür ve yenilenebilir olur.
+
+---
+
+## ADR-007 — Kalıcı generation queue ve dağıtık rate limit
+
+**Tarih:** 16 Temmuz 2026
+**Durum:** Kabul edildi
+
+### Bağlam
+
+`generation_jobs` satırları kalıcı olsa da üretim Next `after()` yaşam döngüsüne
+bağlıydı. Instance içi IP sayacı yatay ölçeklemede ortak kota sağlayamıyordu.
+On bir ardışık AI çağrısı da 60 saniyelik function sınırını aşabiliyordu.
+
+### Karar
+
+Hosted generation işleri Vercel Queues ile teslim edilecek. Job input'u
+Postgres'te saklanacak; service-role worker işi atomik RPC ile lease edecek,
+başarısız denemeleri exponential backoff ile en fazla beş kez yineleyecek ve
+project/job sonucunu tek transaction içinde tamamlayacak. Pipeline bağımlılık
+sırasını koruyan paralel gruplar halinde çalışacak. API kotaları authenticated
+owner ve sabit bucket politikalarıyla Postgres'te atomik tüketilecek.
+
+### Sonuçlar
+
+- Request tamamlandıktan veya function yeniden başlatıldıktan sonra iş kaybolmaz.
+- At-least-once queue teslimleri aktif lease ve terminal status ile idempotenttir.
+- Pipeline'ın en kötü durum kritik yolu function süresine sığacak şekilde kısalır.
+- Production instance'ları ortak rate-limit state'i kullanır; local demo bellek
+  fallback'iyle çalışmaya devam eder.
+- Hosted worker için server-only `SUPABASE_SERVICE_ROLE_KEY` gerekir.
