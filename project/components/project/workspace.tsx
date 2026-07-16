@@ -6,7 +6,7 @@ import { PixieTeam } from "@/components/pixies/pixie-team";
 import { OutputHub } from "@/components/outputs/output-hub";
 import type { Project } from "@/types/project";
 import type { GenerationJob } from "@/types/generation-job";
-import type { Blueprint } from "@/types/output";
+import type { Blueprint, BlueprintSection } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
 import { PIXIES } from "@/types/pixie";
 
@@ -24,6 +24,8 @@ export function Workspace({ project }: { project: Project }) {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [regeneratingSection, setRegeneratingSection] =
+    useState<BlueprintSection | null>(null);
   const [statuses, setStatuses] = useState<Record<string, PixieStatus>>(() => {
     if (!project.blueprint) return {};
     const done: Record<string, PixieStatus> = {};
@@ -124,6 +126,71 @@ export function Workspace({ project }: { project: Project }) {
     }
   }
 
+  async function handleExportJson() {
+    if (!blueprint) return;
+    setError(null);
+    try {
+      const res = await fetch("/api/export-json", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: project.id, blueprint }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Export failed");
+      const blob = new Blob([data.json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = data.filename || "blueprint.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Export failed");
+    }
+  }
+
+  async function handleCopyMarkdown(markdown: string) {
+    setError(null);
+    try {
+      await navigator.clipboard.writeText(markdown);
+    } catch {
+      setError("Copy failed. Your browser may not allow clipboard access.");
+    }
+  }
+
+  async function handleRegenerate(section: BlueprintSection) {
+    if (!blueprint) return;
+    setError(null);
+    setRegeneratingSection(section);
+    try {
+      const res = await fetch("/api/regenerate-output", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          input: {
+            rawIdea: project.rawIdea,
+            goal: project.goal,
+            platform: project.platform,
+            targetAudience: project.targetAudience,
+            constraints: project.constraints,
+            outputDepth: project.outputDepth,
+          },
+          section,
+          previousOutputs: blueprint,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Regenerate failed");
+      setBlueprint((prev) =>
+        prev ? { ...prev, [section]: data.output } : prev,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Regenerate failed");
+    } finally {
+      setRegeneratingSection(null);
+    }
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
       <aside className="flex flex-col gap-4 rounded-2xl border bg-card p-5">
@@ -163,7 +230,15 @@ export function Workspace({ project }: { project: Project }) {
             <h3 className="mb-3 font-heading text-sm font-medium text-muted-foreground">
               Blueprint
             </h3>
-            <OutputHub project={project} blueprint={blueprint} onExport={handleExport} />
+            <OutputHub
+              project={project}
+              blueprint={blueprint}
+              onExport={handleExport}
+              onExportJson={handleExportJson}
+              onCopyMarkdown={handleCopyMarkdown}
+              onRegenerate={handleRegenerate}
+              regeneratingSection={regeneratingSection}
+            />
           </section>
         ) : (
           <section className="rounded-2xl border border-dashed bg-card p-6">

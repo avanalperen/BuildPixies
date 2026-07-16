@@ -81,3 +81,10 @@ export const exportReadmeRequestSchema = z
     blueprint: blueprintSchema,
   })
   .strict();
+
+export const exportJsonRequestSchema = z
+.object({
+  projectId: z.string().trim().min(1).max(160).optional(),
+  blueprint: blueprintSchema,
+})
+.strict();
