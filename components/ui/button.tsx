@@ -41,7 +41,7 @@ const buttonVariants = cva(
   }
 )
 
-type ButtonProps = ButtonPrimitive.Props &
+type ButtonProps = Omit<ButtonPrimitive.Props, "nativeButton" | "render"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }
@@ -56,15 +56,15 @@ function Button({
 }: ButtonProps) {
   const classes = cn(buttonVariants({ variant, size, className }))
   if (asChild && React.isValidElement(children)) {
-    return (
-      <ButtonPrimitive
-        data-slot="button"
-        nativeButton={false}
-        className={classes}
-        render={children as React.ReactElement}
-        {...props}
-      />
-    )
+    const child = children as React.ReactElement<{
+      className?: string
+      [key: string]: unknown
+    }>
+    return React.cloneElement(child, {
+      ...props,
+      "data-slot": "button",
+      className: cn(classes, child.props.className),
+    })
   }
   return (
     <ButtonPrimitive data-slot="button" className={classes} {...props}>

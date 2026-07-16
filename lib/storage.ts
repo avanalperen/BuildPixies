@@ -15,6 +15,10 @@ export function canUseLocalFileStore(): boolean {
 }
 
 export function localStorePath(filename: string): string {
+  const namespace = process.env.BUILDPIXIES_LOCAL_STORE_NAMESPACE?.trim();
+  if (namespace && /^[a-z0-9_-]+$/i.test(namespace)) {
+    return path.join(process.cwd(), ".local", namespace, filename);
+  }
   return path.join(process.cwd(), ".local", filename);
 }
 
