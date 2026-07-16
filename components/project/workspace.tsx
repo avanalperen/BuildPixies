@@ -12,7 +12,7 @@ import { PIXIES } from "@/types/pixie";
 
 const pipelineNames = PIXIES.map((pixie) => pixie.name);
 const pollDelayMs = 1500;
-const maxPollAttempts = 120;
+const maxPollAttempts = 240;
 
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

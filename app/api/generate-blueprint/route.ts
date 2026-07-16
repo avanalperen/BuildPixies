@@ -6,14 +6,10 @@ import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/h
 import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
 import { getErrorStatus } from "@/lib/errors";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
-  const limited = checkRateLimit(request, {
-    bucket: "ai:generate",
-    limit: 5,
-    windowMs: 60_000,
-  });
+  const limited = await checkRateLimit(request, "ai:generate");
   if (limited) return limited;
 
   const parsed = await parseJsonWithSchema(

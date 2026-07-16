@@ -43,8 +43,8 @@ type PipelineStep =
 const pipeline: PipelineStep[] = [
   { pixie: "Pip", section: "orchestrationPlan", build: orchestratorPrompt, mode: "json" },
   { pixie: "Pria", section: "productBrief", build: productPrompt, mode: "json" },
-  { pixie: "Pria", section: "mvpScope", build: mvpScopePrompt, mode: "json" },
   { pixie: "Moxie", section: "marketAnalysis", build: marketPrompt, mode: "json" },
+  { pixie: "Pria", section: "mvpScope", build: mvpScopePrompt, mode: "json" },
   { pixie: "Luma", section: "uxFlow", build: uxPrompt, mode: "json" },
   { pixie: "Tinker", section: "techPlan", build: techPrompt, mode: "json" },
   { pixie: "Bitsy", section: "codeSkeleton", build: codePrompt, mode: "json" },
@@ -52,6 +52,15 @@ const pipeline: PipelineStep[] = [
   { pixie: "Sprinta", section: "backlog", build: backlogPrompt, mode: "json" },
   { pixie: "Sprinta", section: "sprintPlan", build: scrumPrompt, mode: "json" },
   { pixie: "Quill", section: "readme", build: docsPrompt, mode: "markdown" },
+];
+
+const pipelineBatches: PipelineStep[][] = [
+  [pipeline[0]],
+  pipeline.slice(1, 3),
+  pipeline.slice(3, 6),
+  pipeline.slice(6, 9),
+  [pipeline[9]],
+  [pipeline[10]],
 ];
 
 function assertValidSection(
@@ -83,7 +92,7 @@ export async function generateBlueprint(
   const outputs: Partial<Record<BlueprintSection, unknown>> = {};
   const ctx = { input, previousOutputs: outputs };
 
-  for (const step of pipeline) {
+  const runStep = async (step: PipelineStep) => {
     onEvent?.({ pixie: step.pixie, section: step.section, status: "thinking" });
     try {
       const { system, user } = step.build(ctx);
@@ -98,6 +107,10 @@ export async function generateBlueprint(
       onEvent?.({ pixie: step.pixie, section: step.section, status: "failed" });
       throw error;
     }
+  };
+
+  for (const batch of pipelineBatches) {
+    await Promise.all(batch.map(runStep));
   }
 
   return blueprintSchema.parse(outputs);

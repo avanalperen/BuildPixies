@@ -15,11 +15,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const limited = checkRateLimit(request, {
-    bucket: "projects:create",
-    limit: 30,
-    windowMs: 60_000,
-  });
+  const limited = await checkRateLimit(request, "projects:create");
   if (limited) return limited;
 
   const parsed = await parseJsonWithSchema(
