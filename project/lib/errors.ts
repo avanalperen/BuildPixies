@@ -18,10 +18,20 @@ export class StorageUnavailableError extends Error {
   }
 }
 
+export class ServiceUnavailableError extends Error {
+  status = 503;
+
+  constructor(message = "Service temporarily unavailable") {
+    super(message);
+    this.name = "ServiceUnavailableError";
+  }
+}
+
 export function getErrorStatus(error: unknown): number {
   if (
     error instanceof AuthRequiredError ||
-    error instanceof StorageUnavailableError
+    error instanceof StorageUnavailableError ||
+    error instanceof ServiceUnavailableError
   ) {
     return error.status;
   }

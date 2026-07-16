@@ -1,20 +1,25 @@
 import { after, NextRequest } from "next/server";
-import { createGenerationJob } from "@/lib/generation-jobs";
+import {
+  createGenerationJob,
+  failGenerationJob,
+  setGenerationJobQueueMessage,
+} from "@/lib/generation-jobs";
+import {
+  enqueueBlueprintGeneration,
+  shouldUseDurableGenerationQueue,
+} from "@/lib/generation-queue";
 import { runBlueprintGenerationJob } from "@/lib/generation-runner";
-import { getProject } from "@/lib/projects";
+import { getProject, updateProjectStatus } from "@/lib/projects";
 import { checkRateLimit } from "@/lib/api/rate-limit";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
-import { getErrorStatus } from "@/lib/errors";
+import { getErrorStatus, ServiceUnavailableError } from "@/lib/errors";
+import { getSupabaseAdminConfig } from "@/lib/supabase/config";
 
 export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
-  const limited = checkRateLimit(request, {
-    bucket: "ai:generation-jobs",
-    limit: 5,
-    windowMs: 60_000,
-  });
+  const limited = await checkRateLimit(request, "ai:generation-jobs");
   if (limited) return limited;
 
   const parsed = await parseJsonWithSchema(
@@ -48,15 +53,44 @@ export async function POST(request: NextRequest) {
       return jsonError("projectId or input is required", 400);
     }
 
-    const job = await createGenerationJob({ projectId: body.projectId });
+    const useDurableQueue = shouldUseDurableGenerationQueue();
+    if (useDurableQueue && !getSupabaseAdminConfig()) {
+      throw new ServiceUnavailableError(
+        "Blueprint generation is not fully configured",
+      );
+    }
 
-    after(() =>
-      runBlueprintGenerationJob({
-        jobId: job.id,
-        projectId: body.projectId,
-        input: generationInput,
-      }),
-    );
+    const job = await createGenerationJob({
+      projectId: body.projectId,
+      generationInput,
+    });
+
+    if (useDurableQueue) {
+      try {
+        const messageId = await enqueueBlueprintGeneration(job.id);
+        await setGenerationJobQueueMessage(job.id, messageId);
+      } catch {
+        await failGenerationJob(job.id, "Background queue unavailable").catch(
+          () => undefined,
+        );
+        if (body.projectId) {
+          await updateProjectStatus(body.projectId, "failed").catch(
+            () => undefined,
+          );
+        }
+        throw new ServiceUnavailableError(
+          "Blueprint generation is temporarily unavailable",
+        );
+      }
+    } else {
+      after(() =>
+        runBlueprintGenerationJob({
+          jobId: job.id,
+          projectId: body.projectId,
+          input: generationInput,
+        }),
+      );
+    }
 
     return Response.json({ job }, { status: 202 });
   } catch (error) {

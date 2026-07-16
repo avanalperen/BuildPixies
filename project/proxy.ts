@@ -7,6 +7,10 @@ const enableAnonymousAuth =
   process.env.NEXT_PUBLIC_BUILDPIXIES_ENABLE_ANON_AUTH !== "0";
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/api/queues/")) {
+    return NextResponse.next();
+  }
+
   const config = getSupabaseConfig();
   if (!config) return NextResponse.next();
 

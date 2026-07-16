@@ -1,5 +1,6 @@
 import type { Blueprint } from "@/types/output";
 import type { GenerationJob } from "@/types/generation-job";
+import type { CreateProjectInput } from "@/types/project";
 import {
   assertStorageAvailable,
   canUseLocalFileStore,
@@ -57,6 +58,7 @@ async function persistMemoryToDisk(): Promise<void> {
 
 export async function createGenerationJob(input: {
   projectId?: string;
+  generationInput: CreateProjectInput;
 }): Promise<GenerationJob> {
   assertStorageAvailable();
   const context = await getSupabaseUserClient();
@@ -66,6 +68,8 @@ export async function createGenerationJob(input: {
     projectId: input.projectId,
     ownerId: context?.userId,
     status: "queued",
+    input: input.generationInput,
+    attemptCount: 0,
     createdAt: now,
     updatedAt: now,
   };
@@ -78,6 +82,8 @@ export async function createGenerationJob(input: {
         project_id: job.projectId,
         owner_id: context.userId,
         status: job.status,
+        input: job.input,
+        attempt_count: job.attemptCount,
         created_at: job.createdAt,
         updated_at: job.updatedAt,
       })
@@ -144,6 +150,14 @@ export async function failGenerationJob(
   });
 }
 
+export async function setGenerationJobQueueMessage(
+  id: string,
+  queueMessageId: string | null,
+): Promise<GenerationJob | null> {
+  if (!queueMessageId) return getGenerationJob(id);
+  return updateGenerationJob(id, { queueMessageId });
+}
+
 async function updateGenerationJob(
   id: string,
   patch: Partial<GenerationJob>,
@@ -158,6 +172,7 @@ async function updateGenerationJob(
         status: patch.status,
         error: patch.error,
         blueprint: patch.blueprint,
+        queue_message_id: patch.queueMessageId,
         updated_at: updatedAt,
         started_at: patch.startedAt,
         completed_at: patch.completedAt,
@@ -186,7 +201,16 @@ function rowToGenerationJob(row: Record<string, unknown>): GenerationJob {
     ownerId: row.owner_id ? String(row.owner_id) : undefined,
     status: row.status as GenerationJob["status"],
     error: row.error ? String(row.error) : undefined,
+    input: row.input as GenerationJob["input"],
     blueprint: row.blueprint as GenerationJob["blueprint"],
+    attemptCount:
+      typeof row.attempt_count === "number" ? row.attempt_count : undefined,
+    leaseExpiresAt: row.lease_expires_at
+      ? String(row.lease_expires_at)
+      : undefined,
+    queueMessageId: row.queue_message_id
+      ? String(row.queue_message_id)
+      : undefined,
     createdAt: String(row.created_at ?? new Date().toISOString()),
     updatedAt: String(row.updated_at ?? new Date().toISOString()),
     startedAt: row.started_at ? String(row.started_at) : undefined,
