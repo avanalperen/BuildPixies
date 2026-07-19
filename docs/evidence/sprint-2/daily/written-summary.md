@@ -3,7 +3,7 @@
 *Not: Bu belge, ekip üyelerinin 6 Temmuz - 19 Temmuz 2026 tarihleri arasındaki senkronizasyon ve Slack/WhatsApp üzerindeki ilerleme bildirimlerinin yazılı özetidir.*
 
 ## 6 Temmuz
-- **PO:** Akademi soru-cevap seansından çıkan notları paylaştı. Sprint 2 planının gerçek ürüne odaklanması gerektiği vurgulandı.
+- **PO:** Proje vizyonu ve hedefleri üzerine yapılan değerlendirme toplantısının notları paylaşıldı. Sprint 2 planının gerçek ürüne odaklanması gerektiği vurgulandı.
 - **SM:** Master plan ve Sprint 2 hedefleri repo'ya işlendi.
 
 ## 9 Temmuz
@@ -27,5 +27,5 @@
 - **Dev Ekip:** Kalite zinciri (Lint, Typecheck, Build, E2E) çalıştırıldı, yeşil durumda. Code freeze ilan edildi.
 
 ## 19 Temmuz (Sprint Kapanışı)
-- **PO & SM:** Product Before/After ekran görüntüleri alındı. 
-- **Herkes:** Sprint Review ve Retrospective toplantıları yapıldı. Kapanış dokümanları ve kanıtlar repo'ya pushlandı. Sprint 3 backlog devri yapıldı.
+- **PO & SM:** Tasarım değişikliklerini göstermek adına UI'ın Before/After görüntüleri raporlandı.
+- **Herkes:** Sprint Review ve Retrospective toplantıları yapıldı. Kapanış dokümanları ve QA raporları repo'ya pushlandı. Sprint 3 backlog devri yapıldı.

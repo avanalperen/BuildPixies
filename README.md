@@ -656,8 +656,8 @@ sırasında bağlanır.
 
 # Screenshots
 
-Sprint 1 ekran görüntüleri `Sprint 1 / Ürün Durumu` bölümünde listelenmiştir.
-Sprint 2 ve Sprint 3 sonunda bu bölüm final demo akışıyla güncellenecektir.
+Sprint 1 ve Sprint 2 ekran görüntüleri `Ürün Durumu` bölümlerinde listelenmiştir.
+Sprint 3 sonunda bu bölüm final demo akışıyla güncellenecektir.
 
 # Demo Video
 

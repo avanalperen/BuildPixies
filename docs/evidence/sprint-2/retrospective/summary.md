@@ -2,7 +2,7 @@
 
 ## İyi Gidenler
 
-- OpenRouter üzerinden Free tier modeliyle gerçek structured output almayı başardık. Böylece demo ortamımız API maliyetlerinden kurtuldu ve bağımsız hale geldi.
+- OpenRouter üzerinden Free tier modeliyle gerçek structured output almayı başardık. Böylece test ve entegrasyon ortamımız bağımsız hale geldi.
 - Output Hub kısmında PR #11 ile eklediğimiz Export (Markdown/JSON) ve Regenerate özellikleri, ürünün profesyonel bir SaaS gibi hissettirmesinde inanılmaz derecede etkili oldu.
 - Curated Sample Blueprint eklemek, sistemi beklemeden ürünün vadettiği değeri 5 saniyede göstermek adına çok başarılı ve etkili bir hamle oldu.
 - Teknik kalite hattının (GitHub Actions, Lint, Typecheck, E2E testleri) sprint boyunca bizi koruması, hataların merge edilmesini büyük oranda engelledi.
@@ -10,14 +10,14 @@
 ## Zorlayanlar
 
 - Tam generation (üretim) sürecinin ortalama 250+ saniye sürmesi, hem UI'ın kilitlenmesine hem de olası hatalarda tüm sürecin çöpe gitmesine (Partial persistence eksikliği) neden oldu.
-- Görsel kanıtların, belgelerin ve test dokümantasyonlarının yine Sprint'in son gününe yığılması, kapanış stresini ciddi anlamda artırdı.
+- Dokümantasyon, tasarım kalibrasyonları ve E2E testlerinin son güne yığılması, release öncesi kalite güvence sürecini sıkıştırdı.
 - Rate limit'e takılan API call'ları, üretim esnasında uygulamanın kararlılığını test etmemizi zorlaştırdı.
 
 ## Öğrenimler
 
 - Kullanıcıya bekleme süresinde ne olduğunu göstermezsek (Progressive UX / Event Contract eksikliği), arka planda ne kadar mükemmel bir AI çalışırsa çalışsın uygulama dışarıdan "bozuk" veya "donmuş" hissettiriyor. Mimariyi baştan buna göre kurgulamak kesinlikle şarttı.
-- Tasarım değişikliklerini yaparken eski "kanıtsız iddiaları" (ör. 1000+ creator vb.) temizlemek, hem ürünün dürüstlüğünü hem de Bootcamp kurallarına uyumunu önemli ölçüde artırıyor. Gerçekçilikten kopmamak en değerli güven unsurudur.
-- Evidence (kanıt) süreci sprintin bir parçasıdır ve Definition of Done içerisinde değerlendirilmelidir. Sona bırakılan kanıtlar, projenin bitişini riske atar.
+- Tasarım değişikliklerini yaparken eski iddiaları (ör. 1000+ creator vb.) temizlemek, ürünün profesyonelliğini önemli ölçüde artırıyor. Gerçekçilikten kopmamak en değerli güven unsurudur.
+- Test ve QA (Quality Assurance) süreçleri sprintin ayrılmaz bir parçasıdır. Sona bırakılan doğrulama işlemleri, sprint teslimini riske atar.
 
 ## Aksiyonlar
 
