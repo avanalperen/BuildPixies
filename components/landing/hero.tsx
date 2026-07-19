@@ -39,8 +39,8 @@ export function Hero() {
               <WandSparkles className="size-5" fill="currentColor" />
               Summon your pixies
             </Link>
-            <Link href="/#features" className="glass-panel inline-flex h-14 items-center justify-center rounded-full px-8 text-sm font-semibold tracking-[0.02em] text-foreground transition-colors hover:bg-surface-low">
-              See what you get
+            <Link href="/sample" className="glass-panel inline-flex h-14 items-center justify-center rounded-full px-8 text-sm font-semibold tracking-[0.02em] text-foreground transition-colors hover:bg-surface-low">
+              View sample blueprint
             </Link>
           </div>
           <p className="mt-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">

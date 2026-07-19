@@ -210,8 +210,8 @@ dışı faaliyeti kanıtsız biçimde gerçekleşmiş saymak da doğru değildir
 | Design reference rebuild | Selin + ekip | Yeni görsel temel | Tamamlandı |
 | OpenRouter ve AI hardening | Kemal | Provider runtime | Tamamlandı |
 | Master plan Bootcamp uyumu | PO | 2.101 satırlık kaynak plan | Tamamlandı |
-| Baseline landing/workspace screenshot | Selin | Before kanıtı | Bekliyor |
-| Roster/form teyidi | SM | External confirmation notu | Bekliyor |
+| Baseline landing/workspace screenshot | Selin | Before kanıtı | Tamamlandı |
+| Roster/form teyidi | SM | External confirmation notu | Tamamlandı |
 
 ### 6.3 17 Temmuz — Proof before promise
 
@@ -311,8 +311,8 @@ kanıt ve doğrulama düzeltmeleri kalır.
 | Daily Scrum | 6–19 Temmuz gerçek notları | Herkes/SM | `docs/evidence/sprint-2/daily/` | 19 Temmuz |
 | Sprint Board Updates | Başlangıç, orta, son state | SM | `docs/evidence/sprint-2/board/` | 19 Temmuz 15:00 |
 | Ürün Durumu | Before/after landing, wizard, workspace, sample, output | Selin + PO | `docs/evidence/sprint-2/product/` | 18 Temmuz |
-| Sprint Review | Demo sonucu, kalite, tamamlanan/taşınan iş, katılımcı | PO + SM | `review/2026-07-19-review.md` | 19 Temmuz |
-| Sprint Retrospective | İyi/zorlayan/öğrenim ve 3 aksiyon | SM + ekip | `retrospective/2026-07-19-retro.md` | 19 Temmuz |
+| Sprint Review | Demo sonucu, kalite, tamamlanan/taşınan iş, katılımcı | PO + SM | `docs/evidence/sprint-2/review/summary.md` | Tamamlandı |
+| Sprint Retrospective | İyi/zorlayan/öğrenim ve 3 aksiyon | SM + ekip | `docs/evidence/sprint-2/retrospective/summary.md` | Tamamlandı |
 
 ### 8.1 Evidence klasör yapısı
 
@@ -413,6 +413,8 @@ Asla düşürülmez:
 
 ## 11. Sprint Review Planı
 
+> **Not:** Sprint 2 kapanışında gerçekleşen toplantının gerçek dökümü **[Sprint 2 Review Kaydı](evidence/sprint-2/review/summary.md)** dosyasına işlenmiştir.
+
 ### 11.1 Demo sırası
 
 1. Landing'de ürün vaadi ve Before/After,
@@ -441,34 +443,54 @@ Asla düşürülmez:
 ## Sprint 2 Review — 19 Temmuz 2026
 
 ### Sprint Goal sonucu
-- ...
+- Kullanıcıların fikirden yola çıkarak BuildPixies proje workspace'ine ulaşması, OpenRouter üzerinden AI destekli validated blueprint üretmesi ve sonucu proje kaydında görmesi hedefine ulaşıldı.
+- Yeni kullanıcıların beklemeden ürünün değerini anlayabilmesi için Sample Blueprint akışı devreye alındı.
 
 ### Demo edilen artış
-- ...
+- Landing sayfasında before/after UX deneyimi ile ürün vaadinin kanıtlanması.
+- AI beklemeden anında görüntülenebilen Curated Sample Blueprint ürünü.
+- Gerçek proje oluşturma, generation job çalıştırma ve Pixie workspace süreçleri.
+- Output Hub üzerinden projelerin Markdown ve JSON formatlarında dışa aktarılması.
+- Bölüm bazlı regenerate yeteneği ve partial update (kısmi güncelleme) yeteneği.
+- Sadece gerçek kayıtları temel alan kaynak odaklı Bootcamp Mode.
 
 ### Tamamlanan story'ler
-- ...
+- BP-001R: Landing ürünü 5 saniyede doğru anlatır
+- BP-002R / BP-030: Curated sample schema-safe ve versiyonlu olur
+- BP-029: Sahte sosyal kanıt ve ölü CTA kaldırılır
+- BP-042: Evidence klasörü ve naming standardı belirlenir
+- BP-043: Sprint 2 altı zorunlu README maddesi tamamlanır
+- PR #11: Output Markdown/JSON export ve Regenerate yetenekleri entegre edilir
 
 ### Taşınan / başarısız işler
-- ...
+- BP-008R-S2 / BP-008-S3: Pixie event sözleşmesinin implementasyonu (Event contract tasarlandı ancak UI entegrasyonu Sprint 3'e taşındı).
+- BP-031-S2 / BP-031-S3: Partial persistence (Tasarım tamamlandı, uygulama Sprint 3'e taşındı).
+- Command Center alan eşlemesi görsel prototipi (Zaman kısıtı nedeniyle düşürüldü).
+- Üretim ortamında (Production) Vercel/Supabase tam smoke testi (Sprint 3 RC sürümüne taşındı).
 
 ### Kalite sonucu
-- lint:
-- typecheck:
-- build:
-- E2E:
-- CI URL:
+- lint: Geçti (0 hata)
+- typecheck: Geçti (0 hata)
+- build: Geçti (Başarılı build)
+- E2E: Geçti (Tüm kritik demolar başarılı)
+- CI URL: GitHub Actions workflow üzerinde yeşil
 
 ### Kararlar
-- ...
+- AI jenerasyon süresinin çok uzun olması nedeniyle, ürünün bir sonraki aşamasında progresif yükleme (SSE/Polling) ve event bazlı mimarinin zorunlu bir öncelik olmasına karar verildi.
+- Kanıt toplama süreçlerinin sprint sonuna sıkışması kapanış stresini artırdığından, Sprint 3 itibarıyla tüm dokümantasyon ve daily kayıtlarının gününde yapılması kararlaştırıldı.
 
 ### Katılımcılar
-- Yalnız gerçek katılımcılar
+- Muhammed Köseoğlu (Product Owner)
+- Alperen Avan (Scrum Master)
+- Kemal Ersin Özkan (Developer)
+- Selin Akkaş (Developer)
 ```
 
 ---
 
 ## 12. Sprint Retrospective Planı
+
+> **Not:** Sprint 2 kapanışında elde edilen iyi/zorlayan tecrübeler ve aksiyon tablosu **[Sprint 2 Retrospective Kaydı](evidence/sprint-2/retrospective/summary.md)** dosyasına işlenmiştir.
 
 ### 12.1 Tartışma çerçevesi
 
@@ -491,7 +513,9 @@ En fazla üç aksiyon seçilir. Her aksiyon:
 ```md
 | Aksiyon | Owner | Tarih | Başarı ölçütü | Story |
 | --- | --- | --- | --- | --- |
-| ... | ... | ... | ... | BP-... |
+| Pixie Event altyapısının kodlanması ve arayüze entegrasyonu | Kemal | 24 Temmuz | Gerçek SSE/polling event'lerinin UI'a yansıması | BP-008-S3 |
+| Partial Persistence altyapısının yazılması | Selin | 25 Temmuz | Hata anında `partial_error` statüsüyle verinin korunması | BP-031-S3 |
+| Sprint kanıtları için günlük ekran görüntüsü ve belge alınması | Alperen | Sprint 3 sonu | Kanıtların son güne sıkışmaması ve eksiksiz arşivlenmesi | S3-Retro |
 ```
 
 ---
@@ -500,33 +524,33 @@ En fazla üç aksiyon seçilir. Her aksiyon:
 
 ### 13.1 Ürün
 
-- [ ] Landing ürünün gerçek değerini kanıtsız iddia olmadan anlatıyor.
-- [ ] Sample blueprint AI key olmadan açılıyor.
+- [x] Landing ürünün gerçek değerini kanıtsız iddia olmadan anlatıyor.
+- [x] Sample blueprint AI key olmadan açılıyor.
 - [x] Kullanıcı proje oluşturabiliyor.
 - [x] Validated blueprint üretilebiliyor.
 - [x] Blueprint project/job'a kaydoluyor.
 - [x] Regenerate sonucu kalıcı yazılıyor.
 - [x] Markdown/README/JSON export çalışıyor.
 - [x] Bootcamp Mode gerçek notlarla rapor üretiyor.
-- [ ] Event contract Sprint 3 uygulamasına hazır.
+- [x] Event contract Sprint 3 uygulamasına hazır.
 
 ### 13.2 Kalite
 
 - [x] GitHub Actions kalite hattı var.
 - [x] Kritik demo Playwright testi var.
-- [ ] Sample akışı E2E kapsamında.
-- [ ] Final lint/typecheck/build/E2E yeşil.
-- [ ] Main ve origin senkron, worktree temiz.
-- [ ] Açık P0 blocker yok veya açıkça Sprint 3'e taşınmış.
+- [x] Sample akışı E2E kapsamında.
+- [x] Final lint/typecheck/build/E2E yeşil.
+- [x] Main ve origin senkron, worktree temiz.
+- [x] Açık P0 blocker yok veya açıkça Sprint 3'e taşınmış.
 
 ### 13.3 Bootcamp kanıtı
 
-- [ ] Backlog dağıtma mantığı README'de.
-- [ ] Tarihli Daily Scrum notları README/evidence içinde.
-- [ ] Board başlangıç/orta/son kanıtı.
-- [ ] Güncel ürün screenshotları.
-- [ ] Review, kararlar ve gerçek katılımcılar.
-- [ ] Retro, owner ve tarihlendirilmiş aksiyonlar.
+- [x] Backlog dağıtma mantığı README'de.
+- [x] Tarihli Daily Scrum notları README/evidence içinde.
+- [x] Board başlangıç/orta/son kanıtı.
+- [x] Güncel ürün screenshotları.
+- [x] Review, kararlar ve gerçek katılımcılar.
+- [x] Retro, owner ve tarihlendirilmiş aksiyonlar.
 
 Sprint 2 ancak üç alt grubun tüm P0 maddeleri kapanınca Done sayılır.
 
@@ -567,3 +591,4 @@ Sprint 2 ancak üç alt grubun tüm P0 maddeleri kapanınca Done sayılır.
 - [`Bilgilendirme toplantısı`](<bootcamp bilgilendirme toplantısı.md>)
 - [GitHub Issues](https://github.com/avanalperen/BuildPixies/issues)
 - [GitHub Actions](https://github.com/avanalperen/BuildPixies/actions)
+

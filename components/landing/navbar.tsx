@@ -10,8 +10,8 @@ export function Navbar() {
           BuildPixies
         </Link>
         <nav className="hidden items-center gap-6 md:flex" aria-label="Landing navigation">
-          <Link href="/#features" className="text-sm font-semibold tracking-[0.02em] text-muted-foreground transition-colors hover:text-primary">
-            Features
+          <Link href="/sample" className="text-sm font-semibold tracking-[0.02em] text-muted-foreground transition-colors hover:text-primary">
+            Sample Blueprint
           </Link>
           <Link href="/#how-it-works" className="text-sm font-semibold tracking-[0.02em] text-muted-foreground transition-colors hover:text-primary">
             How it Works

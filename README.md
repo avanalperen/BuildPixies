@@ -339,18 +339,146 @@ Sprint 1 review sonucunda aşağıdaki kararlar alındı:
 
 > Ayrıntılı aktif uygulama ve kapanış planı:
 > [`docs/sprint-2.md`](docs/sprint-2.md)
+>
+> Bootcamp minimum altı kanıt manifestosu:
+> [`docs/evidence/sprint-2/README.md`](docs/evidence/sprint-2/README.md)
 
-> Sprint 2 (6–19 Temmuz 2026) başlangıcı. Çalışan MVP'nin polish, deploy ve
-> kullanıcı deneyimi sertleştirme süreci bu bölümde sprint sonunda
-> belgelenecektir.
+## Sprint Notları
 
-**16 Temmuz ara güncellemesi:** PR #11 ile Markdown kopyalama, JSON export ve
-bölüm bazlı regenerate kontrolleri tamamlandı. Post-merge incelemede regenerate
-sonuçlarının kalıcı proje kaydına yazılması, eşzamanlı istek koruması ve Sprint
-Plan sekmesi eklendi. Ardından source-grounded Bootcamp Mode; strict çıktı
-şeması, proje kaydı, ayrı API kotası ve Markdown export ile tamamlandı. Kritik
-demo yolculuğu Playwright E2E ile güvenceye alındı; testin bulduğu CTA link
-semantiği düzeltildi ve aynı kalite zinciri GitHub Actions'a bağlandı.
+- **Sprint dönemi:** 6 Temmuz – 19 Temmuz 2026
+- **Sprint hedefi:** Kullanıcının fikirden gerçek, doğrulanmış ve saklanan MVP blueprint'ine ulaşabildiği çalışan ürünü kanıtlamak; ürün vaadini sample deneyimiyle anlaşılır hale getirmek.
+- **Sprint içinde tamamlanması tahmin edilen puan:** 25 puan (16 Temmuz reseti sonrası kapanış backlog'u)
+- **Tamamlanan puan:** 25 puan
+- **Sprint sonucu:** Sprint 2 hedefi tamamlandı. Landing page before/after eklendi, Curated Sample Blueprint ile bekleme süresi elimine edildi, Output Hub üzerinden Regenerate ve Markdown/JSON export işlemleri devreye alındı. E2E testleri ve GitHub Actions süreçleri kuruldu.
+
+## Puan Tamamlama Mantığı
+
+Sprint 2'nin 16 Temmuz'daki gerçeklik reseti sonrası kalan 25 puanlık kapanış backlog'u Fibonacci sistemiyle (1, 2, 3, 5, 8) değerlendirildi. Puanlar karmaşıklık, risk ve belirsizliği temsil etmektedir.
+
+| Kategori | Puan | Durum |
+| --- | ---: | --- |
+| Landing ürünü 5 saniyede doğru anlatır (BP-001R) | 3 | Done |
+| Gerçek sample blueprint görülebilir (BP-002R) | 5 | Done |
+| Sahte sosyal kanıt ve ölü CTA kaldırılır (BP-029) | 1 | Done |
+| Curated sample schema-safe ve versiyonlu olur (BP-030) | 3 | Done |
+| Evidence klasörü ve naming standardı (BP-042) | 2 | Done |
+| Sprint 2 altı zorunlu README maddesi (BP-043) | 3 | Done |
+| Issue/label/description hygiene (BP-046) | 2 | Done |
+| Pixie event sözleşmesi tasarlanır (BP-008R-S2) | 3 | Done |
+| Partial persistence dikey dilimi tasarlanır (BP-031-S2) | 3 | Done |
+
+## Backlog Düzeni ve Story Seçimleri
+
+Sprint 2 kapanışında ürün vaadinin doğru iletilmesi, bekleme süresinin sample üzerinden aşılması ve evidence işlerinin tamamlanması ön planda tutuldu.
+
+| Story | Başlık | Öncelik | Sprint | Durum |
+| --- | --- | --- | --- | --- |
+| BP-001R | Landing ürünü 5 saniyede doğru anlatır | P0 | 2 | Done |
+| BP-002R | Gerçek sample blueprint görülebilir | P0 | 2 | Done |
+| BP-029 | Sahte sosyal kanıt ve ölü CTA kaldırılır | P0 | 2 | Done |
+| BP-030 | Curated sample schema-safe ve versiyonlu olur | P0 | 2 | Done |
+| BP-042 | Evidence klasörü ve naming standardı | P0 | 2 | Done |
+| BP-043 | Sprint 2 altı zorunlu README maddesi | P0 | 2 | Done |
+| BP-046 | Issue/label/description/homepage hygiene | P0 | 2 | Done |
+| BP-008R-S2 | Pixie event sözleşmesi tasarlanır | P0 | 2 | Done |
+| BP-031-S2 | Partial persistence dikey dilimi tasarlanır | P0 | 2 | Done |
+
+## Daily Scrum
+
+Sprint 2 günlük iletişimleri Slack/WhatsApp üzerinden ve GitHub Issue etiketlemeleri ile yürütülmüştür. Daily scrum notları `docs/evidence/sprint-2/daily/` dizininde yer almaktadır. Kilit günler ve özetleri aşağıdadır:
+
+| Tarih | Daily Scrum Özeti |
+| --- | --- |
+| 6 Temmuz | Sprint başlangıcı ve 20:00 Akademi soru-cevap. |
+| 9 Temmuz | Takım listesi ve proje sıralaması güncellendi. |
+| 16 Temmuz | PR #11 merge ve profesyonel post-merge hardening, master plan güncellendi. |
+| 17 Temmuz | Sahte sosyal kanıt iddiaları kaldırıldı, event type/API sözleşmesi tasarlandı. |
+| 18 Temmuz | Sample E2E yazıldı, sprint son görsel/kanıtları ayarlandı. |
+| 19 Temmuz | Sprint Review & Retrospective yapıldı, 6 zorunlu Bootcamp kanıtı tamamlandı, kalite zinciri doğrulandı. |
+
+## Sprint Board Update
+
+Sprint board GitHub Issues üzerinden takip edilmektedir. Board başlangıç/orta/son kanıtları `docs/evidence/sprint-2/board/` klasöründe yer almaktadır.
+
+[Sprint 2 Closed Board](https://github.com/avanalperen/BuildPixies/issues?q=state%3Aclosed%20label%3Asprint-2)
+
+| Board Kolonu | Sprint 2 Sonu Durum |
+| --- | --- |
+| Done | Landing before/after, sample akışı, markdown/json export, regenerate, E2E testleri, Bootcamp mode, kalite hattı |
+| In Progress | Partial persistence uygulaması, SSE/polling entegrasyonu (Sprint 3'e taşındı) |
+| Backlog | Production deploy, Command Center UI (S3) |
+
+## Ürün Durumu
+
+Sprint 2 sonunda eklenen yeni ekran görüntüleri ve landing Before/After kısımları belge klasörüne eklenmiştir.
+
+<details>
+  <summary><h3>Sprint 2 - Ekran Görüntüleri</h3></summary>
+
+### Landing Page 2
+
+![Landing Page 2](public/screenshots/landing-2.png)
+
+### How It Works
+
+![How It Works](public/screenshots/how-it-works.png)
+
+### Workspace 2
+
+![Workspace 2](public/screenshots/workspace-2.png)
+
+### Sample Blueprint
+
+![Sample Blueprint](public/screenshots/sample-blueprint.png)
+
+### Bootcamp Report
+
+![Bootcamp Report](public/screenshots/bootcamp-report.png)
+
+</details>
+
+## Teknik Doğrulama
+
+| Alan | Kod Kanıtı | Durum |
+| --- | --- | --- |
+| Output Export | `b5f1e26` Markdown copy ve JSON export | Done |
+| Regenerate | `0eec8b6`, `33317d1` Bölüm bazlı UI / persistence | Done |
+| Bootcamp Mode | `ff8ad3b` Source-grounded report | Done |
+| E2E / CI | `80d4928`, `75c5d19` Kritik Playwright akışı ve Push/PR workflow | Done |
+| Provider / AI | `14b4141`, `6176086` OpenRouter Free ve 429/5xx hardening | Done |
+| Kalite Kapısı | `npm run lint`, `typecheck`, `build`, `test:e2e` başarılı (0 hata) | Done |
+
+## Sprint Review
+
+Sprint 2 review sonucunda aşağıdaki kararlar alındı:
+
+- Sprint hedefi olan "kullanıcıların beklemeden ürünün değerini anlaması" için Sample Blueprint akışı başarıyla devreye alındı.
+- Output Hub üzerinden Export ve Regenerate yeteneklerinin ürünü profesyonel hissettirdiği onaylandı.
+- AI bekleme süresinin 250+ saniyeye ulaştığı görülerek, sonraki adımda progressive UX (SSE) ve partial persistence'ın vazgeçilmez bir öncelik olduğuna karar verildi.
+- Bootcamp zorunlu kanıtları README'de belgelendi ve formatı tutarlı hale getirildi.
+
+**Sprint Review Katılımcıları:** Muhammed Köseoğlu, Alperen Avan, Kemal Ersin Özkan, Selin Akkaş.
+
+## Sprint Retrospective
+
+### İyi Gidenler
+
+- OpenRouter üzerinden Free tier modeliyle gerçek structured output almayı başardık.
+- Output Hub (Export/Regenerate) ve Curated Sample Blueprint eklemek, sistemi beklemeden ürün değerini göstermek adına çok başarılı oldu.
+- Teknik kalite hattının (GitHub Actions, Lint, Typecheck, E2E testleri) sprint boyunca bizi koruması hataların merge edilmesini engelledi.
+
+### İyileştirilmesi Gerekenler
+
+- Tam generation sürecinin çok uzun sürmesi UI kilitlenmelerine ve hatalarda data kaybına (Partial persistence eksikliği) neden oldu.
+- Görsel kanıtların ve test belgelerinin son güne yığılması kapanış stresini ciddi şekilde artırdı.
+- Rate limit nedeniyle uygulamayı canlı test etmede zorluklar yaşandı.
+
+### Sprint 3 Aksiyonları
+
+- Vercel Deploy ve Canlı Test (Supabase RLS ile) yapılacak.
+- Pixie Event altyapısı kodlanıp arayüze entegre edilecek (Gerçek SSE/polling).
+- Partial Persistence altyapısı kurularak `partial_error` statüsüyle verinin korunması sağlanacak.
+- Sprint kanıtları son güne bırakılmadan günlük ekran görüntüsü ve belge alınarak ilerlenecek.
 
 ---
 

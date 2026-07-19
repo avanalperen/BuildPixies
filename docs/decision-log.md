@@ -237,3 +237,66 @@ Provider anahtarları yalnızca server environment'ta tutulacak.
   üretilir; tekrarlanan doğrulama hatası istemciye ayrıntı sızdırmadan `503` olur.
 - Production güvenilirliği gerektiğinde `OPENROUTER_MODEL` ile sabit/ücretli bir
   model seçilebilir.
+
+---
+
+## ADR-009 — Pixie Event Contract (BP-008R-S2)
+
+**Tarih:** 19 Temmuz 2026
+**Durum:** Tasarlandı (Sprint 3 için)
+
+### Bağlam
+
+Uzun süren AI (Generation) görevleri için 250 saniyeye varan bekleme süresi,
+kullanıcı arayüzünü (UI) dondurmakta ve ürün deneyimini olumsuz etkilemektedir.
+AI aşamalarının gerçek zamanlı takibini sağlamak, kullanıcının sistemin çalıştığına
+dair güven duymasını kolaylaştırmak için backend ile client arasında çalışacak
+yeni bir "Pixie Event" sözleşmesine ihtiyaç duyulmuştur.
+
+### Karar
+
+Oluşturulacak olan event objesi standart olarak `id` (uuid), `pixie` (agent), 
+`section` (blueprint alanı), `status` (waiting/thinking/done/failed), 
+`message` (kullanıcı dostu durum mesajı) ve `timestamp` alanlarını içerecektir.
+Güvenlik prensibi gereği, raw prompt'lar ve AI'dan dönen hassas içerikler 
+kesinlikle event loglarına veya istemci sözleşmesine dahil edilmeyecektir.
+İstemci (client), retry durumunda duplicate event alsa bile bunu idempotent
+olarak yönetecek, sadece validasyondan geçmiş bir bölüm `done` sayılacaktır.
+
+### Sonuçlar
+
+- Sprint 3'te progressive UX (adım adım yükleme) sorunsuz uygulanabilecektir.
+- Polling mekanizmaları mevcut istemcileri kırmayacak şekilde versiyonlanır.
+- Local geliştirme ve Durable Job Store aynı ortak tipi (`GenerationEvent`) kullanır.
+- UI, boş bir yükleme ekranı yerine aktif ajanların çalıştığını gösterebilir.
+
+---
+
+## ADR-010 — Partial Blueprint Persistence (BP-031-S2)
+
+**Tarih:** 19 Temmuz 2026
+**Durum:** Tasarlandı (Sprint 3 için)
+
+### Bağlam
+
+API tarafında karşılaşılabilecek 429 (Rate Limit) hataları veya olası 5xx
+kesintilerinde, o ana kadar üretilmiş blueprint parçaları (section) tamamen 
+kaybolmakta ve 250 saniyelik uzun AI üretim süreci israf olmaktaydı. Hata
+durumlarında dahi kullanıcıya bir değer sunmak gerekiyordu.
+
+### Karar
+
+Yarım kalan veya hata veren AI süreçlerinin o ana kadar olan kazanımlarını 
+kaybetmemek adına Partial Persistence (Kısmi Kayıt) modeli kullanılacaktır.
+Her bir AI Pixie adımı şema doğrulamasını başarıyla geçip `done` statüsüne 
+ulaştıkça, PostgreSQL üzerindeki `projects.blueprint` JSONB alanı kısmi 
+olarak güncellenecektir. Veritabanındaki `status` enum yapısına eksikliği 
+belirtmek için yeni değerler (`partial_error` vb.) eklenecektir.
+
+### Sonuçlar
+
+- Uzun görevlerde kısmi hatalar yaşansa bile önceki kazanımlar korunur.
+- API kotaları ve zaman maliyeti israf edilmez, sistem daha verimli çalışır.
+- İstemci, projeyi açtığında eksik kalan kısımları algılayarak "kaldığı
+  yerden devam et" veya "hatalı bölümü yeniden üret" yeteneği kazanır.
+- UX tarafında kesinti anında oluşan "veri kaybı" korkusu tamamen giderilir.
