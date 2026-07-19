@@ -256,16 +256,6 @@ per-Pixie event/streaming işi BP-008R/BP-031 olarak sonraki kapsamdadır.
 | In Progress | Per-pixie gerçek event/streaming, UI regenerate kontrolleri |
 | Backlog | Account linking, SSE events, Vercel deploy hardening, CAPTCHA/quota |
 
-[Sprint 2 Closed Board](https://github.com/avanalperen/BuildPixies/issues?q=state%3Aclosed%20label%3Asprint-2)
-
-![Sprint 2 Board Closeout](docs/evidence/sprint-2/board/2026-07-19-board-closeout-backfilled.png)
-
-| Board Kolonu | Sprint 2 Sonu Durum |
-| --- | --- |
-| Done | Landing before/after, sample akışı, markdown/json export, regenerate, E2E testleri, Bootcamp mode, kalite hattı |
-| In Progress | Partial persistence uygulaması, SSE/polling entegrasyonu (Sprint 3'e taşındı) |
-| Backlog | Production deploy, Command Center UI (S3) |
-
 ## Ürün Durumu
 
 Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görüntüleri
@@ -426,6 +416,8 @@ Sprint 2 günlük iletişimleri Slack/WhatsApp üzerinden ve GitHub Issue etiket
 Sprint board GitHub Issues üzerinden takip edilmektedir. Board başlangıç/orta/son kanıtları `docs/evidence/sprint-2/board/` klasöründe yer almaktadır.
 
 [Sprint 2 Closed Board](https://github.com/avanalperen/BuildPixies/issues?q=state%3Aclosed%20label%3Asprint-2)
+
+![Sprint 2 Board Closeout](docs/evidence/sprint-2/board/2026-07-19-board-closeout-backfilled.png)
 
 | Board Kolonu | Sprint 2 Sonu Durum |
 | --- | --- |
