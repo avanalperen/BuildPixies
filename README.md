@@ -401,12 +401,15 @@ Sprint 2 günlük iletişimleri Slack/WhatsApp üzerinden ve GitHub Issue etiket
 
 | Tarih | Daily Scrum Özeti |
 | --- | --- |
-| 6 Temmuz | Sprint başlangıcı ve 20:00 Akademi soru-cevap. |
-| 9 Temmuz | Takım listesi ve proje sıralaması güncellendi. |
-| 16 Temmuz | PR #11 merge ve profesyonel post-merge hardening, master plan güncellendi. |
-| 17 Temmuz | Sahte sosyal kanıt iddiaları kaldırıldı, event type/API sözleşmesi tasarlandı. |
-| 18 Temmuz | Sample E2E yazıldı, sprint son görsel/kanıtları ayarlandı. |
-| 19 Temmuz | Sprint Review & Retrospective yapıldı, 6 zorunlu Bootcamp kanıtı tamamlandı, kalite zinciri doğrulandı. |
+| 6 Temmuz | Sprint başlangıcı toplantısı yapıldı ve görev dağılımı gerçekleştirildi. |
+| 8 Temmuz | Landing sayfasındaki ürün anlatımı revize edildi, tasarımlar netleştirildi. |
+| 10 Temmuz | Curated Sample Blueprint'in yapısı tasarlandı ve UI'a entegrasyonu başladı. |
+| 12 Temmuz | Sahte sosyal kanıtlar ve çalışmayan CTA'lar tespit edilip temizlendi. |
+| 14 Temmuz | Bölüm bazlı regenerate özelliği ve Output Export (Markdown/JSON) üzerine çalışıldı. |
+| 16 Temmuz | Geliştirilen özelliklerin PR'ları birleştirildi ve post-merge testleri yapıldı. |
+| 17 Temmuz | Uzun API yanıtlarını daha iyi yönetmek için Event altyapısı ve Partial Persistence mimarisi tasarlandı. |
+| 18 Temmuz | Playwright ile E2E testleri yazılarak uygulamanın ana senaryosu doğrulandı. |
+| 19 Temmuz | Sprint Review ve Retrospective toplantıları yapıldı. |
 
 ## Sprint Board Update
 
@@ -467,7 +470,7 @@ Sprint 2 review sonucunda aşağıdaki kararlar alındı:
 - Sprint hedefi olan "kullanıcıların beklemeden ürünün değerini anlaması" için Sample Blueprint akışı başarıyla devreye alındı.
 - Output Hub üzerinden Export ve Regenerate yeteneklerinin ürünü profesyonel hissettirdiği onaylandı.
 - AI bekleme süresinin 250+ saniyeye ulaştığı görülerek, sonraki adımda progressive UX (SSE) ve partial persistence'ın vazgeçilmez bir öncelik olduğuna karar verildi.
-- Bootcamp zorunlu kanıtları README'de belgelendi ve formatı tutarlı hale getirildi.
+- Ekip içi iletişim eksiklikleri değerlendirilerek proje yönetimi ve dökümantasyon standartlarının iyileştirilmesine karar verildi.
 
 **Sprint Review Katılımcıları:** Muhammed Köseoğlu, Alperen Avan, Kemal Ersin Özkan, Selin Akkaş.
 
