@@ -33,7 +33,14 @@ BuildPixies
   <tr>
     <td>Kemal Ersin Özkan</td>
     <td>Developer</td>
-    <td>GitHub / LinkedIn eklenecek</td>
+    <td>
+      <a href="https://github.com/smallforward11" target="_blank">
+        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="28">
+      </a>
+      <a href="https://www.linkedin.com/in/kemal-ersin-özkan-855244231/" target="_blank">
+        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="28">
+      </a>
+    </td>
   </tr>
   <tr>
     <td>Selin Akkaş</td>
