@@ -45,7 +45,7 @@ export function PixieCard({
         className={cn(
           "flex items-center gap-4 rounded-xl border bg-white p-4 shadow-sm transition-all hover:shadow-md",
           isActive && "pixie-thinking border-2",
-          status === "waiting" && "border-outline-variant/30 bg-white/60 opacity-65",
+          status === "waiting" && "border-outline-variant/30 bg-white/60 opacity-80",
           status === "failed" && "border-destructive/30",
         )}
       >

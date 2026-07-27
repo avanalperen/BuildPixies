@@ -233,7 +233,7 @@ export function Workspace({ project }: { project: Project }) {
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-8" aria-busy={loading}>
+    <div className={`flex min-w-0 flex-col gap-8${blueprint ? " pb-24 lg:pb-0" : ""}`} aria-busy={loading}>
       <p className="sr-only" role="status" aria-live="polite">
         {loading
           ? "The blueprint is being generated."
@@ -257,7 +257,7 @@ export function Workspace({ project }: { project: Project }) {
               <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Platform</dt><dd className="font-semibold capitalize">{project.platform.replace("-", " ")}</dd></div>
               <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Audience</dt><dd className="max-w-[60%] truncate font-semibold">{project.targetAudience}</dd></div>
             </dl>
-            <button onClick={handleGenerate} disabled={loading || regeneratingSection !== null} className="magic-button inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50">
+            <button type="button" onClick={handleGenerate} disabled={loading || regeneratingSection !== null} className="magic-button inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50">
               <Sparkles className="size-4" />
               {loading ? "Pixies are working..." : blueprint ? "Regenerate all" : "Generate blueprint"}
             </button>
@@ -319,7 +319,7 @@ export function Workspace({ project }: { project: Project }) {
       <BootcampMode project={project} />
 
       {blueprint && (
-        <nav className="glass-panel fixed bottom-8 left-1/2 z-40 hidden -translate-x-1/2 items-center gap-4 rounded-full px-6 py-3 shadow-xl md:flex lg:ml-[140px]" aria-label="Blueprint actions">
+        <nav className="glass-panel fixed bottom-24 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center justify-center gap-2 overflow-x-auto rounded-full px-4 py-2.5 shadow-xl sm:gap-4 sm:px-6 sm:py-3 md:w-auto md:max-w-none lg:bottom-4 lg:ml-[140px]" aria-label="Blueprint actions">
           <button type="button" onClick={handleExport} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-all hover:bg-surface-container hover:text-primary">
             <Download className="size-4" />Download Blueprint
           </button>

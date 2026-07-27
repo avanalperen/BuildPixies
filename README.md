@@ -39,9 +39,12 @@ BuildPixies
     </td>
   </tr>
   <tr>
-    <td>Selin Akkaş</td>
+    <td><a href="https://github.com/selinakkas">Selin Akkaş</a></td>
     <td>Developer</td>
-    <td>GitHub / LinkedIn eklenecek</td>
+    <td>
+      <a href="https://github.com/selinakkas" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
+      <a href="https://www.linkedin.com/in/selin-akkaş-088153312/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20" /></a>
+    </td>
   </tr>
 </table>
 

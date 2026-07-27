@@ -154,7 +154,7 @@ export function NewProjectForm() {
     <form onSubmit={handleSubmit} aria-busy={submitting} className="relative z-10 flex w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-outline-variant bg-white shadow-[0_10px_30px_rgba(11,28,48,0.06)]">
       <header className="flex items-center justify-between border-b border-outline-variant bg-surface/80 px-6 py-3 backdrop-blur-xl">
         <Brand compact />
-        <Link href="/dashboard" aria-label="Close" className="flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-surface-highest hover:text-primary">
+        <Link href="/dashboard" aria-label="Close" className="flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-surface-highest hover:text-primary">
           <X className="size-5" />
         </Link>
       </header>
@@ -188,7 +188,7 @@ export function NewProjectForm() {
                   )}>
                     {complete ? <Check className="size-5" /> : <Icon className="size-5" />}
                   </span>
-                  <span className={cn("absolute top-12 text-xs font-medium whitespace-nowrap", active ? "text-primary" : "text-muted-foreground opacity-55 group-hover:opacity-100")}>
+                  <span className={cn("absolute top-12 w-16 text-center text-[11px] font-medium sm:w-20 sm:text-xs sm:whitespace-nowrap", active ? "text-primary" : "text-muted-foreground group-hover:text-foreground")}>
                     {item.label}
                   </span>
                 </button>

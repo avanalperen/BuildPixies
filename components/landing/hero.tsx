@@ -79,7 +79,7 @@ export function Hero() {
                 const isMuted = item.tone === "muted";
                 const isSecondary = item.tone === "secondary";
                 return (
-                  <div key={item.label} className={`flex items-center gap-3 rounded-xl border border-outline-variant/30 bg-white p-3 ${isMuted ? "opacity-60" : ""}`}>
+                  <div key={item.label} className={`flex items-center gap-3 rounded-xl border border-outline-variant/30 bg-white p-3 ${isMuted ? "opacity-75" : ""}`}>
                     <span className={`flex size-8 items-center justify-center rounded-full ${isSecondary ? "bg-secondary/10 text-secondary" : isMuted ? "bg-outline/10 text-outline" : "bg-primary/10 text-primary"}`}>
                       <Icon className="size-4" />
                     </span>
