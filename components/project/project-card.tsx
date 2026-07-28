@@ -78,7 +78,7 @@ export function ProjectCard({ project }: { project: Project }) {
             {state.label}
           </span>
         </div>
-        <Link href={`/projects/${project.id}`} aria-label={`Open ${project.title}`} className="flex size-8 items-center justify-center rounded-full bg-surface-low text-primary transition-colors hover:bg-surface-highest">
+        <Link href={`/projects/${project.id}`} aria-label={`Open ${project.title}`} className="flex size-10 items-center justify-center rounded-full bg-surface-low text-primary transition-colors hover:bg-surface-highest">
           <ArrowRight className="size-5" />
         </Link>
       </div>

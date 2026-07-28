@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import {
   FolderOpen,
@@ -48,8 +48,11 @@ export function AppShell({
   active?: ActiveItem;
 }) {
   return (
-    <div className="min-h-screen bg-background">
-      <aside className="fixed inset-y-0 left-0 z-50 hidden w-[280px] flex-col border-r border-outline-variant/20 bg-surface px-4 py-10 shadow-[0_10px_30px_rgba(11,28,48,0.04)] lg:flex">
+    <div
+      className="min-h-screen bg-background"
+      style={{ "--sidebar-width": "280px" } as CSSProperties}
+    >
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-[var(--sidebar-width)] flex-col border-r border-outline-variant/20 bg-surface px-4 py-10 shadow-[0_10px_30px_rgba(11,28,48,0.04)] lg:flex">
         <Brand className="mb-12 px-2" />
         <nav className="flex flex-1 flex-col gap-2" aria-label="Primary navigation">
           {navigation.map((item) => (
@@ -58,7 +61,7 @@ export function AppShell({
         </nav>
       </aside>
 
-      <header className="fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between border-b border-outline-variant/55 bg-surface/80 px-4 backdrop-blur-xl lg:left-[280px] lg:px-10">
+      <header className="fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between border-b border-outline-variant/55 bg-surface/80 px-4 backdrop-blur-xl lg:left-[var(--sidebar-width)] lg:px-10">
         <Brand compact className="lg:hidden" />
         <span className="hidden lg:block" />
         <div className="flex items-center gap-2 sm:gap-4">
@@ -73,7 +76,7 @@ export function AppShell({
         </div>
       </header>
 
-      <main className="min-h-screen pt-16 pb-20 lg:ml-[280px] lg:pb-0">
+      <main className="min-h-screen pt-16 pb-20 lg:ml-[var(--sidebar-width)] lg:pb-0">
         {children}
       </main>
 
