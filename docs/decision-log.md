@@ -354,3 +354,43 @@ kendi durum yazma mantığıyla çalışan job'ın proje durumunu ezebiliyordu.
   uygulandı: ayrı event kaydı yerine `progress.steps[]` (`section`, `pixie`,
   `status`) saklanır; polling idempotent kalır çünkü client her seferinde tam
   durumu okur.
+
+---
+
+## ADR-012 — Canlı deploy kapsam dışı, deploy-ready kanıtı zorunlu
+
+**Tarih:** 1 Ağustos 2026
+**Durum:** Kabul edildi (takım kararı)
+
+### Bağlam
+
+Sprint 3 planı BP-039 (Vercel production deploy) ve BP-040 (production Supabase
+smoke) story'lerini P0 olarak taşıyordu. Teslime bir gün kala takım ürünü
+canlıya almama kararı aldı. Bootcamp kuralları bu kararı destekliyor:
+`docs/bootcamp.md` canlı linki **opsiyonel** sayar, jüri kriteri "canlıya
+alınmış **veya canlıya alınabilecek şekilde geliştirilme yapılmış**" der ve
+final teslim paketi "çalışan ürün **veya doğrulanmış deploy-ready paket**"
+kabul eder.
+
+### Karar
+
+BP-039 ve BP-040 Dropped. Yerine BP-039R açıldı: canlı URL yerine **deploy
+edilebilirliğin kanıtlanması**. Kanıt üç ayaktan oluşur:
+
+1. `npm run build` ile production build'in temiz üretilmesi ve route/queue
+   manifest'inin belgelenmesi,
+2. `next start` ile production modunda çalıştırılan uçtan uca smoke,
+3. migration'ların şema ve yetki sözleşmesini doğrulayan SQL testi.
+
+Production secret'ları, canlı URL ve incognito smoke maddeleri teslim
+kapsamından çıkarılır.
+
+### Sonuçlar
+
+- Jüri kriterindeki 10 puanlık "canlıya alınabilir" kalemi kanıtla savunulur;
+  canlı URL yokluğu belirsiz bırakılmaz.
+- Production Supabase secret'ı hiç üretilmediği için secret sızma yüzeyi daralır.
+- Anonim kullanıcı izolasyonu (RLS) canlı ortamda değil, migration sözleşme
+  testi ve kod incelemesiyle kanıtlanır; bu sınırlama README'de açıkça yazılır.
+- Ürün canlıya alınmak istenirse gereken tek iş migration'ları uygulamak ve
+  environment değişkenlerini girmektir; kodda değişiklik gerekmez.

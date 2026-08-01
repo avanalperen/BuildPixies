@@ -717,9 +717,12 @@ Supabase ile kalıcı storage kullanacaksanız migration'ları uygulayın:
 supabase db push
 ```
 
-> Deploy öncesi `202608010001_generation_progress.sql` ve
-> `202608010002_partial_blueprint.sql` uygulanmış olmalıdır; `generation_jobs`
-> üzerindeki `progress` kolonu olmadan generation job kaydı oluşturulamaz.
+> **Canlı deploy kapsam dışıdır** (ADR-012). Ürün deploy-ready geliştirilmiştir;
+> kanıtı [`docs/evidence/sprint-3/product/deploy-readiness.md`](docs/evidence/sprint-3/product/deploy-readiness.md).
+> Canlıya alınmak istenirse altı migration'ın uygulanması ve environment
+> değişkenlerinin girilmesi yeterlidir; kod değişikliği gerekmez.
+> `202608010001_generation_progress.sql` ve `202608010002_partial_blueprint.sql`
+> zorunludur: `generation_jobs.progress` kolonu olmadan job kaydı oluşturulamaz.
 
 Gerekli ortam değişkenleri:
 

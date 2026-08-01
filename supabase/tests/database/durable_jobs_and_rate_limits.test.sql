@@ -1,6 +1,6 @@
 begin;
 
-select plan(23);
+select plan(30);
 
 select has_table(
   'public',
@@ -204,6 +204,84 @@ select ok(
       and blueprint = '{"test":true}'::jsonb
   ),
   'job completion atomically updates the project'
+);
+
+-- 202608010001 / 202608010002: progress and partial persistence contract.
+select has_column(
+  'public',
+  'generation_jobs',
+  'progress',
+  'generation jobs persist real pipeline progress'
+);
+select has_column(
+  'public',
+  'generation_jobs',
+  'partial_blueprint',
+  'generation jobs keep the sections produced so far'
+);
+select ok(
+  has_function_privilege(
+    'service_role',
+    'public.set_generation_job_progress(uuid,uuid,jsonb,jsonb)',
+    'execute'
+  ),
+  'the worker can report progress'
+);
+select ok(
+  not has_function_privilege(
+    'authenticated',
+    'public.set_generation_job_progress(uuid,uuid,jsonb,jsonb)',
+    'execute'
+  ),
+  'authenticated users cannot forge progress'
+);
+select ok(
+  not exists (
+    select 1
+    from pg_proc
+    join pg_namespace on pg_namespace.oid = pg_proc.pronamespace
+    where pg_namespace.nspname = 'public'
+      and pg_proc.proname = 'set_generation_job_progress'
+      and pg_proc.pronargs = 3
+  ),
+  'the superseded three argument progress function is gone'
+);
+
+-- A permanently failed run must not hide a blueprint the project already owns.
+insert into auth.users (id)
+values ('00000000-0000-0000-0000-000000000031');
+set local "request.jwt.claim.sub" = '00000000-0000-0000-0000-000000000031';
+insert into public.projects (
+  id, owner_id, title, raw_idea, goal, platform, target_audience,
+  blueprint, status
+) values (
+  '10000000-0000-0000-0000-000000000031',
+  '00000000-0000-0000-0000-000000000031',
+  'Already generated', 'An idea long enough to store', 'bootcamp', 'web',
+  'builders', '{"test":true}'::jsonb, 'ready'
+);
+insert into public.generation_jobs (
+  id, project_id, owner_id, status, input
+) values (
+  '20000000-0000-0000-0000-000000000031',
+  '10000000-0000-0000-0000-000000000031',
+  '00000000-0000-0000-0000-000000000031',
+  'queued',
+  '{"rawIdea":"An idea long enough to store","goal":"bootcamp","platform":"web","targetAudience":"builders"}'::jsonb
+);
+select ok(
+  public.fail_generation_job_permanently(
+    '20000000-0000-0000-0000-000000000031',
+    'provider unavailable'
+  ),
+  'a queued job can fail permanently'
+);
+select ok(
+  exists (
+    select 1 from public.projects
+    where id = '10000000-0000-0000-0000-000000000031' and status = 'ready'
+  ),
+  'a failed run keeps a project that already owns a blueprint ready'
 );
 
 select * from finish();

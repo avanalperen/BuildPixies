@@ -66,7 +66,7 @@ Landing
 | Progress feedback | Generate sonrası ≤2 sn state | E2E/screen record |
 | Partial değer | İlk tamamlanan section finalden önce açılır | Long-job E2E |
 | Command Center | Scope, risk, first sprint, next actions tek ekranda | UX acceptance |
-| Production | Public URL ve incognito smoke | URL + smoke log |
+| Deploy-ready | Production build + local production-mode smoke + migration sözleşme testi | Build log + smoke log + SQL test |
 | Güvenlik | Cross-owner read engelli, secret-safe | RLS test + audit |
 | Kalite | lint/typecheck/build/E2E/CI green | GitHub Actions |
 | Evidence | Sprint 3 altı zorunlu madde | README/evidence audit |
@@ -179,8 +179,9 @@ kesinleştirilir.
 | BP-033 | MVP Command Center overview | P0 | 5 | Blueprint mapping | UX acceptance |
 | BP-034 | Çıktılar anlamlı gruplara ayrılır | P0 | 5 | BP-033 | Responsive screenshot |
 | BP-037 | Core journey accessibility/mobile polish | P0 | 5 | UI freeze | Keyboard/mobile test |
-| BP-039 | Vercel production deploy | P0 | 5 | Env/queue | Public URL |
-| BP-040 | Production Supabase migration/auth/RLS smoke | P0 | 5 | Project access | Isolation evidence |
+| ~~BP-039~~ | ~~Vercel production deploy~~ | — | — | — | **Dropped** (1 Ağustos, takım kararı) |
+| ~~BP-040~~ | ~~Production Supabase migration/auth/RLS smoke~~ | — | — | — | **Dropped** (1 Ağustos, takım kararı) |
+| BP-039R | Doğrulanmış deploy-ready paket kanıtı | P0 | 3 | Build/migration | Production build + local prod smoke + SQL sözleşme testi |
 | BP-044 | En fazla 3 dakikalık YouTube video | P0 | 8 | RC1/demo | Incognito link |
 | BP-045 | Submission form ve release checklist | P0 | 3 | Video/deploy/docs | Submission proof |
 | BP-048 | AI architecture ve trace kanıtı | P0 | 3 | Event/log | Diagram + README |
@@ -204,7 +205,8 @@ Aşağıdaki durumlar `main` üzerindeki koddan doğrulanmıştır; kalite kapı
 | BP-034 | Done | Overview / Product / Experience / Build / Delivery grupları |
 | BP-037 | Code Complete | Mobile keyboard journey E2E; dar ekran okunabilirlik düzeltmeleri |
 | BP-048 | Done | README "AI Mimarisi ve Üretim İzi" bölümü + diyagram |
-| BP-039/BP-040 | Blocked | Production Vercel/Supabase erişimi takımda; migration'lar deploy öncesi zorunlu |
+| BP-039/BP-040 | **Dropped** | Ürün canlıya alınmayacak (takım kararı, 1 Ağustos). Yerine BP-039R |
+| BP-039R | In Progress | Deploy-ready kanıtı: production build, local production-mode smoke, migration sözleşme testi |
 | BP-044/BP-045 | Planned | RC1 sonrası; video ve form takım işi |
 
 **Bilinen açık sınırlama:** bir bölüm kalıcı olarak başarısız olduğunda tüm
