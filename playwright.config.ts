@@ -28,6 +28,8 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       BUILDPIXIES_DISABLE_FILE_STORE: "0",
+      // Paces the keyless pipeline so mid-run and refresh states are testable.
+      BUILDPIXIES_SAMPLE_STEP_DELAY_MS: "400",
       BUILDPIXIES_ENABLE_ANON_AUTH: "0",
       BUILDPIXIES_LOCAL_STORE_NAMESPACE: "e2e",
       BUILDPIXIES_REQUIRE_SUPABASE: "0",

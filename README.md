@@ -537,6 +537,68 @@ Queues · generation job polling · local JSON fallback for development.
 **Roadmap stack:** OpenAI Agents SDK handoff · pgvector project memory · durable
 workflow steps/SSE streaming · account linking · Vercel deploy hardening.
 
+## AI Mimarisi ve Üretim İzi
+
+Tek bir blueprint üretimi, 11 adımı bağımlılık sırasına göre altı paralel
+gruba bölen role-based bir pipeline'dır. Her adım kendi pixie'sine aittir ve
+şema doğrulamasını geçmeden `done` sayılmaz.
+
+```mermaid
+flowchart TD
+  UI["Workspace<br/>POST /api/generation-jobs"] --> DEDUPE{"Projede aktif<br/>job var mı?"}
+  DEDUPE -- "Evet" --> EXIST["Mevcut job döner<br/>202, yeni maliyet yok"]
+  DEDUPE -- "Hayır" --> JOB["generation_jobs satırı<br/>status=queued, progress=11x pending"]
+  JOB --> ROUTE{"Vercel mi?"}
+  ROUTE -- "Evet" --> Q["Vercel Queue<br/>lease + retry (max 5)"]
+  ROUTE -- "Hayır" --> AFTER["Next after()<br/>local runner"]
+  Q --> WORK["Orchestrator"]
+  AFTER --> WORK
+  WORK --> B1["1: Pip orchestrationPlan"]
+  B1 --> B2["2: Pria productBrief · Moxie marketAnalysis"]
+  B2 --> B3["3: Pria mvpScope · Luma uxFlow · Tinker techPlan"]
+  B3 --> B4["4: Bitsy codeSkeleton · Bugsy testPlan · Sprinta backlog"]
+  B4 --> B5["5: Sprinta sprintPlan"]
+  B5 --> B6["6: Quill readme"]
+  B6 --> DONE["complete_generation_job<br/>projects.blueprint + status=ready"]
+  B1 -. "her adım" .-> VAL{"Zod strict<br/>doğrulama"}
+  VAL -- "Geçti" --> SAVE["progress + partial_blueprint<br/>job satırına yazılır"]
+  VAL -- "Şema hatası" --> R1["1 kez daha üret<br/>retry talimatıyla"]
+  VAL -- "Timeout/429/5xx" --> R2["1 kez daha dene<br/>backoff ile"]
+  SAVE -. "polling" .-> UI
+```
+
+### Katman sorumlulukları
+
+| Katman | Dosya | Sorumluluk |
+| --- | --- | --- |
+| Prompt | `lib/ai/prompts.ts` | Rol bazlı system/user promptları, önceki bölüm bağlamı |
+| Şema | `lib/ai/schemas.ts` | Bölüm başına strict Zod şeması, tam blueprint şeması |
+| Orkestrasyon | `lib/ai/orchestrator.ts` | Paralel gruplar, şema retry, transient retry, event yayını |
+| Sağlayıcı | `lib/ai/client.ts` | OpenRouter/OpenAI seçimi, timeout, token limiti, hata sınıflama |
+| İlerleme | `lib/generation-progress.ts` | Event → `progress.steps[]` + `partial_blueprint`, coalesced yazım |
+| Dayanıklılık | `lib/generation-worker.ts` | Lease alma, idempotent tamamlama, kalıcı hata |
+
+### Ne loglanır, ne loglanmaz
+
+Üretim izi tanılama için yeterli, ama sızıntısızdır. `lib/ai/client.ts` ve
+`lib/ai/orchestrator.ts` yalnız şu alanları loglar:
+
+- sağlayıcı adı, model adı, HTTP status, sağlayıcı hata tipi,
+- `retry-after`, request id, deneme sayısı,
+- şema hatası olan alan yolları (`issuePaths`), bölüm adı.
+
+Loglara **hiçbir zaman** girmeyenler: API anahtarları, ham prompt metni,
+kullanıcının fikir metni ve modelden dönen içerik. İstemciye dönen hata
+mesajları `getSafeErrorMessage` ile sabit metinlere indirgenir; sağlayıcı
+ayrıntısı client'a taşınmaz.
+
+### Üretilen izin doğrulanabilir kısmı
+
+`GET /api/generation-jobs/:id` her poll'da tam gerçeği döner: hangi bölüm
+`pending/running/done/failed`, hangi pixie sorumlu, o ana kadar hangi bölümler
+doğrulanmış (`partialBlueprint`). Kayıtlar owner-scoped RLS altındadır; başka
+bir kullanıcı ne progress ne partial sonucu okuyabilir.
+
 ## Klasör Yapısı
 
 ```text

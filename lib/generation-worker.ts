@@ -173,11 +173,13 @@ export async function runDurableGenerationJob(jobId: string): Promise<void> {
     if (error instanceof GenerationLeaseBusyError) throw error;
     await tracker.flush().catch(() => undefined);
     const message = getSafeErrorMessage(error);
+    // Error class plus the sanitised message only: a raw message can echo
+    // field names from the model output.
     console.error("Blueprint generation attempt failed", {
       jobId: job.id,
       attemptCount: job.attemptCount,
       errorName: error instanceof Error ? error.name : "UnknownError",
-      errorMessage: error instanceof Error ? error.message : "Unknown error",
+      safeMessage: message,
     });
     await releaseGenerationJob(job, message).catch(() => undefined);
     throw new GenerationAttemptError(job.id, job.attemptCount, message);

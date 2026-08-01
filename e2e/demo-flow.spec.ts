@@ -185,6 +185,93 @@ test("reports real pipeline progress and exports from the stored project", async
   await expect(readme.json()).resolves.toMatchObject({ filename: "README.md" });
 });
 
+test("keeps a running generation visible across a refresh", async ({
+  page,
+  request,
+}) => {
+  const createResponse = await request.post("/api/projects", {
+    data: {
+      rawIdea: "A community fridge network coordinator for local volunteers",
+      goal: "bootcamp",
+      platform: "web",
+      targetAudience: "volunteer coordinators",
+    },
+  });
+  const { project } = (await createResponse.json()) as {
+    project: { id: string };
+  };
+
+  await page.goto(`/projects/${project.id}`);
+  await page.getByRole("button", { name: "Generate blueprint" }).click();
+
+  // The run must report state, not an empty spinner.
+  await expect(page.getByText("Sections completed")).toBeVisible({
+    timeout: 2_000,
+  });
+  await expect(
+    page.getByRole("button", { name: "Pixies are working..." }),
+  ).toBeDisabled();
+
+  // A refresh mid-run keeps tracking the same job instead of restarting it.
+  await page.reload();
+  await expect(page.getByText("Sections completed")).toBeVisible({
+    timeout: 5_000,
+  });
+  await expect(
+    page.getByRole("button", { name: "Pixies are working..." }),
+  ).toBeDisabled();
+
+  // Finished sections open before the pipeline ends.
+  await expect(page.locator("details").first()).toBeVisible({
+    timeout: 10_000,
+  });
+  await page.locator("details").first().click();
+  await expect(page.locator("details").first()).toContainText("•");
+
+  await expect(page.getByText("What you are building")).toBeVisible({
+    timeout: 30_000,
+  });
+});
+
+test("completes the mobile journey with the keyboard only", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/projects/new");
+
+  await page.getByLabel("What are we building?").focus();
+  await page.keyboard.type(
+    "A keyboard accessible study planner for evening students",
+  );
+
+  // Tab to Continue and advance the wizard without a pointer.
+  await page.keyboard.press("Tab");
+  let guard = 0;
+  while (guard++ < 25) {
+    const label = await page.evaluate(
+      () => document.activeElement?.textContent?.trim() ?? "",
+    );
+    if (label === "Continue") break;
+    await page.keyboard.press("Tab");
+  }
+  expect(guard, "Continue must be reachable by keyboard").toBeLessThan(25);
+  await page.keyboard.press("Enter");
+
+  await expect(
+    page.getByRole("button", { name: "Goal", exact: true }),
+  ).toHaveAttribute("aria-current", "step");
+
+  // Every step control must expose a visible focus ring.
+  const outlineStyle = await page.evaluate(() => {
+    const element = document.activeElement as HTMLElement | null;
+    if (!element) return null;
+    const style = getComputedStyle(element);
+    return { outline: style.outlineStyle, shadow: style.boxShadow };
+  });
+  expect(
+    outlineStyle?.outline !== "none" || outlineStyle?.shadow !== "none",
+    "focused control needs a visible focus indicator",
+  ).toBe(true);
+});
+
 test("rejects invalid project input", async ({ request }) => {
   const response = await request.post("/api/projects", {
     data: {

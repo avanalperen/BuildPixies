@@ -171,7 +171,17 @@ export async function generateBlueprint(
 ): Promise<Blueprint> {
   if (!isAIConfigured()) {
     const sample = buildSampleBlueprint(input.rawIdea);
+    // Tests pace the keyless pipeline so mid-run states are observable.
+    const stepDelayMs = Number(process.env.BUILDPIXIES_SAMPLE_STEP_DELAY_MS) || 0;
     for (const step of pipeline) {
+      await onEvent?.({
+        pixie: step.pixie,
+        section: step.section,
+        status: "running",
+      });
+      if (stepDelayMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, stepDelayMs));
+      }
       await onEvent?.({
         pixie: step.pixie,
         section: step.section,

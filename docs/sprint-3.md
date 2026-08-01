@@ -190,6 +190,28 @@ kesinleştirilir.
 contract dilimleri BP-008R/BP-031 puanından düşülür ve takım availability'sine
 göre committed toplam belirlenir.
 
+### 4.2.1 Gerçekleşen durum (1 Ağustos 2026)
+
+Aşağıdaki durumlar `main` üzerindeki koddan doğrulanmıştır; kalite kapısı
+(`lint`, `typecheck`, `build`, `test:e2e` 9/9) her commit'te yeşildir.
+
+| ID | Durum | Kanıt |
+| --- | --- | --- |
+| BP-008R | Done | `progress.steps[]` job kaydından; `lib/pixie-progress.ts`, workspace |
+| BP-031 | Done | `202608010001`, `202608010002` migration; partial persistence E2E |
+| BP-025R/BP-032 | Done | Refresh-mid-job E2E; tamamlanan bölüm run bitmeden açılıyor |
+| BP-033 | Done | `lib/command-center.ts` deterministic mapping; Overview default |
+| BP-034 | Done | Overview / Product / Experience / Build / Delivery grupları |
+| BP-037 | Code Complete | Mobile keyboard journey E2E; dar ekran okunabilirlik düzeltmeleri |
+| BP-048 | Done | README "AI Mimarisi ve Üretim İzi" bölümü + diyagram |
+| BP-039/BP-040 | Blocked | Production Vercel/Supabase erişimi takımda; migration'lar deploy öncesi zorunlu |
+| BP-044/BP-045 | Planned | RC1 sonrası; video ve form takım işi |
+
+**Bilinen açık sınırlama:** bir bölüm kalıcı olarak başarısız olduğunda tüm
+pipeline yeniden çalıştırılır; kısmi bölümler saklandığı için kullanıcı değer
+kaybetmez ama tamamlanmış bölümler tekrar üretilir. Ücretsiz sağlayıcı
+gecikmesiyle birlikte bu, uzun koşularda maliyet değil süre riskidir.
+
 ### 4.3 P1 yalnız core stabilse
 
 | ID | Sonuç | SP | Go koşulu |
