@@ -8,9 +8,12 @@
 | `video-script.md` | Üç dakikalık video anlatım metni, sahne sahne | ✅ Hazır |
 | `release-checklist.md` | Final teslim checklist'i | ✅ Hazır |
 | `../user-testing/protocol.md` | Kullanıcı testi protokolü | ⏳ Koşulmayı bekliyor |
-| `daily/` | 20 Temmuz – 2 Ağustos Daily Scrum notları | ⬜ Takım dolduracak |
+| `daily/development-log.md` | Commit türevi gerçek geliştirme günlüğü | ✅ Hazır |
+| `daily/` | Takımın kendi Daily Scrum notları | ⬜ Takım dolduracak |
 | `board/` | Planning / mid / freeze / final board görselleri | ⬜ Takım dolduracak |
-| `review/` | Sprint Review: demo sonucu, katılımcılar, taşınan işler | ⬜ Takım dolduracak |
-| `retrospective/` | Altı haftalık öğrenim, owner/tarihli aksiyonlar | ⬜ Takım dolduracak |
+| `review/technical-summary.md` | Review'ın koddan doğrulanabilir bölümü | ✅ Hazır |
+| `review/` | Demo sonucu, katılımcılar, PO kabulü | ⬜ Takım dolduracak |
+| `retrospective/technical-findings.md` | Yaşanan teknik olaylardan çıkan dersler | ✅ Hazır |
+| `retrospective/` | Süreç retrosu + owner/tarihli aksiyonlar | ⬜ Takım dolduracak |
 
 ⬜ işaretli maddeler takımın gerçek verisini gerektirir ve uydurulmamıştır.

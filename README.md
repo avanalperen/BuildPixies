@@ -572,8 +572,11 @@ rolü, Agents SDK ve pgvector bilinçli olarak kapsam dışında tutuldu.
 
 ## Daily Scrum
 
-> _Takım tarafından doldurulacak:_ `docs/evidence/sprint-3/daily/` altına
-> 20 Temmuz – 2 Ağustos arası tarihli notlar eklenecek.
+Commit geçmişinden türetilmiş gerçek geliştirme günlüğü:
+[`daily/development-log.md`](docs/evidence/sprint-3/daily/development-log.md)
+— gün gün kim ne yaptı, hangi story, hangi blocker.
+
+> Takımın kendi sözlü Daily Scrum notları aynı klasöre eklenecektir.
 
 ## Sprint Board Update
 
@@ -604,13 +607,22 @@ Ekran görüntüleri, hangi story'yi kanıtladıkları ve hangi sağlayıcıyla
 
 ## Sprint Review
 
-> _Takım tarafından doldurulacak:_ demo sonucu, katılımcılar, taşınan işler.
-> Teknik girdi hazır: yukarıdaki tablo ve kanıt belgeleri.
+Koddan doğrulanabilir bölüm hazır:
+[`review/technical-summary.md`](docs/evidence/sprint-3/review/technical-summary.md)
+— tamamlananlar, düşenler ve nedenleri, kalite sonucu, sprint sırasında
+bulunan beş gerçek hata.
+
+> Demo sonucu, katılımcı listesi ve PO kabul kararı takım tarafından eklenecek.
 
 ## Sprint Retrospective
 
-> _Takım tarafından doldurulacak:_ altı haftalık öğrenim ve owner/tarih
-> atanmış aksiyonlar. `docs/evidence/sprint-3/retrospective/`
+Yaşanan teknik olaylardan çıkarılan dersler:
+[`retrospective/technical-findings.md`](docs/evidence/sprint-3/retrospective/technical-findings.md)
+— altyapının bağlanmamış olması, tek bölüm hatasının tüm koşuyu düşürmesi,
+eski bir güvenlik sabitlemesinin açığa dönüşmesi ve tasarım/şema çelişkisi.
+
+> Süreç retrosu ve **owner/tarih atanmış aksiyonlar** takım tarafından
+> eklenecek (kural gereği zorunlu).
 
 ## Bilinen Sınırlamalar
 
