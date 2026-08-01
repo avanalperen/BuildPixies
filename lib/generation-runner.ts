@@ -6,8 +6,17 @@ import {
   completeGenerationJob,
   failGenerationJob,
   markGenerationJobRunning,
+  setGenerationJobProgress,
 } from "@/lib/generation-jobs";
-import { saveProjectBlueprint, updateProjectStatus } from "@/lib/projects";
+import {
+  createGenerationProgressTracker,
+  createInitialProgress,
+} from "@/lib/generation-progress";
+import {
+  markProjectGenerationFailed,
+  saveProjectBlueprint,
+  updateProjectStatus,
+} from "@/lib/projects";
 import { getSafeErrorMessage } from "@/lib/api/http";
 
 export async function runBlueprintGenerationJob(options: {
@@ -16,22 +25,27 @@ export async function runBlueprintGenerationJob(options: {
   input: CreateProjectInput;
 }): Promise<void> {
   const { jobId, projectId, input } = options;
+  const tracker = createGenerationProgressTracker(async (progress) => {
+    await setGenerationJobProgress(jobId, progress);
+  });
 
   try {
-    await markGenerationJobRunning(jobId);
+    await markGenerationJobRunning(jobId, createInitialProgress());
     if (projectId) {
       await updateProjectStatus(projectId, "generating");
     }
 
-    const blueprint = await generateBlueprint(input);
+    const blueprint = await generateBlueprint(input, tracker.onEvent);
+    await tracker.flush();
 
     if (projectId) {
       await saveProjectBlueprint(projectId, blueprint);
     }
     await completeGenerationJob(jobId, blueprint);
   } catch (error) {
+    await tracker.flush().catch(() => undefined);
     if (projectId) {
-      await updateProjectStatus(projectId, "failed").catch(() => undefined);
+      await markProjectGenerationFailed(projectId).catch(() => undefined);
     }
     await failGenerationJob(jobId, getSafeErrorMessage(error)).catch(
       () => undefined,

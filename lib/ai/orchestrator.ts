@@ -3,7 +3,7 @@ import type { Blueprint, BlueprintSection } from "@/types/output";
 import { isAIConfigured, runJsonCompletion, runTextCompletion } from "@/lib/ai/client";
 import { buildSampleBlueprint } from "@/lib/ai/sample";
 import { blueprintSchema, validateSection } from "@/lib/ai/schemas";
-import { AIOutputValidationError } from "@/lib/errors";
+import { AIOutputValidationError, ServiceUnavailableError } from "@/lib/errors";
 import {
   backlogPrompt,
   codePrompt,
@@ -22,10 +22,12 @@ import {
 export interface OrchestratorEvent {
   pixie: string;
   section: BlueprintSection;
-  status: "thinking" | "done" | "failed";
+  status: "running" | "done" | "failed";
 }
 
-export type OrchestratorListener = (event: OrchestratorEvent) => void;
+export type OrchestratorListener = (
+  event: OrchestratorEvent,
+) => void | Promise<void>;
 
 type PipelineStep =
   | {
@@ -55,6 +57,11 @@ const pipeline: PipelineStep[] = [
   { pixie: "Quill", section: "readme", build: docsPrompt, mode: "markdown" },
 ];
 
+/** Ordered pipeline steps, so callers can show every step before it starts. */
+export function getPipelineSteps(): { pixie: string; section: BlueprintSection }[] {
+  return pipeline.map((step) => ({ pixie: step.pixie, section: step.section }));
+}
+
 const pipelineBatches: PipelineStep[][] = [
   [pipeline[0]],
   pipeline.slice(1, 3),
@@ -65,6 +72,39 @@ const pipelineBatches: PipelineStep[][] = [
 ];
 
 const structuredOutputAttempts = 2;
+const transientAttempts = 2;
+const transientRetryDelayMs = 1_500;
+
+/**
+ * A single slow or busy provider response used to throw away every section
+ * the pipeline had already produced, so transient failures get one retry.
+ * Schema failures are excluded: `runStructuredSection` already handles those.
+ */
+async function withTransientRetry<T>(
+  section: BlueprintSection,
+  run: () => Promise<T>,
+): Promise<T> {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await run();
+    } catch (error) {
+      const retryable =
+        error instanceof ServiceUnavailableError &&
+        !(error instanceof AIOutputValidationError);
+      if (!retryable || attempt >= transientAttempts) throw error;
+
+      console.warn("AI section failed with a transient error; retrying", {
+        section,
+        attempt,
+        maxAttempts: transientAttempts,
+        errorMessage: error.message,
+      });
+      await new Promise((resolve) =>
+        setTimeout(resolve, transientRetryDelayMs * attempt),
+      );
+    }
+  }
+}
 const retryInstruction = [
   "The previous response did not match the required output schema.",
   "Return exactly one JSON object with the requested fields and value types.",
@@ -129,9 +169,13 @@ export async function generateBlueprint(
 ): Promise<Blueprint> {
   if (!isAIConfigured()) {
     const sample = buildSampleBlueprint(input.rawIdea);
-    pipeline.forEach((step) =>
-      onEvent?.({ pixie: step.pixie, section: step.section, status: "done" }),
-    );
+    for (const step of pipeline) {
+      await onEvent?.({
+        pixie: step.pixie,
+        section: step.section,
+        status: "done",
+      });
+    }
     return sample;
   }
 
@@ -139,21 +183,34 @@ export async function generateBlueprint(
   const ctx = { input, previousOutputs: outputs };
 
   const runStep = async (step: PipelineStep) => {
-    onEvent?.({ pixie: step.pixie, section: step.section, status: "thinking" });
+    await onEvent?.({
+      pixie: step.pixie,
+      section: step.section,
+      status: "running",
+    });
     try {
       const { system, user } = step.build(ctx);
       if (step.mode === "markdown") {
-        outputs[step.section] = await runTextCompletion(system, user);
+        outputs[step.section] = await withTransientRetry(step.section, () =>
+          runTextCompletion(system, user),
+        );
       } else {
-        outputs[step.section] = await runStructuredSection(
-          step.section,
-          system,
-          user,
+        const section = step.section;
+        outputs[section] = await withTransientRetry(section, () =>
+          runStructuredSection(section, system, user),
         );
       }
-      onEvent?.({ pixie: step.pixie, section: step.section, status: "done" });
+      await onEvent?.({
+        pixie: step.pixie,
+        section: step.section,
+        status: "done",
+      });
     } catch (error) {
-      onEvent?.({ pixie: step.pixie, section: step.section, status: "failed" });
+      await onEvent?.({
+        pixie: step.pixie,
+        section: step.section,
+        status: "failed",
+      });
       throw error;
     }
   };

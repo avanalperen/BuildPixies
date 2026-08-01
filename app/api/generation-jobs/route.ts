@@ -2,14 +2,16 @@ import { after, NextRequest } from "next/server";
 import {
   createGenerationJob,
   failGenerationJob,
+  getActiveGenerationJobForProject,
   setGenerationJobQueueMessage,
 } from "@/lib/generation-jobs";
 import {
   enqueueBlueprintGeneration,
   shouldUseDurableGenerationQueue,
 } from "@/lib/generation-queue";
+import { createInitialProgress } from "@/lib/generation-progress";
 import { runBlueprintGenerationJob } from "@/lib/generation-runner";
-import { getProject, updateProjectStatus } from "@/lib/projects";
+import { markProjectGenerationFailed, getProject } from "@/lib/projects";
 import { checkRateLimit } from "@/lib/api/rate-limit";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
@@ -38,6 +40,14 @@ export async function POST(request: NextRequest) {
       if (!project) {
         return jsonError("Project not found", 404);
       }
+
+      // One run per project: a second click must join the run in flight
+      // instead of paying for a duplicate pipeline.
+      const runningJob = await getActiveGenerationJobForProject(project.id);
+      if (runningJob) {
+        return Response.json({ job: runningJob }, { status: 202 });
+      }
+
       input ??= {
         rawIdea: project.rawIdea,
         goal: project.goal,
@@ -63,6 +73,7 @@ export async function POST(request: NextRequest) {
     const job = await createGenerationJob({
       projectId: body.projectId,
       generationInput,
+      progress: createInitialProgress(),
     });
 
     if (useDurableQueue) {
@@ -74,7 +85,7 @@ export async function POST(request: NextRequest) {
           () => undefined,
         );
         if (body.projectId) {
-          await updateProjectStatus(body.projectId, "failed").catch(
+          await markProjectGenerationFailed(body.projectId).catch(
             () => undefined,
           );
         }

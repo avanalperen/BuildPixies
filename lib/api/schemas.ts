@@ -1,26 +1,14 @@
 import { z } from "zod";
 import { blueprintSchema } from "@/lib/ai/schemas";
+import { blueprintSectionSchema } from "@/lib/schemas/blueprint-section";
 import { createProjectInputSchema } from "@/lib/schemas/project";
 
 export { createProjectInputSchema } from "@/lib/schemas/project";
+export { blueprintSectionSchema } from "@/lib/schemas/blueprint-section";
 
 export const resourceIdSchema = z.string().uuid();
 
 export const createProjectRequestSchema = createProjectInputSchema;
-
-export const blueprintSectionSchema = z.enum([
-  "orchestrationPlan",
-  "productBrief",
-  "marketAnalysis",
-  "mvpScope",
-  "uxFlow",
-  "techPlan",
-  "codeSkeleton",
-  "backlog",
-  "testPlan",
-  "sprintPlan",
-  "readme",
-]);
 
 export const generateBlueprintRequestSchema = z
   .object({
@@ -53,16 +41,16 @@ export const bootcampReportRequestSchema = z
   })
   .strict();
 
-export const exportReadmeRequestSchema = z
+const exportRequestSchema = z
   .object({
     projectId: resourceIdSchema.optional(),
-    blueprint: blueprintSchema,
+    blueprint: blueprintSchema.optional(),
   })
-  .strict();
+  .strict()
+  .refine((value) => value.projectId || value.blueprint, {
+    message: "projectId or blueprint is required",
+  });
 
-export const exportJsonRequestSchema = z
-  .object({
-    projectId: resourceIdSchema.optional(),
-    blueprint: blueprintSchema,
-  })
-  .strict();
+export const exportReadmeRequestSchema = exportRequestSchema;
+
+export const exportJsonRequestSchema = exportRequestSchema;

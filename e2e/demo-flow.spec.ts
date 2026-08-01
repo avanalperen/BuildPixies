@@ -115,6 +115,65 @@ test("keeps the main journey responsive on mobile", async ({ page, request }) =>
   expect(workspaceHasHorizontalOverflow, "workspace should not overflow horizontally").toBe(false);
 });
 
+test("reports real pipeline progress and exports from the stored project", async ({
+  request,
+}) => {
+  const createResponse = await request.post("/api/projects", {
+    data: {
+      rawIdea: "A shared reading list app for small book clubs",
+      goal: "bootcamp",
+      platform: "web",
+      targetAudience: "book clubs",
+    },
+  });
+  expect(createResponse.status()).toBe(201);
+  const { project } = (await createResponse.json()) as {
+    project: { id: string };
+  };
+
+  // Regenerating before a blueprint exists is a conflict, not a silent no-op.
+  const earlyRegenerate = await request.post("/api/regenerate-output", {
+    data: { projectId: project.id, section: "productBrief" },
+  });
+  expect(earlyRegenerate.status()).toBe(409);
+
+  const jobResponse = await request.post("/api/generation-jobs", {
+    data: { projectId: project.id },
+  });
+  expect(jobResponse.status()).toBe(202);
+  const created = (await jobResponse.json()) as {
+    job: {
+      id: string;
+      progress?: { steps: { section: string; status: string }[] };
+    };
+  };
+  expect(created.job.progress?.steps.length).toBe(11);
+  expect(
+    created.job.progress?.steps.every((step) => step.status === "pending"),
+  ).toBe(true);
+
+  let job = created.job as {
+    id: string;
+    status?: string;
+    progress?: { steps: { section: string; status: string }[] };
+  };
+  for (let attempt = 0; attempt < 30 && job.status !== "succeeded"; attempt++) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const poll = await request.get(`/api/generation-jobs/${created.job.id}`);
+    expect(poll.status()).toBe(200);
+    job = ((await poll.json()) as { job: typeof job }).job;
+  }
+  expect(job.status).toBe("succeeded");
+  expect(job.progress?.steps.every((step) => step.status === "done")).toBe(true);
+
+  // The stored blueprint is enough to export; no client payload required.
+  const readme = await request.post("/api/export-readme", {
+    data: { projectId: project.id },
+  });
+  expect(readme.status()).toBe(200);
+  await expect(readme.json()).resolves.toMatchObject({ filename: "README.md" });
+});
+
 test("rejects invalid project input", async ({ request }) => {
   const response = await request.post("/api/projects", {
     data: {

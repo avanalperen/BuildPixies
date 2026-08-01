@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { exportJson } from "@/lib/export/json";
+import { resolveExportProject } from "@/lib/export/resolve";
 import { getProject } from "@/lib/projects";
+import { checkRateLimit } from "@/lib/api/rate-limit";
 import {
   getSafeErrorMessage,
   jsonError,
@@ -10,6 +12,9 @@ import { exportJsonRequestSchema } from "@/lib/api/schemas";
 import { getErrorStatus } from "@/lib/errors";
 
 export async function POST(request: NextRequest) {
+  const limited = await checkRateLimit(request, "export:document");
+  if (limited) return limited;
+
   const parsed = await parseJsonWithSchema(
     request,
     exportJsonRequestSchema,
@@ -17,29 +22,11 @@ export async function POST(request: NextRequest) {
   );
   if (!parsed.ok) return parsed.response;
 
-  const body = parsed.data;
   try {
-    let project = body.projectId ? await getProject(body.projectId) : null;
-    if (body.projectId && !project) {
-      return jsonError("Project not found", 404);
-    }
-    if (!project) {
-      project = {
-        id: "export",
-        title: "Untitled idea",
-        rawIdea: "",
-        goal: "bootcamp",
-        platform: "web",
-        targetAudience: "",
-        constraints: {},
-        blueprint: body.blueprint,
-        status: "ready",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-    }
-    const blueprint = project.blueprint ?? body.blueprint;
-    const json = exportJson(project, blueprint);
+    const resolved = await resolveExportProject(parsed.data, getProject);
+    if (!resolved.ok) return resolved.response;
+
+    const json = exportJson(resolved.project, resolved.blueprint);
     return Response.json({ json, filename: "blueprint.json" });
   } catch (error) {
     return jsonError(getSafeErrorMessage(error), getErrorStatus(error));

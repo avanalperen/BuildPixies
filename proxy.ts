@@ -47,8 +47,9 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
+// Only the signed-in surface needs a session. Marketing pages and assets stay
+// off this path so a visit does not create an anonymous user or an extra
+// round trip to Supabase.
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
-  ],
+  matcher: ["/dashboard/:path*", "/projects/:path*", "/api/:path*"],
 };

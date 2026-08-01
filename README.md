@@ -86,6 +86,11 @@ formatlarda hazırlanır.
 - Supabase veya local JSON fallback ile proje/blueprint saklama
 - Supabase Auth anonymous owner mode + `owner_id` bazlı RLS temeli
 - Uzun AI üretimi için `generation_jobs` durum modeli ve UI polling
+- Gerçek pipeline ilerlemesi: her bölüm için pixie bazlı `pending/running/
+  done/failed` durumu job kaydına yazılır ve workspace'te gösterilir
+- Sayfa yenilense de devam eden üretim kaldığı yerden izlenir; aynı proje için
+  ikinci bir üretim başlatılmaz
+- Geçici sağlayıcı hatalarında (timeout, 429, 5xx) bölüm bazlı tekrar deneme
 - Vercel Queues ile kalıcı üretim kuyruğu, lease tabanlı tekrar deneme ve
   idempotent job tamamlama
 - Supabase üzerinde owner bazlı atomik API rate limit
@@ -300,12 +305,13 @@ Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görünt�
 | Project create/list/detail | `app/api/projects/*`, `lib/projects.ts` | Done |
 | Blueprint pipeline | `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` | Done |
 | Durable job + polling | `app/api/generation-jobs/*`, `app/api/queues/*`, `lib/generation-worker.ts`, `components/project/workspace.tsx` | Done |
+| Gerçek generation progress | `lib/generation-progress.ts`, `lib/pixie-progress.ts`, `components/project/generation-progress.tsx`, `supabase/migrations/202608010001_generation_progress.sql` | Done |
 | Supabase owner/RLS | `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
 | Distributed rate limit | `lib/api/rate-limit.ts`, `supabase/migrations/202607160001_durable_jobs_and_rate_limits.sql` | Done |
 | Bootcamp Mode | `app/api/bootcamp-report/route.ts`, `components/project/bootcamp-mode.tsx`, `lib/ai/bootcamp.ts` | Done |
 | README export | `app/api/export-readme/route.ts`, `lib/export/markdown.ts` | Done |
 | Output controls | `app/api/export-json/route.ts`, `app/api/regenerate-output/route.ts`, `components/outputs/output-hub.tsx` | Done |
-| Demo E2E + CI | `e2e/demo-flow.spec.ts`, `playwright.config.ts`, `.github/workflows/quality.yml`; 6/6 senaryo | Done |
+| Demo E2E + CI | `e2e/demo-flow.spec.ts`, `playwright.config.ts`, `.github/workflows/quality.yml`; 7/7 senaryo | Done |
 | Audit | `package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
 
 ## Sprint Review
@@ -540,7 +546,6 @@ workflow steps/SSE streaming · account linking · Vercel deploy hardening.
       generation-jobs/
       queues/
       bootcamp-report/
-      generate-blueprint/
       regenerate-output/
       export-json/
       export-readme/
@@ -644,6 +649,9 @@ Supabase ile kalıcı storage kullanacaksanız migration'ları uygulayın:
 ```bash
 supabase db push
 ```
+
+> Deploy öncesi `202608010001_generation_progress.sql` uygulanmış olmalıdır;
+> `generation_jobs.progress` kolonu olmadan generation job kaydı oluşturulamaz.
 
 Gerekli ortam değişkenleri:
 

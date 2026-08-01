@@ -8,12 +8,13 @@ type BucketState = {
   resetAt: number;
 };
 
+// Keep in sync with public.consume_rate_limit in supabase/migrations.
 const policies = {
   "ai:generation-jobs": { limit: 5, windowMs: 60_000 },
-  "ai:generate": { limit: 5, windowMs: 60_000 },
   "ai:regenerate": { limit: 10, windowMs: 60_000 },
   "ai:bootcamp": { limit: 5, windowMs: 60_000 },
   "projects:create": { limit: 30, windowMs: 60_000 },
+  "export:document": { limit: 30, windowMs: 60_000 },
 } as const;
 
 export type RateLimitBucket = keyof typeof policies;

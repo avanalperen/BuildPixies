@@ -922,14 +922,17 @@ Browser
 | `GET /api/projects` | Proje listesi | Owner-aware storage |
 | `POST /api/projects` | Proje oluştur | Zod + rate limit |
 | `GET /api/projects/:id` | Proje detayı | Owner/RLS |
-| `POST /api/generation-jobs` | Async blueprint başlat | 300s, rate limit, durable/local runner |
-| `GET /api/generation-jobs/:id` | Job poll | Owner-aware |
+| `POST /api/generation-jobs` | Async blueprint başlat | 300s, rate limit, durable/local runner; aktif job varsa onu döner |
+| `GET /api/generation-jobs/:id` | Job poll (gerçek section progress dahil) | Owner-aware |
 | `POST /api/queues/generate-blueprint` | Queue callback | Node runtime, retry/lease |
-| `POST /api/generate-blueprint` | Senkron/uyumluluk üretimi | 300s; ana UI job endpoint kullanır |
-| `POST /api/regenerate-output` | Tek section regenerate | 120s, strict validation |
+| `POST /api/regenerate-output` | Tek section regenerate | 120s, strict validation, blueprint yoksa 409 |
 | `POST /api/bootcamp-report` | Source-grounded delivery report | 120s, ayrı rate limit |
-| `POST /api/export-readme` | Markdown export | Request validation |
-| `POST /api/export-json` | JSON export | Request validation |
+| `POST /api/export-readme` | Markdown export | Rate limit; kayıtlı blueprint kullanılır |
+| `POST /api/export-json` | JSON export | Rate limit; kayıtlı blueprint kullanılır |
+
+> `POST /api/generate-blueprint` (senkron uyumluluk endpoint'i) 1 Ağustos 2026'da
+> kaldırıldı: UI kullanmıyordu ve çalışan durable job'ın proje durumunu
+> ezebiliyordu. Tek üretim yolu `POST /api/generation-jobs`.
 
 ### 14.5 Mimari kalite hedefleri
 

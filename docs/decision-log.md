@@ -300,3 +300,47 @@ belirtmek için yeni değerler (`partial_error` vb.) eklenecektir.
 - İstemci, projeyi açtığında eksik kalan kısımları algılayarak "kaldığı
   yerden devam et" veya "hatalı bölümü yeniden üret" yeteneği kazanır.
 - UX tarafında kesinti anında oluşan "veri kaybı" korkusu tamamen giderilir.
+
+---
+
+## ADR-011 — Gerçek generation progress ve tek üretim yolu
+
+**Tarih:** 1 Ağustos 2026
+**Durum:** Kabul edildi (ADR-009'un uygulanmış hâli)
+
+### Bağlam
+
+Workspace üretim sırasında sahte ilerleme gösteriyordu: `OrchestratorEvent`
+altyapısı vardı ama hiçbir çağıran `onEvent` geçmiyordu, bu yüzden tüm
+pixie'ler önce "waiting", sonra topluca "done" oluyordu. Sayfa yenilendiğinde
+devam eden üretim görünmez oluyor ve kullanıcı ikinci bir job başlatabiliyordu.
+Ayrıca UI'ın kullanmadığı `POST /api/generate-blueprint` senkron endpoint'i
+kendi durum yazma mantığıyla çalışan job'ın proje durumunu ezebiliyordu.
+
+### Karar
+
+- Pipeline adımları `generation_jobs.progress` alanına yazılır; her adım
+  `pending/running/done/failed` olarak pixie ismiyle birlikte saklanır.
+- Local runner user client üzerinden, durable worker ise lease korumalı
+  `set_generation_job_progress` RPC'si üzerinden yazar.
+- Workspace bu veriden beslenir; refresh sonrası aktif job sunucudan gelir ve
+  aynı proje için ikinci job açılmaz (10 dakika hareketsiz job stale sayılır).
+- `POST /api/generate-blueprint` kaldırıldı; tek üretim yolu `generation-jobs`.
+- Geçici sağlayıcı hataları (timeout/429/5xx) bölüm bazında bir kez daha
+  denenir; şema hataları mevcut structured output retry'ı ile ele alınmaya
+  devam eder.
+
+### Sonuçlar
+
+- Kullanıcı 1–4 dakikalık üretimde hangi pixie'nin hangi bölümde çalıştığını
+  ve kaç bölümün bittiğini gerçek veriyle görür.
+- Başarısız üretim, projenin mevcut blueprint'ini "failed" göstererek gizlemez.
+- Bir bölüm kalıcı olarak başarısız olursa tüm run hâlâ atılır; kısmi bölüm
+  sonuçlarının kullanıcıya açılması Sprint 3 kapsamında kalır.
+- `202608010001_generation_progress.sql` migration'ı **deploy öncesi zorunludur**:
+  `generation_jobs.progress` kolonu olmadan Supabase yolunda job kaydı
+  oluşturulamaz.
+- ADR-009'daki event sözleşmesi, job satırında tutulan adım listesi olarak
+  uygulandı: ayrı event kaydı yerine `progress.steps[]` (`section`, `pixie`,
+  `status`) saklanır; polling idempotent kalır çünkü client her seferinde tam
+  durumu okur. ADR-010'daki partial persistence hâlâ açıktır.

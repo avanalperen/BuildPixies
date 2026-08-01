@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Copy,
   Download,
@@ -13,46 +13,129 @@ import {
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { OutputHub } from "@/components/outputs/output-hub";
 import { BootcampMode } from "@/components/project/bootcamp-mode";
+import { GenerationProgressPanel } from "@/components/project/generation-progress";
 import { requestJson } from "@/lib/api/client";
 import { blueprintSchema } from "@/lib/ai/schemas";
 import { exportMarkdown } from "@/lib/export/markdown";
 import { generationJobResponseSchema } from "@/lib/schemas/generation-job";
+import {
+  countCompletedSteps,
+  describeActiveSteps,
+  pixieStatusesFromSteps,
+} from "@/lib/pixie-progress";
 import type { Project } from "@/types/project";
-import type { GenerationJob } from "@/types/generation-job";
+import type { GenerationJob, GenerationStep } from "@/types/generation-job";
 import type { Blueprint, BlueprintSection } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
 import { PIXIES } from "@/types/pixie";
 
-const pollDelayMs = 1500;
-const maxPollAttempts = 240;
+const firstPollDelayMs = 1_200;
+const maxPollDelayMs = 5_000;
+const maxPollMs = 6 * 60_000;
 
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function Workspace({ project }: { project: Project }) {
+const allDone: Record<string, PixieStatus> = Object.fromEntries(
+  PIXIES.map((pixie) => [pixie.name, "done" as PixieStatus]),
+);
+
+export function Workspace({
+  project,
+  activeJob = null,
+}: {
+  project: Project;
+  activeJob?: GenerationJob | null;
+}) {
   const [blueprint, setBlueprint] = useState<Blueprint | null>(
     project.blueprint ?? null,
   );
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(activeJob));
   const [error, setError] = useState<string | null>(null);
   const [regeneratingSection, setRegeneratingSection] =
     useState<BlueprintSection | null>(null);
-  const [statuses, setStatuses] = useState<Record<string, PixieStatus>>(() => {
-    if (!project.blueprint) return {};
-    const done: Record<string, PixieStatus> = {};
-    PIXIES.forEach((p) => (done[p.name] = "done"));
-    return done;
-  });
+  const [steps, setSteps] = useState<GenerationStep[]>(
+    activeJob?.progress?.steps ?? [],
+  );
+  const runIdRef = useRef(0);
+
+  const statuses = useMemo<Record<string, PixieStatus>>(() => {
+    if (steps.length > 0) return pixieStatusesFromSteps(steps);
+    if (loading) return {};
+    return blueprint ? allDone : {};
+  }, [steps, loading, blueprint]);
+
+  const pollGenerationJob = useCallback(
+    async (jobId: string, runId: number): Promise<GenerationJob> => {
+      const deadline = Date.now() + maxPollMs;
+      let delay = firstPollDelayMs;
+
+      while (Date.now() < deadline) {
+        await wait(delay);
+        delay = Math.min(Math.round(delay * 1.35), maxPollDelayMs);
+        if (runIdRef.current !== runId) {
+          throw new Error("Generation tracking was cancelled");
+        }
+
+        const data = await requestJson<unknown>(
+          `/api/generation-jobs/${jobId}`,
+          undefined,
+          "Generation status could not be loaded",
+        );
+        const { job } = generationJobResponseSchema.parse(data);
+        if (job.progress) setSteps(job.progress.steps);
+        if (job.status === "succeeded" || job.status === "failed") return job;
+      }
+
+      throw new Error("Generation is still running. Try again in a moment.");
+    },
+    [],
+  );
+
+  const trackGenerationJob = useCallback(
+    async (jobId: string, runId: number) => {
+      try {
+        const finishedJob = await pollGenerationJob(jobId, runId);
+        if (runIdRef.current !== runId) return;
+
+        if (finishedJob.status === "failed") {
+          throw new Error(finishedJob.error || "Generation failed");
+        }
+        if (!finishedJob.blueprint) {
+          throw new Error("Generation finished without a blueprint");
+        }
+        setBlueprint(finishedJob.blueprint);
+      } catch (err) {
+        if (runIdRef.current !== runId) return;
+        setError(err instanceof Error ? err.message : "Generation failed");
+      } finally {
+        if (runIdRef.current === runId) setLoading(false);
+      }
+    },
+    [pollGenerationJob],
+  );
+
+  // A run started before this page load keeps reporting into this view.
+  // `loading` already starts true for it, so the effect only subscribes.
+  const activeJobId = activeJob?.id;
+  useEffect(() => {
+    if (!activeJobId) return;
+    const runId = runIdRef.current + 1;
+    runIdRef.current = runId;
+    void trackGenerationJob(activeJobId, runId);
+    return () => {
+      if (runIdRef.current === runId) runIdRef.current += 1;
+    };
+  }, [activeJobId, trackGenerationJob]);
 
   async function handleGenerate() {
+    if (loading || regeneratingSection) return;
+    const runId = runIdRef.current + 1;
+    runIdRef.current = runId;
     setLoading(true);
     setError(null);
-    setBlueprint(null);
-    const next: Record<string, PixieStatus> = {};
-    PIXIES.forEach((p) => (next[p.name] = "waiting"));
-    next.Pip = "thinking";
-    setStatuses(next);
+    setSteps([]);
 
     try {
       const data = await requestJson<unknown>(
@@ -60,60 +143,18 @@ export function Workspace({ project }: { project: Project }) {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            projectId: project.id,
-            input: {
-              rawIdea: project.rawIdea,
-              goal: project.goal,
-              platform: project.platform,
-              targetAudience: project.targetAudience,
-              constraints: project.constraints,
-              outputDepth: project.outputDepth,
-            },
-          }),
+          body: JSON.stringify({ projectId: project.id }),
         },
         "Generation failed",
       );
       const { job } = generationJobResponseSchema.parse(data);
-
-      const finishedJob = await pollGenerationJob(job.id);
-      if (finishedJob.status === "failed") {
-        throw new Error(finishedJob.error || "Generation failed");
-      }
-      if (!finishedJob.blueprint) {
-        throw new Error("Generation finished without a blueprint");
-      }
-
-      setBlueprint(finishedJob.blueprint);
-      const done: Record<string, PixieStatus> = {};
-      PIXIES.forEach((p) => (done[p.name] = "done"));
-      setStatuses(done);
+      if (job.progress) setSteps(job.progress.steps);
+      await trackGenerationJob(job.id, runId);
     } catch (err) {
+      if (runIdRef.current !== runId) return;
       setError(err instanceof Error ? err.message : "Generation failed");
-      const failed: Record<string, PixieStatus> = {};
-      PIXIES.forEach((p) => (failed[p.name] = "waiting"));
-      failed.Pip = "failed";
-      setStatuses(failed);
-    } finally {
       setLoading(false);
     }
-  }
-
-  async function pollGenerationJob(jobId: string): Promise<GenerationJob> {
-    for (let attempt = 0; attempt < maxPollAttempts; attempt += 1) {
-      await wait(pollDelayMs);
-      const data = await requestJson<unknown>(
-        `/api/generation-jobs/${jobId}`,
-        undefined,
-        "Generation status could not be loaded",
-      );
-      const { job } = generationJobResponseSchema.parse(data);
-      if (job.status === "succeeded" || job.status === "failed") {
-        return job;
-      }
-    }
-
-    throw new Error("Generation is still running. Try again in a moment.");
   }
 
   async function handleExport() {
@@ -128,7 +169,7 @@ export function Workspace({ project }: { project: Project }) {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ projectId: project.id, blueprint }),
+          body: JSON.stringify({ projectId: project.id }),
         },
         "Export failed",
       );
@@ -157,7 +198,7 @@ export function Workspace({ project }: { project: Project }) {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ projectId: project.id, blueprint }),
+          body: JSON.stringify({ projectId: project.id }),
         },
         "Export failed",
       );
@@ -232,16 +273,22 @@ export function Workspace({ project }: { project: Project }) {
     }
   }
 
+  const activeStepLabel = describeActiveSteps(steps);
+  const completedSteps = countCompletedSteps(steps);
+  const statusMessage = loading
+    ? activeStepLabel
+      ? `${completedSteps} of ${steps.length} sections ready. Working on ${activeStepLabel}.`
+      : "The generation job is queued."
+    : error
+      ? error
+      : blueprint
+        ? "The blueprint is ready."
+        : "The blueprint has not been generated yet.";
+
   return (
     <div className={`flex min-w-0 flex-col gap-8${blueprint ? " pb-24 lg:pb-0" : ""}`} aria-busy={loading}>
       <p className="sr-only" role="status" aria-live="polite">
-        {loading
-          ? "The blueprint is being generated."
-          : error
-            ? error
-            : blueprint
-              ? "The blueprint is ready."
-              : "The blueprint has not been generated yet."}
+        {statusMessage}
       </p>
       <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(240px,0.8fr)_minmax(290px,0.95fr)_minmax(390px,1.35fr)]">
         <section className="app-card flex min-h-[620px] min-w-0 flex-col overflow-hidden">
@@ -273,7 +320,13 @@ export function Workspace({ project }: { project: Project }) {
             </h2>
             <span className="inline-flex items-center gap-1 rounded-full bg-surface-high px-3 py-1 text-xs font-medium text-primary">
               <Sparkles className="size-3.5" />
-              {loading ? "Processing" : blueprint ? "Ready" : "Waiting"}
+              {loading
+                ? steps.length > 0
+                  ? `${completedSteps}/${steps.length} sections`
+                  : "Queued"
+                : blueprint
+                  ? "Ready"
+                  : "Waiting"}
             </span>
           </header>
           <div className="custom-scrollbar max-h-[680px] overflow-y-auto pr-1 pb-2">
@@ -293,7 +346,21 @@ export function Workspace({ project }: { project: Project }) {
             </span>
           </header>
           <div className="relative z-10 min-w-0 p-4 md:p-6">
-            {blueprint ? (
+            {loading ? (
+              <div className="flex min-h-[480px] flex-col gap-5">
+                <p className="text-sm text-muted-foreground">
+                  {activeStepLabel
+                    ? `Working on ${activeStepLabel}.`
+                    : "The generation job is queued. You can leave this page — progress is saved with the job."}
+                </p>
+                {steps.length > 0 && <GenerationProgressPanel steps={steps} />}
+                {blueprint && (
+                  <p className="text-xs text-muted-foreground">
+                    Your previous blueprint stays saved until the new one is ready.
+                  </p>
+                )}
+              </div>
+            ) : blueprint ? (
               <OutputHub
                 project={project}
                 blueprint={blueprint}
@@ -318,8 +385,9 @@ export function Workspace({ project }: { project: Project }) {
 
       <BootcampMode project={project} />
 
-      {blueprint && (
+      {blueprint && !loading && (
         <nav className="glass-panel fixed bottom-24 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center justify-center gap-2 overflow-x-auto rounded-full px-4 py-2.5 shadow-xl sm:gap-4 sm:px-6 sm:py-3 md:w-auto md:max-w-none lg:bottom-4 lg:ml-[140px]" aria-label="Blueprint actions">
+
           <button type="button" onClick={handleExport} className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-all hover:bg-surface-container hover:text-primary">
             <Download className="size-4" />Download Blueprint
           </button>

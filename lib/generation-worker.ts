@@ -1,10 +1,12 @@
 import "server-only";
 
 import type { Blueprint } from "@/types/output";
+import type { GenerationProgress } from "@/types/generation-job";
 import type { CreateProjectInput } from "@/types/project";
 import { generateBlueprint } from "@/lib/ai/orchestrator";
 import { getSafeErrorMessage } from "@/lib/api/http";
 import { createProjectInputSchema } from "@/lib/api/schemas";
+import { createGenerationProgressTracker } from "@/lib/generation-progress";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const LEASE_SECONDS = 600;
@@ -111,6 +113,19 @@ async function completeGenerationJob(
   if (!data) throw new GenerationLeaseBusyError();
 }
 
+async function setGenerationJobProgress(
+  job: ClaimedGenerationJob,
+  progress: GenerationProgress,
+): Promise<void> {
+  const supabase = createAdminClient();
+  const { error } = await supabase.rpc("set_generation_job_progress", {
+    p_job_id: job.id,
+    p_lease_token: job.leaseToken,
+    p_progress: progress,
+  });
+  if (error) throw error;
+}
+
 async function releaseGenerationJob(
   job: ClaimedGenerationJob,
   errorMessage: string,
@@ -144,11 +159,16 @@ export async function runDurableGenerationJob(jobId: string): Promise<void> {
   }
 
   const { job } = claim;
+  const tracker = createGenerationProgressTracker((progress) =>
+    setGenerationJobProgress(job, progress),
+  );
   try {
-    const blueprint = await generateBlueprint(job.input);
+    const blueprint = await generateBlueprint(job.input, tracker.onEvent);
+    await tracker.flush();
     await completeGenerationJob(job, blueprint);
   } catch (error) {
     if (error instanceof GenerationLeaseBusyError) throw error;
+    await tracker.flush().catch(() => undefined);
     const message = getSafeErrorMessage(error);
     console.error("Blueprint generation attempt failed", {
       jobId: job.id,

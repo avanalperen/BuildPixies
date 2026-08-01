@@ -52,11 +52,20 @@ async function persistMemoryToDisk(): Promise<void> {
   }
 }
 
+/** Derives a readable title without cutting the last word in half. */
+function titleFromIdea(rawIdea: string): string {
+  const idea = rawIdea.trim();
+  if (idea.length <= 60) return idea;
+  const clipped = idea.slice(0, 60);
+  const lastSpace = clipped.lastIndexOf(" ");
+  return `${(lastSpace > 20 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…`;
+}
+
 function toProject(input: CreateProjectInput): Project {
   const now = new Date().toISOString();
   return {
     id: crypto.randomUUID(),
-    title: input.title?.trim() || input.rawIdea.slice(0, 60) || "Untitled idea",
+    title: input.title?.trim() || titleFromIdea(input.rawIdea) || "Untitled idea",
     rawIdea: input.rawIdea,
     goal: input.goal,
     platform: input.platform,
@@ -160,6 +169,16 @@ export async function updateProjectStatus(
     memory.set(id, { ...existing, status, updatedAt });
     await persistMemoryToDisk();
   }
+}
+
+/**
+ * A failed run must not hide a blueprint the project already owns; those
+ * projects stay `ready` so the dashboard keeps telling the truth.
+ */
+export async function markProjectGenerationFailed(id: string): Promise<void> {
+  const project = await getProject(id);
+  if (!project) return;
+  await updateProjectStatus(id, project.blueprint ? "ready" : "failed");
 }
 
 export async function saveProjectBlueprint(

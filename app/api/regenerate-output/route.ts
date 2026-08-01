@@ -31,6 +31,13 @@ export async function POST(request: NextRequest) {
         return jsonError("Project not found", 404);
       }
 
+      if (!project.blueprint) {
+        return jsonError(
+          "Generate the blueprint before regenerating a section",
+          409,
+        );
+      }
+
       input = {
         rawIdea: project.rawIdea,
         goal: project.goal,
