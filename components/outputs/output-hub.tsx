@@ -8,6 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { exportMarkdown } from "@/lib/export/markdown";
 import { sectionLabels } from "@/lib/pixie-progress";
+import {
+  groupDescriptions,
+  outputGroupParam,
+  parseOutputGroup,
+  type OutputGroup,
+} from "@/lib/output-groups";
 import type { Blueprint, BlueprintSection } from "@/types/output";
 import type { Project } from "@/types/project";
 
@@ -33,30 +39,6 @@ function List({ items }: { items: string[] }) {
     </ul>
   );
 }
-
-/** Names the active group so the panel header matches what is on screen. */
-const groupDescriptions = {
-  overview: {
-    title: "Overview — the MVP decision",
-    hint: "Scope, risks, first sprint and the next three actions on one screen.",
-  },
-  product: {
-    title: "Product — what and for whom",
-    hint: "Product brief, MVP scope, market angle, backlog and the build plan.",
-  },
-  experience: {
-    title: "Experience — the user journey",
-    hint: "Screens, primary actions and the flow between them.",
-  },
-  build: {
-    title: "Build — how it gets made",
-    hint: "Tech plan, code skeleton and the test plan.",
-  },
-  delivery: {
-    title: "Delivery — what you hand in",
-    hint: "Sprint plan and the README export.",
-  },
-} as const;
 
 /**
  * One blueprint section inside a group: its own heading and regenerate action,
@@ -158,9 +140,11 @@ export function OutputHub({
   onCopyMarkdown,
   onRegenerate,
   regeneratingSection,
+  initialGroup = "overview",
 }: {
   project: Project;
   blueprint: Blueprint;
+  initialGroup?: OutputGroup;
   onExport?: () => void;
   onExportJson?: () => void;
   onCopyMarkdown?: (markdown: string) => void;
@@ -170,16 +154,20 @@ export function OutputHub({
   const b = blueprint;
   const readmeMarkdown = exportMarkdown(project, blueprint);
   const sectionProps = { regeneratingSection, onRegenerate };
-  const [group, setGroup] = useState<keyof typeof groupDescriptions>("overview");
+  const [group, setGroup] = useState<OutputGroup>(initialGroup);
+
+  function selectGroup(value: string) {
+    const next = parseOutputGroup(value);
+    setGroup(next);
+    // Keep the URL shareable without triggering a navigation or re-render.
+    const url = new URL(window.location.href);
+    if (next === "overview") url.searchParams.delete(outputGroupParam);
+    else url.searchParams.set(outputGroupParam, next);
+    window.history.replaceState(null, "", url);
+  }
 
   return (
-    <Tabs
-      value={group}
-      onValueChange={(value) =>
-        setGroup(value as keyof typeof groupDescriptions)
-      }
-      className="w-full"
-    >
+    <Tabs value={group} onValueChange={selectGroup} className="w-full">
       <TabsList className="w-full justify-start overflow-x-auto">
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="product">Product</TabsTrigger>

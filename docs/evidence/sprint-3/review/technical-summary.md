@@ -12,7 +12,7 @@
 | BP-031 | Doğrulanan bölümler anında kaydediliyor | E2E assertion + migration `202608010002` |
 | BP-025R / BP-032 | Refresh/reconnect üretimi kaybetmiyor; tamamlanan bölüm run bitmeden açılıyor | Mid-job refresh E2E + görüntü 09 |
 | BP-033 | MVP Command Center, Overview varsayılan | E2E + görüntü 04 |
-| BP-034 | On bir bölüm beş grupta | Görüntü 05 |
+| BP-034 | On bir bölüm beş grupta, aktif grubu adlandıran header, deep-link (`?view=`) | Görüntü 05 + E2E |
 | BP-035 | Talimatla kontrollü bölüm düzeltme | E2E (200 + 400 sınır testi) |
 | BP-036 | Delivery Pack ayrı route | E2E + görüntü 06 |
 | BP-038 | Log yüzeyi secret-safe, bağımlılık açıkları kapalı | `security-audit.md` |

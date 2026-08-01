@@ -15,6 +15,7 @@ import Link from "next/link";
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { Button } from "@/components/ui/button";
 import { OutputHub } from "@/components/outputs/output-hub";
+import type { OutputGroup } from "@/lib/output-groups";
 import { GenerationProgressPanel } from "@/components/project/generation-progress";
 import { requestJson } from "@/lib/api/client";
 import { blueprintSchema } from "@/lib/ai/schemas";
@@ -56,9 +57,11 @@ const allDone: Record<string, PixieStatus> = Object.fromEntries(
 export function Workspace({
   project,
   latestJob = null,
+  initialGroup = "overview",
 }: {
   project: Project;
   latestJob?: GenerationJob | null;
+  initialGroup?: OutputGroup;
 }) {
   const resumableJob = isJobActive(latestJob) ? latestJob : null;
   const [blueprint, setBlueprint] = useState<Blueprint | null>(
@@ -418,6 +421,7 @@ export function Workspace({
                 onCopyMarkdown={handleCopyMarkdown}
                 onRegenerate={handleRegenerate}
                 regeneratingSection={regeneratingSection}
+                initialGroup={initialGroup}
               />
             ) : completedSections > 0 ? (
               // The run stopped early, but the sections it finished are real.

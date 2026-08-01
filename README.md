@@ -99,6 +99,8 @@ formatlarda hazırlanır.
 - Controlled refine: bir bölümü "kapsamı iki haftaya daralt" gibi kısa bir
   talimatla hedefli yeniden üretme (300 karakter sınırı, aynı strict şema)
 - Bootcamp Delivery Pack ayrı route: export'lar ve Scrum belgeleri tek yerde
+- Çıktı grupları deep-link edilebilir (`?view=build`); demo doğrudan bir gruba
+  link verebilir
 - Vercel Queues ile kalıcı üretim kuyruğu, lease tabanlı tekrar deneme ve
   idempotent job tamamlama
 - Supabase üzerinde owner bazlı atomik API rate limit

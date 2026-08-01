@@ -6,6 +6,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { Workspace } from "@/components/project/workspace";
 import { getLatestGenerationJobForProject } from "@/lib/generation-jobs";
 import { getProject } from "@/lib/projects";
+import { parseOutputGroup, outputGroupParam } from "@/lib/output-groups";
 import { resourceIdSchema } from "@/lib/api/schemas";
 
 export const dynamic = "force-dynamic";
@@ -16,10 +17,13 @@ export const metadata: Metadata = {
 
 export default async function ProjectDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { id } = await params;
+  const initialGroup = parseOutputGroup((await searchParams)[outputGroupParam]);
   if (!resourceIdSchema.safeParse(id).success) notFound();
   const project = await getProject(id);
   if (!project) notFound();
@@ -38,7 +42,11 @@ export default async function ProjectDetailPage({
           <ChevronRight className="size-4" />
           <span className="max-w-[60vw] truncate text-foreground">{project.title}</span>
         </nav>
-        <Workspace project={project} latestJob={latestJob} />
+        <Workspace
+          project={project}
+          latestJob={latestJob}
+          initialGroup={initialGroup}
+        />
       </div>
     </AppShell>
   );

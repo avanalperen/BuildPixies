@@ -363,6 +363,12 @@ test("opens the curated sample blueprint from the landing page", async ({
     page.getByRole("heading", { name: "Backlog", exact: true }),
   ).toBeVisible();
 
+  // Selecting a group deep-links it, and the link opens on that group.
+  await page.getByRole("tab", { name: "Build" }).click();
+  await expect(page).toHaveURL(/\?view=build$/);
+  await page.goto("/sample?view=experience");
+  await expect(page.getByText("Experience — the user journey")).toBeVisible();
+
   const download = page.waitForEvent("download");
   await page.getByRole("tab", { name: "Delivery" }).click();
   await page.getByRole("button", { name: "Download README.md" }).click();

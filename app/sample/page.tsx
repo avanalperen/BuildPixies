@@ -3,13 +3,19 @@ import Link from "next/link";
 import { ChevronRight, ExternalLink } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Workspace } from "@/components/project/workspace";
+import { parseOutputGroup, outputGroupParam } from "@/lib/output-groups";
 import { sampleProject } from "@/lib/sample-data";
 
 export const metadata: Metadata = {
   title: "Sample Blueprint Workspace",
 };
 
-export default function SampleProjectPage() {
+export default async function SampleProjectPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const initialGroup = parseOutputGroup((await searchParams)[outputGroupParam]);
   return (
     <AppShell active="projects">
       <div className="mx-auto w-full max-w-[1640px] px-4 py-6 md:px-10 md:py-10">
@@ -23,7 +29,7 @@ export default function SampleProjectPage() {
             Create your own <ExternalLink className="size-3" />
           </Link>
         </nav>
-        <Workspace project={sampleProject} />
+        <Workspace project={sampleProject} initialGroup={initialGroup} />
       </div>
     </AppShell>
   );
