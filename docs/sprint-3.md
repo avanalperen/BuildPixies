@@ -212,7 +212,9 @@ Aşağıdaki durumlar `main` üzerindeki koddan doğrulanmıştır; kalite kapı
 | BP-038 | Done | Log yüzeyi denetimi, bundle secret taraması, `npm audit --omit=dev` 0 |
 | BP-041 | Dropped | Canlı public yüzey yok; mevcut owner bazlı rate limit korunuyor |
 | BP-047 | Blocked | `docs/evidence/user-testing/protocol.md` koşuma hazır; katılımcı gerekiyor |
-| BP-044/BP-045 | Planned | RC1 sonrası; video ve form takım işi |
+| BP-044 | Blocked | Anlatım metni hazır (`evidence/sprint-3/video-script.md`); kayıt ve YouTube upload takım işi |
+| BP-045 | Blocked | Checklist hazır (`evidence/sprint-3/release-checklist.md`); form gönderimi takım işi |
+| BP-043-S3 | Partial | Altı zorunlu kanıttan Backlog mantığı ve Ürün Durumu hazır; Daily/Board/Review/Retro takım verisi bekliyor |
 
 **Bilinen açık sınırlama:** bir bölüm kalıcı olarak başarısız olduğunda tüm
 pipeline yeniden çalıştırılır; kısmi bölümler saklandığı için kullanıcı değer

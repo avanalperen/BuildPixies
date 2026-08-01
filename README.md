@@ -159,9 +159,9 @@ formatlarda hazırlanır.
 | BP-022 | Kullanıcı olarak projelerimin başkasına görünmemesini istiyorum | P0 | Done |
 | BP-023 | Kullanıcı olarak uzun AI üretimini sayfa donmadan takip etmek istiyorum | P0 | Done |
 | BP-024 | Geliştirici olarak bilinen moderate audit uyarılarını kapatmak istiyorum | P0 | Done |
-| BP-025 | Geliştirici olarak durable queue/SSE streaming istiyorum | P1 | Partial — queue done, SSE pending |
-| BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | Sprint 3 |
-| BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | Sprint 3 |
+| BP-025 | Geliştirici olarak durable queue/SSE streaming istiyorum | P1 | Partial — queue done; SSE yerine job polling + progress |
+| BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | Dropped — Bootcamp sonrası roadmap |
+| BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | Dropped — canlı public yüzey yok (ADR-012); owner bazlı rate limit korunuyor |
 | BP-028 | Geliştirici olarak kritik demo akışını her değişiklikte doğrulamak istiyorum | P1 | Done |
 | BP-029 | Sahte sosyal kanıt ve ölü CTA'lar kaldırılır | P0 | Done |
 | BP-030 | Curated sample schema-safe ve AI beklemeden versiyonlu olur | P0 | Done |
@@ -172,9 +172,17 @@ formatlarda hazırlanır.
 | BP-002R | Gerçek sample blueprint görülebilir (Revize) | P0 | Done |
 | BP-008R-S2 | Pixie event sözleşmesi tasarlanır | P0 | Done |
 | BP-031-S2 | Partial persistence dikey dilimi tasarlanır | P0 | Done |
-| BP-008-S3 | Pixie Event altyapısının kodlanması ve arayüze entegrasyonu | P0 | Sprint 3 |
-| BP-031-S3 | Partial Persistence altyapısının yazılması | P0 | Sprint 3 |
-| BP-050 | Production Deploy ve Canlı Test (Supabase RLS) | P0 | Sprint 3 |
+| BP-008-S3 | Pixie Event altyapısının kodlanması ve arayüze entegrasyonu | P0 | Done |
+| BP-031-S3 | Partial Persistence altyapısının yazılması | P0 | Done |
+| BP-050 | Production Deploy ve Canlı Test (Supabase RLS) | P0 | Dropped — ADR-012; yerine doğrulanmış deploy-ready paket (BP-039R) |
+| BP-033 | Kullanıcı olarak MVP kararını tek ekranda görmek istiyorum | P0 | Done |
+| BP-034 | Kullanıcı olarak çıktıları anlamlı gruplarda gezmek istiyorum | P0 | Done |
+| BP-035 | Kullanıcı olarak bir bölümü kısa bir talimatla düzelttirmek istiyorum | P1 | Done |
+| BP-036 | Kullanıcı olarak teslim paketine ayrı bir ekrandan ulaşmak istiyorum | P1 | Done |
+| BP-038 | Geliştirici olarak üretim loglarının secret-safe olduğunu kanıtlamak istiyorum | P1 | Done |
+| BP-039R | Jüri olarak ürünün deploy-ready olduğunu doğrulamak istiyorum | P0 | Done |
+| BP-047 | Ürün sahibi olarak üç hedef kullanıcıyla test yapmak istiyorum | P1 | Blocked — protokol hazır, katılımcı bekleniyor |
+| BP-048 | Jüri olarak AI mimarisini ve üretim izini görmek istiyorum | P0 | Done |
 
 ---
 
@@ -521,12 +529,106 @@ Sprint 2 review sonucunda aşağıdaki kararlar alındı:
 
 # Sprint 3
 
-> Ayrıntılı final sprint, release, video ve submission planı:
-> [`docs/sprint-3.md`](docs/sprint-3.md)
+> **Dönem:** 20 Temmuz – 2 Ağustos 2026
+> **Sprint Goal:** Ürün değeri net, progressive AI deneyimi olan, Scrum
+> kanıtları ve videosu hazır bir submission candidate.
+> Ayrıntılı plan: [`docs/sprint-3.md`](docs/sprint-3.md) ·
+> Kanıt klasörü: [`docs/evidence/sprint-3/`](docs/evidence/sprint-3/)
 
-> Sprint 3 (20 Temmuz – 2 Ağustos 2026) başlangıcı. Bootcamp Mode erkenden
-> tamamlandı; AI derinliği, demo video ve final teslim çıktıları bu bölümde
-> tamamlanacaktır.
+## Sprint Notları
+
+Sprint 3, "daha fazla özellik" sprinti değil ürünleştirme sprintiydi. Üç ana
+hat vardı: uzun AI üretiminin dürüst gösterilmesi, on bir dağınık çıktının
+karar hiyerarşisine oturtulması ve teslim paketinin kanıtlanması.
+
+Sprint ortasında iki kapsam kararı alındı. Canlı deploy takım kararıyla
+kapsam dışına çıkarıldı; bootcamp kuralları canlı linki opsiyonel saydığı ve
+jüri kriteri "canlıya alınabilecek şekilde geliştirilmiş" seçeneğini kabul
+ettiği için yerine doğrulanmış deploy-ready paket kanıtı üretildi (ADR-012).
+Buna bağlı olarak public quota/CAPTCHA işi de düştü (ADR-014).
+
+## Puan Tamamlama Mantığı
+
+| Alan | Değer |
+| --- | --- |
+| Candidate toplam | 71 puan |
+| Tamamlanan P0 | BP-008R, BP-031, BP-025R/BP-032, BP-033, BP-034, BP-048, BP-039R |
+| Tamamlanan P1 | BP-035, BP-036, BP-038 |
+| Code Complete | BP-037 (otomatik klavye/mobil testi var, gerçek cihaz kanıtı bekleniyor) |
+| Dropped | BP-039, BP-040, BP-041 (gerekçeleri ADR-012 ve ADR-014'te) |
+| Blocked | BP-047 (üç gerçek katılımcı gerekiyor) |
+| Açık P0 | BP-044 video, BP-045 teslim formu |
+
+Done sayılan hiçbir story kanıtsız değildir; her biri kod, test ve
+`docs/evidence/sprint-3/` altındaki bir belge ile eşleşir.
+
+## Backlog Düzeni ve Story Seçimleri
+
+Sprint 3 backlog'u beş epik üzerine kuruldu: Progressive AI Execution, MVP
+Command Center, Output Information Architecture, Production Readiness ve
+Evidence/Video/Submission. Seçim kuralı, "kullanıcının ürünü anlamasını ve
+jürinin doğrulamasını" engelleyen işleri öne almaktı; bu yüzden yeni pixie
+rolü, Agents SDK ve pgvector bilinçli olarak kapsam dışında tutuldu.
+
+## Daily Scrum
+
+> _Takım tarafından doldurulacak:_ `docs/evidence/sprint-3/daily/` altına
+> 20 Temmuz – 2 Ağustos arası tarihli notlar eklenecek.
+
+## Sprint Board Update
+
+> _Takım tarafından doldurulacak:_ `docs/evidence/sprint-3/board/` altına
+> planning, mid-sprint, feature-freeze ve final board görselleri eklenecek.
+
+## Ürün Durumu
+
+Ekran görüntüleri, hangi story'yi kanıtladıkları ve hangi sağlayıcıyla
+üretildikleri ile birlikte:
+[`docs/evidence/sprint-3/product/README.md`](docs/evidence/sprint-3/product/README.md)
+
+## Teknik Doğrulama
+
+| Alan | Kod Kanıtı | Durum |
+| --- | --- | --- |
+| Gerçek generation progress | `lib/generation-progress.ts`, `lib/pixie-progress.ts`, migration `202608010001` | Done |
+| Partial persistence | `202608010002_partial_blueprint.sql`, `lib/section-preview.ts` | Done |
+| Refresh/reconnect | `getLatestGenerationJobForProject`, mid-job refresh E2E | Done |
+| MVP Command Center | `lib/command-center.ts`, `components/outputs/command-center.tsx` | Done |
+| Output IA | `components/outputs/output-hub.tsx` — beş grup | Done |
+| Controlled refine | `instruction` alanı, 300 karakter sınırı, strict şema | Done |
+| Delivery Pack | `app/projects/[id]/delivery/page.tsx` | Done |
+| AI mimarisi kanıtı | README "AI Mimarisi ve Üretim İzi" + diyagram | Done |
+| Deploy-ready | `docs/evidence/sprint-3/product/deploy-readiness.md` | Done |
+| Güvenlik | `docs/evidence/sprint-3/product/security-audit.md`; `npm audit --omit=dev` 0 açık | Done |
+| Kalite Kapısı | `lint`, `typecheck`, `build`, `test:e2e` 10/10 | Done |
+
+## Sprint Review
+
+> _Takım tarafından doldurulacak:_ demo sonucu, katılımcılar, taşınan işler.
+> Teknik girdi hazır: yukarıdaki tablo ve kanıt belgeleri.
+
+## Sprint Retrospective
+
+> _Takım tarafından doldurulacak:_ altı haftalık öğrenim ve owner/tarih
+> atanmış aksiyonlar. `docs/evidence/sprint-3/retrospective/`
+
+## Bilinen Sınırlamalar
+
+Dürüstlük teslim paketinin parçasıdır; aşağıdakiler bilinçli olarak açıktır:
+
+- **Canlı URL yok.** Ürün deploy-ready geliştirilmiştir; canlıya almak için
+  migration'ları uygulamak ve environment değişkenlerini girmek yeterlidir.
+- **Bir bölüm kalıcı olarak başarısız olursa tüm pipeline yeniden çalışır.**
+  Üretilen bölümler saklandığı için kullanıcı değer kaybetmez, ancak
+  tamamlanmış bölümler tekrar üretilir. Bu maliyet değil süre riskidir.
+- **Ücretsiz sağlayıcı gecikmesi ve kotası.** OpenRouter free katmanında bir
+  üretim 3–4 dakika sürebilir ve günlük kota dolabilir. Anahtar yoksa ürün
+  deterministik sample çıktıya düşer ve bunu gizlemez.
+- **Cross-owner izolasyonu canlı ortamda test edilmedi.** RLS politikaları ve
+  fonksiyon yetkileri SQL sözleşme testi ve kod incelemesiyle doğrulanmıştır.
+- **Geliştirme zincirinde bir `fast-uri` açığı** kabul edilen risktir; üretim
+  bundle'ına girmez.
+- **Agents SDK, pgvector memory ve account linking** kapsam dışıdır; roadmap'te.
 
 ---
 
