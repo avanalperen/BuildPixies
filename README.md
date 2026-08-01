@@ -580,8 +580,13 @@ Commit geçmişinden türetilmiş gerçek geliştirme günlüğü:
 
 ## Sprint Board Update
 
-> _Takım tarafından doldurulacak:_ `docs/evidence/sprint-3/board/` altına
-> planning, mid-sprint, feature-freeze ve final board görselleri eklenecek.
+Canlı board sayımı ve bulgu:
+[`board/board-state.md`](docs/evidence/sprint-3/board/board-state.md)
+
+Sprint 3 işleri GitHub Issues yerine `docs/sprint-3.md` üzerinden takip
+edilmiştir; board'da `sprint-3` etiketli issue bulunmamaktadır. Bu boşluk
+gizlenmemiş, kanıt belgesinde iki dürüst kapatma seçeneğiyle birlikte
+kaydedilmiştir.
 
 ## Ürün Durumu
 

@@ -10,7 +10,8 @@
 | `../user-testing/protocol.md` | Kullanıcı testi protokolü | ⏳ Koşulmayı bekliyor |
 | `daily/development-log.md` | Commit türevi gerçek geliştirme günlüğü | ✅ Hazır |
 | `daily/` | Takımın kendi Daily Scrum notları | ⬜ Takım dolduracak |
-| `board/` | Planning / mid / freeze / final board görselleri | ⬜ Takım dolduracak |
+| `board/board-state.md` | Canlı GitHub board sayımı + sprint-3 issue boşluğu bulgusu | ✅ Hazır |
+| `board/` | Board görselleri (issue backfill kararına bağlı) | ⬜ Takım kararı |
 | `review/technical-summary.md` | Review'ın koddan doğrulanabilir bölümü | ✅ Hazır |
 | `review/` | Demo sonucu, katılımcılar, PO kabulü | ⬜ Takım dolduracak |
 | `retrospective/technical-findings.md` | Yaşanan teknik olaylardan çıkan dersler | ✅ Hazır |
