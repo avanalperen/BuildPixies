@@ -583,10 +583,11 @@ Commit geçmişinden türetilmiş gerçek geliştirme günlüğü:
 Canlı board sayımı ve bulgu:
 [`board/board-state.md`](docs/evidence/sprint-3/board/board-state.md)
 
-Sprint 3 işleri GitHub Issues yerine `docs/sprint-3.md` üzerinden takip
-edilmiştir; board'da `sprint-3` etiketli issue bulunmamaktadır. Bu boşluk
-gizlenmemiş, kanıt belgesinde iki dürüst kapatma seçeneğiyle birlikte
-kaydedilmiştir.
+Sprint 3 işleri sprint boyunca GitHub Issues yerine `docs/sprint-3.md`
+üzerinden takip edilmiş, board'da `sprint-3` etiketli issue açılmamıştı. Bu
+boşluk gizlenmedi: 18 story gerçek durumlarıyla ve planın kuralı gereği
+**`backfilled` etiketiyle** issue'ya dönüştürüldü (10 done, 3 dropped, 5 açık).
+Her issue gövdesinde geriye dönük açıldığı yazılıdır.
 
 ## Ürün Durumu
 
