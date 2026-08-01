@@ -44,6 +44,11 @@ function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// The curated sample renders through this component but is never persisted,
+// so its exports must carry the blueprint instead of a project id.
+const uuidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const allDone: Record<string, PixieStatus> = Object.fromEntries(
   PIXIES.map((pixie) => [pixie.name, "done" as PixieStatus]),
 );
@@ -171,6 +176,12 @@ export function Workspace({
     }
   }
 
+  function exportBody(): string {
+    return JSON.stringify(
+      uuidPattern.test(project.id) ? { projectId: project.id } : { blueprint },
+    );
+  }
+
   async function handleExport() {
     if (!blueprint) return;
     setError(null);
@@ -183,7 +194,7 @@ export function Workspace({
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ projectId: project.id }),
+          body: exportBody(),
         },
         "Export failed",
       );
@@ -212,7 +223,7 @@ export function Workspace({
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ projectId: project.id }),
+          body: exportBody(),
         },
         "Export failed",
       );

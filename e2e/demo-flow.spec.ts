@@ -41,12 +41,14 @@ test("completes the core product journey", async ({ page }) => {
   // Overview is the default landing view and answers the MVP decision.
   await expect(page.getByText("What you are building")).toBeVisible();
   await expect(page.getByText("Must-have scope")).toBeVisible();
-  await expect(page.getByText("Next three actions")).toBeVisible();
+  await expect(page.getByText("Next three actions", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy plan" })).toBeVisible();
 
-  // The eleven sections now live in four groups; Delivery holds backlog+README.
-  await page.getByRole("tab", { name: "Delivery" }).click();
+  // The eleven sections now live in five groups; backlog sits with Product.
+  await page.getByRole("tab", { name: "Product" }).click();
   await expect(page.getByText("Set up project", { exact: true })).toBeVisible();
+
+  await page.getByRole("tab", { name: "Delivery" }).click();
   await expect(page.getByRole("button", { name: "Copy Markdown" }).first()).toBeVisible();
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download README.md" }).click();
@@ -329,6 +331,42 @@ test("refines a section with a controlled instruction", async ({ request }) => {
     },
   });
   expect(tooLong.status()).toBe(400);
+});
+
+test("opens the curated sample blueprint from the landing page", async ({
+  page,
+}) => {
+  await page.goto("/");
+  // The sample must be reachable without waiting for any AI call.
+  await page.goto("/sample");
+
+  await expect(
+    page.getByRole("heading", { name: "Blueprint Output" }),
+  ).toBeVisible();
+  await expect(page.getByText("What you are building")).toBeVisible();
+  await expect(page.getByText("Overview — the MVP decision")).toBeVisible();
+
+  // Every output group is reachable and the header names the active one.
+  for (const [tab, heading] of [
+    ["Product", "Product — what and for whom"],
+    ["Experience", "Experience — the user journey"],
+    ["Build", "Build — how it gets made"],
+    ["Delivery", "Delivery — what you hand in"],
+  ] as const) {
+    await page.getByRole("tab", { name: tab }).click();
+    await expect(page.getByText(heading)).toBeVisible();
+  }
+
+  // Backlog belongs to the Product group per the output IA.
+  await page.getByRole("tab", { name: "Product" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Backlog", exact: true }),
+  ).toBeVisible();
+
+  const download = page.waitForEvent("download");
+  await page.getByRole("tab", { name: "Delivery" }).click();
+  await page.getByRole("button", { name: "Download README.md" }).click();
+  expect((await download).suggestedFilename()).toBe("README.md");
 });
 
 test("rejects invalid project input", async ({ request }) => {

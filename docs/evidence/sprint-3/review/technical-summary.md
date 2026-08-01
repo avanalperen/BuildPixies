@@ -36,13 +36,13 @@
 npm run lint       ✓
 npm run typecheck  ✓
 npm run build      ✓  15 route
-npm run test:e2e   ✓  10/10
+npm run test:e2e   ✓  11/11
 npm audit --omit=dev  0 açık
 ```
 
-E2E kapsamı sprint boyunca 6 → 10 senaryoya çıktı. Eklenen dördü doğrudan bu
+E2E kapsamı sprint boyunca 6 → 11 senaryoya çıktı. Eklenen beşi doğrudan bu
 sprintin çıktısını koruyor: gerçek progress kaydı, mid-job refresh, kontrollü
-refine ve mobil klavye yolculuğu.
+refine, mobil klavye yolculuğu ve curated sample rotası.
 
 ## Sprint sırasında bulunan ve düzeltilen gerçek hatalar
 
@@ -58,6 +58,12 @@ Bunlar plandan değil, çalışırken ortaya çıktı:
    eklenmişti) kendisi açık bir sürümü sabitler hale gelmişti.
 5. **Ölü `/api/generate-blueprint` endpoint'i** çalışan job'ın proje durumunu
    ezebiliyordu; kaldırıldı.
+6. **`/sample` sayfasında export butonları ölüydü.** Sample projesinin id'si
+   UUID olmadığı için export uçları `400` dönüyordu; sayfanın ilk E2E'si
+   yazılınca ortaya çıktı. İstemci artık kalıcı olmayan projeler için
+   blueprint'i gövdede gönderiyor.
+7. **Queue callback yetkisiz çağrıyı reddetmiyordu** (plan §10.1). Route
+   kapatıldı ve opsiyonel shared secret eklendi.
 
 ## Takım tarafından eklenecek
 

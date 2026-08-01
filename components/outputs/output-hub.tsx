@@ -34,6 +34,30 @@ function List({ items }: { items: string[] }) {
   );
 }
 
+/** Names the active group so the panel header matches what is on screen. */
+const groupDescriptions = {
+  overview: {
+    title: "Overview — the MVP decision",
+    hint: "Scope, risks, first sprint and the next three actions on one screen.",
+  },
+  product: {
+    title: "Product — what and for whom",
+    hint: "Product brief, MVP scope, market angle, backlog and the build plan.",
+  },
+  experience: {
+    title: "Experience — the user journey",
+    hint: "Screens, primary actions and the flow between them.",
+  },
+  build: {
+    title: "Build — how it gets made",
+    hint: "Tech plan, code skeleton and the test plan.",
+  },
+  delivery: {
+    title: "Delivery — what you hand in",
+    hint: "Sprint plan and the README export.",
+  },
+} as const;
+
 /**
  * One blueprint section inside a group: its own heading and regenerate action,
  * so grouping the eleven sections does not hide what can be re-run.
@@ -146,9 +170,16 @@ export function OutputHub({
   const b = blueprint;
   const readmeMarkdown = exportMarkdown(project, blueprint);
   const sectionProps = { regeneratingSection, onRegenerate };
+  const [group, setGroup] = useState<keyof typeof groupDescriptions>("overview");
 
   return (
-    <Tabs defaultValue="overview" className="w-full">
+    <Tabs
+      value={group}
+      onValueChange={(value) =>
+        setGroup(value as keyof typeof groupDescriptions)
+      }
+      className="w-full"
+    >
       <TabsList className="w-full justify-start overflow-x-auto">
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="product">Product</TabsTrigger>
@@ -156,6 +187,15 @@ export function OutputHub({
         <TabsTrigger value="build">Build</TabsTrigger>
         <TabsTrigger value="delivery">Delivery</TabsTrigger>
       </TabsList>
+
+      <div className="px-1 pt-3 pb-1">
+        <h3 className="font-heading text-sm font-semibold">
+          {groupDescriptions[group].title}
+        </h3>
+        <p className="text-xs text-muted-foreground">
+          {groupDescriptions[group].hint}
+        </p>
+      </div>
 
       <TabsContent value="overview" className="rounded-xl border bg-card p-4 md:p-5">
         <CommandCenter blueprint={blueprint} onCopy={onCopyMarkdown} />
@@ -191,6 +231,21 @@ export function OutputHub({
             <List items={b.marketAnalysis.differentiation} />
           </Row>
           <Row label="Market risks"><List items={b.marketAnalysis.marketRisks} /></Row>
+        </Section>
+
+        <Section section="backlog" {...sectionProps}>
+          <div className="flex flex-col gap-2">
+            {b.backlog.items.map((item, i) => (
+              <div key={i} className="min-w-0 rounded-lg border p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="break-words font-medium">{item.title}</p>
+                  <Badge variant="secondary">{item.priority}</Badge>
+                </div>
+                <p className="break-words text-sm text-muted-foreground">{item.userStory}</p>
+                <p className="text-xs text-muted-foreground">Sprint {item.sprint}</p>
+              </div>
+            ))}
+          </div>
         </Section>
 
         <Section section="orchestrationPlan" {...sectionProps}>
@@ -280,21 +335,6 @@ export function OutputHub({
                 <div className="mt-2">
                   <List items={sprint.items} />
                 </div>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section section="backlog" {...sectionProps}>
-          <div className="flex flex-col gap-2">
-            {b.backlog.items.map((item, i) => (
-              <div key={i} className="min-w-0 rounded-lg border p-3">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="break-words font-medium">{item.title}</p>
-                  <Badge variant="secondary">{item.priority}</Badge>
-                </div>
-                <p className="break-words text-sm text-muted-foreground">{item.userStory}</p>
-                <p className="text-xs text-muted-foreground">Sprint {item.sprint}</p>
               </div>
             ))}
           </div>

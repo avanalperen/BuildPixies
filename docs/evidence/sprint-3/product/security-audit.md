@@ -70,7 +70,24 @@ npm audit (dev dahil) →  3 vulnerabilities (2 moderate, 1 high: fast-uri)
 Kalan `fast-uri` açığı yalnız geliştirme/lint zincirindedir, üretim bundle'ına
 girmez; kabul edilen risk olarak kaydedilmiştir.
 
-## 4. Yükseltmenin doğrulanması
+## 4. Queue callback yetkilendirmesi
+
+Plan §10.1 "Queue callback yetkisiz çağrıyı reddeder" maddesi denetlendi ve
+**karşılanmadığı görüldü**: `@vercel/queue`'nun `parseCallback` fonksiyonu
+CloudEvent'i ayrıştırıyor ancak çağıranı doğrulamıyor. `proxy.ts` de
+`/api/queues/` yolunu atladığı için istek hiçbir kontrolden geçmiyordu.
+
+**Düzeltme:** `app/api/queues/generate-blueprint/route.ts` artık iki katmanlı:
+
+1. Durable queue kullanımda değilse (`VERCEL !== "1"` ve flag kapalı) route
+   tamamen kapalı — `404`.
+2. `BUILDPIXIES_QUEUE_SECRET` tanımlıysa `x-buildpixies-queue-secret` başlığı
+   eşleşmeyen istek `401`.
+
+Etki sınırlıydı: iş tetiklemek için geçerli bir job UUID'si bilmek gerekiyordu.
+Yine de kimliksiz istekler service-role RPC çağrısı tetikleyebiliyordu.
+
+## 5. Yükseltmenin doğrulanması
 
 `AGENTS.md` bu Next sürümünün eğitim verisinden farklı olabileceğini
 belirttiği için yükseltme tam kalite kapısından geçirildi:
@@ -79,7 +96,7 @@ belirttiği için yükseltme tam kalite kapısından geçirildi:
 npm run lint       ✓
 npm run typecheck  ✓
 npm run build      ✓  (15 route, queue callback ayrı fonksiyon)
-npm run test:e2e   ✓  9/9
+npm run test:e2e   ✓  11/11
 ```
 
 Uygulama davranışında değişiklik gözlenmedi.

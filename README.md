@@ -609,7 +609,7 @@ Ekran görüntüleri, hangi story'yi kanıtladıkları ve hangi sağlayıcıyla
 | AI mimarisi kanıtı | README "AI Mimarisi ve Üretim İzi" + diyagram | Done |
 | Deploy-ready | `docs/evidence/sprint-3/product/deploy-readiness.md` | Done |
 | Güvenlik | `docs/evidence/sprint-3/product/security-audit.md`; `npm audit --omit=dev` 0 açık | Done |
-| Kalite Kapısı | `lint`, `typecheck`, `build`, `test:e2e` 10/10 | Done |
+| Kalite Kapısı | `lint`, `typecheck`, `build`, `test:e2e` 11/11 | Done |
 
 ## Sprint Review
 

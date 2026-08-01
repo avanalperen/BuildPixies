@@ -2,6 +2,7 @@ import { QueueClient } from "@vercel/queue";
 import { z } from "zod";
 import {
   getGenerationQueueRegion,
+  shouldUseDurableGenerationQueue,
   type BlueprintGenerationMessage,
 } from "@/lib/generation-queue";
 import {
@@ -25,7 +26,25 @@ class InvalidQueueMessageError extends Error {
 
 const queue = new QueueClient({ region: getGenerationQueueRegion() });
 
-export const POST = queue.handleCallback<BlueprintGenerationMessage>(
+/**
+ * The queue SDK parses the CloudEvent but does not authenticate the caller, so
+ * this route is closed unless the durable queue is actually in use, and can be
+ * pinned to a shared secret when one is configured.
+ */
+function rejectUnauthorizedCallback(request: Request): Response | null {
+  if (!shouldUseDurableGenerationQueue()) {
+    return Response.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const secret = process.env.BUILDPIXIES_QUEUE_SECRET?.trim();
+  if (secret && request.headers.get("x-buildpixies-queue-secret") !== secret) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  return null;
+}
+
+const handleQueueCallback = queue.handleCallback<BlueprintGenerationMessage>(
   async (message) => {
     const parsed = queueMessageSchema.safeParse(message);
     if (!parsed.success) throw new InvalidQueueMessageError();
@@ -57,3 +76,9 @@ export const POST = queue.handleCallback<BlueprintGenerationMessage>(
     },
   },
 );
+
+export async function POST(request: Request): Promise<Response> {
+  const rejected = rejectUnauthorizedCallback(request);
+  if (rejected) return rejected;
+  return handleQueueCallback(request);
+}

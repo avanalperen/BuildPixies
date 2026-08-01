@@ -8,7 +8,7 @@
 - [x] `npm run lint` temiz
 - [x] `npm run typecheck` temiz
 - [x] `npm run build` temiz
-- [x] `npm run test:e2e` 10/10
+- [x] `npm run test:e2e` 11/11
 - [x] `npm audit --omit=dev` 0 açık
 - [x] Tüm iş `main` branch'inde
 - [x] GitHub Actions kalite kapısı aktif
