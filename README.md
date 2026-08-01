@@ -93,6 +93,9 @@ formatlarda hazırlanır.
 - Geçici sağlayıcı hatalarında (timeout, 429, 5xx) bölüm bazlı tekrar deneme
 - Doğrulanan bölümler üretim sırasında job kaydına yazılır; tamamlanan bölüm
   pipeline bitmeden okunabilir ve üretim yarıda kalsa da kaybolmaz
+- MVP Command Center: ürün, hedef kitle, problem, must-have, kapsam dışı, risk,
+  ilk sprint ve sonraki üç aksiyon tek Overview ekranında
+- On bir bölüm Overview / Product / Experience / Build / Delivery gruplarında
 - Vercel Queues ile kalıcı üretim kuyruğu, lease tabanlı tekrar deneme ve
   idempotent job tamamlama
 - Supabase üzerinde owner bazlı atomik API rate limit

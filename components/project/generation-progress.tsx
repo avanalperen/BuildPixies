@@ -62,10 +62,15 @@ export function GenerationProgressPanel({
           const row = (
             <>
               <StepIcon status={step.status} />
-              <span className="min-w-0 flex-1 truncate">
-                {sectionLabels[step.section]}
+              <span className="min-w-0 flex-1">
+                <span className="block truncate">
+                  {sectionLabels[step.section]}
+                </span>
+                <span className="block text-xs text-muted-foreground sm:hidden">
+                  {step.pixie} · {statusLabel[step.status]}
+                </span>
               </span>
-              <span className="shrink-0 text-xs text-muted-foreground">
+              <span className="hidden shrink-0 text-xs text-muted-foreground sm:block">
                 {step.pixie} · {statusLabel[step.status]}
               </span>
             </>

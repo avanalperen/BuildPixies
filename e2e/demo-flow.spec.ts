@@ -38,10 +38,15 @@ test("completes the core product journey", async ({ page }) => {
     timeout: 45_000,
   });
 
-  await page.getByRole("tab", { name: "Backlog" }).first().click();
-  await expect(page.getByText("Set up project", { exact: true })).toBeVisible();
+  // Overview is the default landing view and answers the MVP decision.
+  await expect(page.getByText("What you are building")).toBeVisible();
+  await expect(page.getByText("Must-have scope")).toBeVisible();
+  await expect(page.getByText("Next three actions")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy plan" })).toBeVisible();
 
-  await page.getByRole("tab", { name: "README" }).first().click();
+  // The eleven sections now live in four groups; Delivery holds backlog+README.
+  await page.getByRole("tab", { name: "Delivery" }).click();
+  await expect(page.getByText("Set up project", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy Markdown" }).first()).toBeVisible();
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download README.md" }).click();

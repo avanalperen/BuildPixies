@@ -11,6 +11,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { PixieTeam } from "@/components/pixies/pixie-team";
+import { Button } from "@/components/ui/button";
 import { OutputHub } from "@/components/outputs/output-hub";
 import { BootcampMode } from "@/components/project/bootcamp-mode";
 import { GenerationProgressPanel } from "@/components/project/generation-progress";
@@ -293,13 +294,17 @@ export function Workspace({
       ? `${completedSteps} of ${steps.length} sections ready. Working on ${activeStepLabel}.`
       : "The generation job is queued."
     : error
-      ? error
+      ? completedSections > 0
+        ? `${error}. ${completedSections} of ${steps.length} sections were saved.`
+        : error
       : blueprint
         ? "The blueprint is ready."
         : "The blueprint has not been generated yet.";
 
   return (
-    <div className={`flex min-w-0 flex-col gap-8${blueprint ? " pb-24 lg:pb-0" : ""}`} aria-busy={loading}>
+    // The floating actions bar is fixed at every breakpoint, so the page keeps
+    // its bottom padding on large screens too.
+    <div className={`flex min-w-0 flex-col gap-8${blueprint ? " pb-24" : ""}`} aria-busy={loading}>
       <p className="sr-only" role="status" aria-live="polite">
         {statusMessage}
       </p>
@@ -312,10 +317,20 @@ export function Workspace({
           <div className="flex flex-1 flex-col gap-5 p-6">
             <h1 className="break-words font-heading text-xl leading-7 font-semibold">{project.title}</h1>
             <p className="flex-1 whitespace-pre-wrap break-words text-base leading-7 text-muted-foreground">{project.rawIdea}</p>
+            {/* Narrow columns stack these rows so long values stay readable. */}
             <dl className="grid gap-2 border-t border-outline-variant/30 pt-4 text-xs">
-              <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Goal</dt><dd className="font-semibold capitalize">{project.goal}</dd></div>
-              <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Platform</dt><dd className="font-semibold capitalize">{project.platform.replace("-", " ")}</dd></div>
-              <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Audience</dt><dd className="max-w-[60%] truncate font-semibold">{project.targetAudience}</dd></div>
+              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4">
+                <dt className="text-muted-foreground">Goal</dt>
+                <dd className="font-semibold capitalize">{project.goal}</dd>
+              </div>
+              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4">
+                <dt className="text-muted-foreground">Platform</dt>
+                <dd className="font-semibold capitalize">{project.platform.replace("-", " ")}</dd>
+              </div>
+              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4">
+                <dt className="text-muted-foreground">Audience</dt>
+                <dd className="break-words font-semibold sm:max-w-[60%] sm:text-right">{project.targetAudience}</dd>
+              </div>
             </dl>
             <button type="button" onClick={handleGenerate} disabled={loading || regeneratingSection !== null} className="magic-button inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50">
               <Sparkles className="size-4" />
@@ -397,8 +412,17 @@ export function Workspace({
                   </h3>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {completedSections} of {steps.length} sections were produced
-                    and saved. Generate again to complete the blueprint.
+                    and saved.
                   </p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="mt-3"
+                    onClick={handleGenerate}
+                    disabled={regeneratingSection !== null}
+                  >
+                    Run the remaining sections
+                  </Button>
                 </div>
                 <GenerationProgressPanel
                   steps={steps}
