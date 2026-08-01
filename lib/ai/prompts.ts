@@ -4,6 +4,8 @@ import type { CreateProjectInput } from "@/types/project";
 export interface PixieContext {
   input: CreateProjectInput;
   previousOutputs?: Partial<Record<BlueprintSection, unknown>>;
+  /** Optional user steer for a single section, e.g. "narrow the scope". */
+  refineInstruction?: string;
 }
 
 export interface BootcampPromptContext {
@@ -47,7 +49,13 @@ Platform: ${ctx.input.platform}
 Target audience: ${ctx.input.targetAudience}
 Output depth: ${ctx.input.outputDepth ?? "bootcamp-ready"}
 Constraints: ${JSON.stringify(ctx.input.constraints ?? {})}
-Previous outputs: ${JSON.stringify(ctx.previousOutputs ?? {})}
+Previous outputs: ${JSON.stringify(ctx.previousOutputs ?? {})}${
+    ctx.refineInstruction
+      ? `
+Refinement request for this section: ${ctx.refineInstruction}
+Apply the refinement request while keeping every required schema field.`
+      : ""
+  }
 </user_context>`;
 }
 

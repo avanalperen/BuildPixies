@@ -25,6 +25,7 @@ export const regenerateOutputRequestSchema = z
     projectId: resourceIdSchema.optional(),
     input: createProjectInputSchema.optional(),
     section: blueprintSectionSchema,
+    instruction: z.string().trim().min(3).max(300).optional(),
     previousOutputs: blueprintSchema.optional(),
   })
   .strict()

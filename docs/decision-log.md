@@ -428,3 +428,32 @@ sürede kendisi açık bir sürümü sabitler hale gelmiş ve düzeltmeyi engell
   bundle'ına girmez.
 - Geri alınmak istenirse tek işlem `package.json` içindeki sürüm ve override
   bloğunu önceki haline döndürmektir.
+
+---
+
+## ADR-014 — P1 kapanışı: controlled refine, Delivery Pack ve düşen kapsam
+
+**Tarih:** 1 Ağustos 2026
+**Durum:** Kabul edildi
+
+### Karar
+
+- **BP-035 (controlled refine):** Bölüm yenileme, opsiyonel bir `instruction`
+  alanı ile yönlendirilebilir. Talimat 300 karakterle sınırlıdır, prompt'un
+  `<user_context>` zarfının içine yerleştirilir (mevcut injection guard'ı
+  kapsar) ve çıktı yine aynı strict şemadan geçer. Serbest sohbet açılmaz.
+- **BP-036 (Delivery Pack):** Bootcamp Mode ve export'lar
+  `/projects/[id]/delivery` route'una taşındı. Workspace'te yerine belirgin bir
+  giriş kartı kaldı; böylece üretim ekranı tek işe odaklanıyor.
+- **BP-041 (public quota + CAPTCHA):** Dropped. Go koşulu "public abuse riski
+  yüksek" idi; ADR-012 ile canlı public yüzey olmadığı için koşul oluşmuyor.
+  Owner bazlı Postgres rate limit yerinde kalıyor.
+- **BP-047 (kullanıcı testi):** Koşulamadı; üç gerçek katılımcı gerektiriyor.
+  Protokol `docs/evidence/user-testing/protocol.md` içinde koşuma hazır.
+
+### Sonuçlar
+
+- Kullanıcı beğenmediği bir bölümü kör yeniden üretim yerine hedefli
+  düzeltebiliyor; talimat sınırlı olduğu için prompt kanalı açılmıyor.
+- Workspace ile teslim paketi ayrıldığı için bilgi mimarisi sadeleşti.
+- Düşen iki kapsam maddesinin nedeni ve geri alma koşulu kayıtlı.

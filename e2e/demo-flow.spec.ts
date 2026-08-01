@@ -53,6 +53,13 @@ test("completes the core product journey", async ({ page }) => {
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("README.md");
 
+  // Bootcamp documents now live on their own Delivery Pack route.
+  await page.getByRole("link", { name: "Open Delivery Pack" }).click();
+  await expect(page).toHaveURL(/\/projects\/[0-9a-f-]+\/delivery$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Delivery Pack" }),
+  ).toBeVisible();
+
   await page.getByLabel("Sprint name").fill("Sprint 2");
   await page.getByLabel("Sprint goal").fill("Finish the working MVP");
   await page
@@ -270,6 +277,58 @@ test("completes the mobile journey with the keyboard only", async ({ page }) => 
     outlineStyle?.outline !== "none" || outlineStyle?.shadow !== "none",
     "focused control needs a visible focus indicator",
   ).toBe(true);
+});
+
+test("refines a section with a controlled instruction", async ({ request }) => {
+  const createResponse = await request.post("/api/projects", {
+    data: {
+      rawIdea: "A budgeting companion for freelance illustrators",
+      goal: "startup",
+      platform: "web",
+      targetAudience: "freelance illustrators",
+    },
+  });
+  const { project } = (await createResponse.json()) as {
+    project: { id: string };
+  };
+
+  const jobResponse = await request.post("/api/generation-jobs", {
+    data: { projectId: project.id },
+  });
+  const { job } = (await jobResponse.json()) as { job: { id: string } };
+  let status = "queued";
+  for (let attempt = 0; attempt < 40 && status !== "succeeded"; attempt++) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const poll = await request.get(`/api/generation-jobs/${job.id}`);
+    status = ((await poll.json()) as { job: { status: string } }).job.status;
+  }
+  expect(status).toBe("succeeded");
+
+  // A refinement steers one section and still returns a schema-valid blueprint.
+  const refined = await request.post("/api/regenerate-output", {
+    data: {
+      projectId: project.id,
+      section: "mvpScope",
+      instruction: "Narrow the scope to a two week build",
+    },
+  });
+  expect(refined.status()).toBe(200);
+  const payload = (await refined.json()) as {
+    section: string;
+    blueprint?: Record<string, unknown>;
+  };
+  expect(payload.section).toBe("mvpScope");
+  expect(payload.blueprint).toBeTruthy();
+
+  // The instruction is bounded so it cannot become an unbounded prompt channel.
+  const tooLong = await request.post("/api/regenerate-output", {
+    data: {
+      projectId: project.id,
+      section: "mvpScope",
+      instruction: "x".repeat(301),
+    },
+  });
+  expect(tooLong.status()).toBe(400);
 });
 
 test("rejects invalid project input", async ({ request }) => {

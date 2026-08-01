@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
       input,
       body.section,
       previousOutputs,
+      body.instruction,
     );
     const blueprint = previousOutputs
       ? blueprintSchema.parse({

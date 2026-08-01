@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  ArrowRight,
   Copy,
   Download,
   FileText,
@@ -10,10 +11,10 @@ import {
   Sparkles,
   UsersRound,
 } from "lucide-react";
+import Link from "next/link";
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { Button } from "@/components/ui/button";
 import { OutputHub } from "@/components/outputs/output-hub";
-import { BootcampMode } from "@/components/project/bootcamp-mode";
 import { GenerationProgressPanel } from "@/components/project/generation-progress";
 import { requestJson } from "@/lib/api/client";
 import { blueprintSchema } from "@/lib/ai/schemas";
@@ -256,7 +257,10 @@ export function Workspace({
     }
   }
 
-  async function handleRegenerate(section: BlueprintSection) {
+  async function handleRegenerate(
+    section: BlueprintSection,
+    instruction?: string,
+  ) {
     if (!blueprint || loading || regeneratingSection) return;
     setError(null);
     setRegeneratingSection(section);
@@ -271,6 +275,7 @@ export function Workspace({
           body: JSON.stringify({
             projectId: project.id,
             section,
+            ...(instruction ? { instruction } : {}),
           }),
         },
         "Regenerate failed",
@@ -442,7 +447,24 @@ export function Workspace({
         </section>
       </div>
 
-      <BootcampMode project={project} />
+      <section aria-labelledby="delivery-pack-link-title" className="app-card flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between md:p-6">
+        <div className="min-w-0">
+          <h2 id="delivery-pack-link-title" className="font-heading text-lg font-semibold">
+            Bootcamp Delivery Pack
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Exports plus Daily Scrum, Review, Retrospective and README drafts
+            built only from your real progress notes.
+          </p>
+        </div>
+        <Link
+          href={`/projects/${project.id}/delivery`}
+          className="magic-button inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold transition-all md:w-auto"
+        >
+          Open Delivery Pack
+          <ArrowRight className="size-4" />
+        </Link>
+      </section>
 
       {blueprint && !loading && (
         <nav className="glass-panel fixed bottom-24 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center justify-center gap-2 overflow-x-auto rounded-full px-4 py-2.5 shadow-xl sm:gap-4 sm:px-6 sm:py-3 md:w-auto md:max-w-none lg:bottom-4 lg:ml-[140px]" aria-label="Blueprint actions">

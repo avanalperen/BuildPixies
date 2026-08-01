@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { CommandCenter } from "@/components/outputs/command-center";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { exportMarkdown } from "@/lib/export/markdown";
 import { sectionLabels } from "@/lib/pixie-progress";
 import type { Blueprint, BlueprintSection } from "@/types/output";
@@ -44,26 +46,81 @@ function Section({
 }: {
   section: BlueprintSection;
   regeneratingSection?: BlueprintSection | null;
-  onRegenerate?: (section: BlueprintSection) => void;
+  onRegenerate?: (section: BlueprintSection, instruction?: string) => void;
   children: React.ReactNode;
 }) {
+  const [refineOpen, setRefineOpen] = useState(false);
+  const [instruction, setInstruction] = useState("");
   const isCurrentSection = regeneratingSection === section;
   const isRegenerating = regeneratingSection != null;
+  const inputId = `refine-${section}`;
+
+  function submitRefine() {
+    const trimmed = instruction.trim();
+    if (trimmed.length < 3) return;
+    onRegenerate?.(section, trimmed);
+    setRefineOpen(false);
+    setInstruction("");
+  }
+
   return (
     <section className="min-w-0 rounded-xl border bg-card p-4 md:p-5">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-heading text-base font-semibold">
           {sectionLabels[section]}
         </h3>
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={!onRegenerate || isRegenerating}
-          onClick={() => onRegenerate?.(section)}
-        >
-          {isCurrentSection ? "Regenerating..." : "Regenerate"}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={!onRegenerate || isRegenerating}
+            aria-expanded={refineOpen}
+            aria-controls={inputId}
+            onClick={() => setRefineOpen((open) => !open)}
+          >
+            Refine
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={!onRegenerate || isRegenerating}
+            onClick={() => onRegenerate?.(section)}
+          >
+            {isCurrentSection ? "Regenerating..." : "Regenerate"}
+          </Button>
+        </div>
       </div>
+
+      {refineOpen && (
+        <div className="mb-3 flex flex-col gap-2 rounded-lg border border-primary/25 bg-primary/5 p-3 sm:flex-row sm:items-end">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <label htmlFor={inputId} className="text-xs font-medium text-muted-foreground">
+              What should change in {sectionLabels[section]}?
+            </label>
+            <Input
+              id={inputId}
+              value={instruction}
+              maxLength={300}
+              placeholder="Narrow the scope to a two week build"
+              onChange={(event) => setInstruction(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  submitRefine();
+                }
+              }}
+            />
+          </div>
+          <Button
+            size="sm"
+            disabled={isRegenerating || instruction.trim().length < 3}
+            onClick={submitRefine}
+          >
+            Apply refinement
+          </Button>
+        </div>
+      )}
+
       {children}
     </section>
   );
@@ -83,7 +140,7 @@ export function OutputHub({
   onExport?: () => void;
   onExportJson?: () => void;
   onCopyMarkdown?: (markdown: string) => void;
-  onRegenerate?: (section: BlueprintSection) => void;
+  onRegenerate?: (section: BlueprintSection, instruction?: string) => void;
   regeneratingSection?: BlueprintSection | null;
 }) {
   const b = blueprint;

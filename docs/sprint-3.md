@@ -206,7 +206,12 @@ Aşağıdaki durumlar `main` üzerindeki koddan doğrulanmıştır; kalite kapı
 | BP-037 | Code Complete | Mobile keyboard journey E2E; dar ekran okunabilirlik düzeltmeleri |
 | BP-048 | Done | README "AI Mimarisi ve Üretim İzi" bölümü + diyagram |
 | BP-039/BP-040 | **Dropped** | Ürün canlıya alınmayacak (takım kararı, 1 Ağustos). Yerine BP-039R |
-| BP-039R | In Progress | Deploy-ready kanıtı: production build, local production-mode smoke, migration sözleşme testi |
+| BP-039R | Done | Deploy-ready kanıtı: production build, production-mode smoke, migration sözleşme testi |
+| BP-035 | Done | `instruction` ile controlled refine; 300 karakter sınırı, aynı strict şema |
+| BP-036 | Done | Delivery Pack route: exports + Bootcamp Mode; workspace'ten link |
+| BP-038 | Done | Log yüzeyi denetimi, bundle secret taraması, `npm audit --omit=dev` 0 |
+| BP-041 | Dropped | Canlı public yüzey yok; mevcut owner bazlı rate limit korunuyor |
+| BP-047 | Blocked | `docs/evidence/user-testing/protocol.md` koşuma hazır; katılımcı gerekiyor |
 | BP-044/BP-045 | Planned | RC1 sonrası; video ve form takım işi |
 
 **Bilinen açık sınırlama:** bir bölüm kalıcı olarak başarısız olduğunda tüm
@@ -218,11 +223,11 @@ gecikmesiyle birlikte bu, uzun koşularda maliyet değil süre riskidir.
 
 | ID | Sonuç | SP | Go koşulu |
 | --- | --- | ---: | --- |
-| BP-035 | Controlled refine aksiyonu | 5 | 24 Temmuz core UX green |
-| BP-036 | Bootcamp Mode ayrı Delivery Pack route | 5 | IA risk yaratmıyor |
-| BP-038 | Safe generation observability | 3 | Secret-safe temel hazır |
-| BP-041 | Public quota + Turnstile/CAPTCHA | 5 | Public abuse riski yüksek |
-| BP-047 | Üç hedef kullanıcı testi | 3 | En az ikisi P0; üçüncüsü capacity |
+| BP-035 | Controlled refine aksiyonu | 5 | ✅ **Done** — bölüm bazlı yönlendirmeli yenileme |
+| BP-036 | Bootcamp Mode ayrı Delivery Pack route | 5 | ✅ **Done** — `/projects/[id]/delivery` |
+| BP-038 | Safe generation observability | 3 | ✅ **Done** — log denetimi + bağımlılık düzeltmesi |
+| BP-041 | Public quota + Turnstile/CAPTCHA | 5 | ❌ **Dropped** — go koşulu "public abuse riski" ADR-012 sonrası oluşmuyor |
+| BP-047 | Üç hedef kullanıcı testi | 3 | ⏳ **Blocked** — protokol hazır, üç gerçek katılımcı gerekiyor |
 
 ### 4.4 Sprint sonrası bırakılacaklar
 

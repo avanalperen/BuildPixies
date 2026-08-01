@@ -96,6 +96,9 @@ formatlarda hazırlanır.
 - MVP Command Center: ürün, hedef kitle, problem, must-have, kapsam dışı, risk,
   ilk sprint ve sonraki üç aksiyon tek Overview ekranında
 - On bir bölüm Overview / Product / Experience / Build / Delivery gruplarında
+- Controlled refine: bir bölümü "kapsamı iki haftaya daralt" gibi kısa bir
+  talimatla hedefli yeniden üretme (300 karakter sınırı, aynı strict şema)
+- Bootcamp Delivery Pack ayrı route: export'lar ve Scrum belgeleri tek yerde
 - Vercel Queues ile kalıcı üretim kuyruğu, lease tabanlı tekrar deneme ve
   idempotent job tamamlama
 - Supabase üzerinde owner bazlı atomik API rate limit

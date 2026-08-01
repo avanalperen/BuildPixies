@@ -240,11 +240,12 @@ export async function regenerateSection(
   input: CreateProjectInput,
   section: BlueprintSection,
   previousOutputs?: Partial<Record<BlueprintSection, unknown>>,
+  refineInstruction?: string,
 ): Promise<unknown> {
   if (!isAIConfigured()) {
     return buildSampleBlueprint(input.rawIdea)[section];
   }
-  const ctx = { input, previousOutputs };
+  const ctx = { input, previousOutputs, refineInstruction };
   const builders: Record<
     BlueprintSection,
     { mode: "json" | "markdown"; build: () => { system: string; user: string } }
