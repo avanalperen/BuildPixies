@@ -1,12 +1,14 @@
 import "server-only";
 
 import type { Blueprint } from "@/types/output";
-import type { GenerationProgress } from "@/types/generation-job";
 import type { CreateProjectInput } from "@/types/project";
 import { generateBlueprint } from "@/lib/ai/orchestrator";
 import { getSafeErrorMessage } from "@/lib/api/http";
 import { createProjectInputSchema } from "@/lib/api/schemas";
-import { createGenerationProgressTracker } from "@/lib/generation-progress";
+import {
+  createGenerationProgressTracker,
+  type GenerationProgressState,
+} from "@/lib/generation-progress";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const LEASE_SECONDS = 600;
@@ -115,13 +117,14 @@ async function completeGenerationJob(
 
 async function setGenerationJobProgress(
   job: ClaimedGenerationJob,
-  progress: GenerationProgress,
+  state: GenerationProgressState,
 ): Promise<void> {
   const supabase = createAdminClient();
   const { error } = await supabase.rpc("set_generation_job_progress", {
     p_job_id: job.id,
     p_lease_token: job.leaseToken,
-    p_progress: progress,
+    p_progress: state.progress,
+    p_partial_blueprint: state.partialBlueprint,
   });
   if (error) throw error;
 }
@@ -159,8 +162,8 @@ export async function runDurableGenerationJob(jobId: string): Promise<void> {
   }
 
   const { job } = claim;
-  const tracker = createGenerationProgressTracker((progress) =>
-    setGenerationJobProgress(job, progress),
+  const tracker = createGenerationProgressTracker((state) =>
+    setGenerationJobProgress(job, state),
   );
   try {
     const blueprint = await generateBlueprint(job.input, tracker.onEvent);

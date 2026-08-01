@@ -23,6 +23,8 @@ export interface OrchestratorEvent {
   pixie: string;
   section: BlueprintSection;
   status: "running" | "done" | "failed";
+  /** Only set on `done`: the section output that passed schema validation. */
+  output?: unknown;
 }
 
 export type OrchestratorListener = (
@@ -174,6 +176,7 @@ export async function generateBlueprint(
         pixie: step.pixie,
         section: step.section,
         status: "done",
+        output: sample[step.section],
       });
     }
     return sample;
@@ -204,6 +207,7 @@ export async function generateBlueprint(
         pixie: step.pixie,
         section: step.section,
         status: "done",
+        output: outputs[step.section],
       });
     } catch (error) {
       await onEvent?.({

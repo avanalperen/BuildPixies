@@ -4,6 +4,7 @@ import type { Blueprint } from "@/types/output";
 import type {
   GenerationJob,
   GenerationProgress,
+  PartialBlueprint,
 } from "@/types/generation-job";
 import type { CreateProjectInput } from "@/types/project";
 import { generationJobSchema } from "@/lib/schemas/generation-job";
@@ -165,6 +166,36 @@ export async function getActiveGenerationJobForProject(
   );
 }
 
+/**
+ * The newest job for a project whatever its status: a failed run still owns
+ * the sections it produced, so the workspace needs it after a refresh.
+ */
+export async function getLatestGenerationJobForProject(
+  projectId: string,
+): Promise<GenerationJob | null> {
+  assertStorageAvailable();
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { data, error } = await context.supabase
+      .from("generation_jobs")
+      .select("*")
+      .eq("project_id", projectId)
+      .eq("owner_id", context.userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? rowToGenerationJob(data) : null;
+  }
+
+  await hydrateMemoryFromDisk();
+  return (
+    Array.from(memory.values())
+      .filter((job) => job.projectId === projectId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0] ?? null
+  );
+}
+
 export async function markGenerationJobRunning(
   id: string,
   progress?: GenerationProgress,
@@ -179,8 +210,9 @@ export async function markGenerationJobRunning(
 export async function setGenerationJobProgress(
   id: string,
   progress: GenerationProgress,
+  partialBlueprint?: PartialBlueprint,
 ): Promise<GenerationJob | null> {
-  return updateGenerationJob(id, { progress });
+  return updateGenerationJob(id, { progress, partialBlueprint });
 }
 
 export async function completeGenerationJob(
@@ -228,6 +260,7 @@ async function updateGenerationJob(
         error: patch.error,
         blueprint: patch.blueprint,
         progress: patch.progress,
+        partial_blueprint: patch.partialBlueprint,
         queue_message_id: patch.queueMessageId,
         updated_at: updatedAt,
         started_at: patch.startedAt,
@@ -262,6 +295,8 @@ function rowToGenerationJob(row: Record<string, unknown>): GenerationJob {
     error: row.error ? String(row.error) : undefined,
     input: row.input as GenerationJob["input"],
     blueprint: row.blueprint as GenerationJob["blueprint"],
+    partialBlueprint:
+      (row.partial_blueprint as GenerationJob["partialBlueprint"]) ?? undefined,
     progress: (row.progress as GenerationJob["progress"]) ?? undefined,
     attemptCount:
       typeof row.attempt_count === "number" ? row.attempt_count : undefined,

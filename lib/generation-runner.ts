@@ -25,8 +25,12 @@ export async function runBlueprintGenerationJob(options: {
   input: CreateProjectInput;
 }): Promise<void> {
   const { jobId, projectId, input } = options;
-  const tracker = createGenerationProgressTracker(async (progress) => {
-    await setGenerationJobProgress(jobId, progress);
+  const tracker = createGenerationProgressTracker(async (state) => {
+    await setGenerationJobProgress(
+      jobId,
+      state.progress,
+      state.partialBlueprint,
+    );
   });
 
   try {

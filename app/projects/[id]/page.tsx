@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Workspace } from "@/components/project/workspace";
-import { getActiveGenerationJobForProject } from "@/lib/generation-jobs";
+import { getLatestGenerationJobForProject } from "@/lib/generation-jobs";
 import { getProject } from "@/lib/projects";
 import { resourceIdSchema } from "@/lib/api/schemas";
 
@@ -24,8 +24,9 @@ export default async function ProjectDetailPage({
   const project = await getProject(id);
   if (!project) notFound();
 
-  // A run that is still in flight keeps its progress visible after a refresh.
-  const activeJob = await getActiveGenerationJobForProject(project.id).catch(
+  // The last run keeps its progress and partial sections visible after a
+  // refresh, whether it is still going or stopped early.
+  const latestJob = await getLatestGenerationJobForProject(project.id).catch(
     () => null,
   );
 
@@ -37,7 +38,7 @@ export default async function ProjectDetailPage({
           <ChevronRight className="size-4" />
           <span className="max-w-[60vw] truncate text-foreground">{project.title}</span>
         </nav>
-        <Workspace project={project} activeJob={activeJob} />
+        <Workspace project={project} latestJob={latestJob} />
       </div>
     </AppShell>
   );

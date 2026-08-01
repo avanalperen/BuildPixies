@@ -275,7 +275,7 @@ olarak yönetecek, sadece validasyondan geçmiş bir bölüm `done` sayılacakt�
 ## ADR-010 — Partial Blueprint Persistence (BP-031-S2)
 
 **Tarih:** 19 Temmuz 2026
-**Durum:** Tasarlandı (Sprint 3 için)
+**Durum:** Uygulandı (1 Ağustos 2026) — depolama yeri revize edildi
 
 ### Bağlam
 
@@ -300,6 +300,16 @@ belirtmek için yeni değerler (`partial_error` vb.) eklenecektir.
 - İstemci, projeyi açtığında eksik kalan kısımları algılayarak "kaldığı
   yerden devam et" veya "hatalı bölümü yeniden üret" yeteneği kazanır.
 - UX tarafında kesinti anında oluşan "veri kaybı" korkusu tamamen giderilir.
+
+### Uygulama notu (1 Ağustos 2026)
+
+Kısmi sonuçlar `projects.blueprint` yerine `generation_jobs.partial_blueprint`
+kolonunda tutulur. `projects.blueprint`, `projectSchema` içinde **strict tam
+blueprint** olarak geri okunur; oraya eksik bir obje yazmak proje sayfasını
+parse hatasıyla düşürürdü. Bu yüzden `projects.blueprint` yalnızca tamamlanmış
+blueprint ile yazılmaya devam eder, `projects.status` enum'una yeni değer
+eklenmez ve workspace kısmi bölümleri job kaydından okur. Böylece geriye dönük
+uyumluluk korunur ve owner-scoped RLS aynı satır üzerinden geçerli kalır.
 
 ---
 
@@ -343,4 +353,4 @@ kendi durum yazma mantığıyla çalışan job'ın proje durumunu ezebiliyordu.
 - ADR-009'daki event sözleşmesi, job satırında tutulan adım listesi olarak
   uygulandı: ayrı event kaydı yerine `progress.steps[]` (`section`, `pixie`,
   `status`) saklanır; polling idempotent kalır çünkü client her seferinde tam
-  durumu okur. ADR-010'daki partial persistence hâlâ açıktır.
+  durumu okur.

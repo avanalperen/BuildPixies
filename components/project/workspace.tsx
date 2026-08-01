@@ -21,10 +21,15 @@ import { generationJobResponseSchema } from "@/lib/schemas/generation-job";
 import {
   countCompletedSteps,
   describeActiveSteps,
+  isJobActive,
   pixieStatusesFromSteps,
 } from "@/lib/pixie-progress";
 import type { Project } from "@/types/project";
-import type { GenerationJob, GenerationStep } from "@/types/generation-job";
+import type {
+  GenerationJob,
+  GenerationStep,
+  PartialBlueprint,
+} from "@/types/generation-job";
 import type { Blueprint, BlueprintSection } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
 import { PIXIES } from "@/types/pixie";
@@ -43,20 +48,24 @@ const allDone: Record<string, PixieStatus> = Object.fromEntries(
 
 export function Workspace({
   project,
-  activeJob = null,
+  latestJob = null,
 }: {
   project: Project;
-  activeJob?: GenerationJob | null;
+  latestJob?: GenerationJob | null;
 }) {
+  const resumableJob = isJobActive(latestJob) ? latestJob : null;
   const [blueprint, setBlueprint] = useState<Blueprint | null>(
     project.blueprint ?? null,
   );
-  const [loading, setLoading] = useState(Boolean(activeJob));
+  const [loading, setLoading] = useState(Boolean(resumableJob));
   const [error, setError] = useState<string | null>(null);
   const [regeneratingSection, setRegeneratingSection] =
     useState<BlueprintSection | null>(null);
   const [steps, setSteps] = useState<GenerationStep[]>(
-    activeJob?.progress?.steps ?? [],
+    latestJob?.progress?.steps ?? [],
+  );
+  const [partialBlueprint, setPartialBlueprint] = useState<PartialBlueprint>(
+    latestJob?.partialBlueprint ?? {},
   );
   const runIdRef = useRef(0);
 
@@ -85,6 +94,7 @@ export function Workspace({
         );
         const { job } = generationJobResponseSchema.parse(data);
         if (job.progress) setSteps(job.progress.steps);
+        if (job.partialBlueprint) setPartialBlueprint(job.partialBlueprint);
         if (job.status === "succeeded" || job.status === "failed") return job;
       }
 
@@ -118,7 +128,7 @@ export function Workspace({
 
   // A run started before this page load keeps reporting into this view.
   // `loading` already starts true for it, so the effect only subscribes.
-  const activeJobId = activeJob?.id;
+  const activeJobId = resumableJob?.id;
   useEffect(() => {
     if (!activeJobId) return;
     const runId = runIdRef.current + 1;
@@ -136,6 +146,7 @@ export function Workspace({
     setLoading(true);
     setError(null);
     setSteps([]);
+    setPartialBlueprint({});
 
     try {
       const data = await requestJson<unknown>(
@@ -149,6 +160,7 @@ export function Workspace({
       );
       const { job } = generationJobResponseSchema.parse(data);
       if (job.progress) setSteps(job.progress.steps);
+      if (job.partialBlueprint) setPartialBlueprint(job.partialBlueprint);
       await trackGenerationJob(job.id, runId);
     } catch (err) {
       if (runIdRef.current !== runId) return;
@@ -275,6 +287,7 @@ export function Workspace({
 
   const activeStepLabel = describeActiveSteps(steps);
   const completedSteps = countCompletedSteps(steps);
+  const completedSections = Object.keys(partialBlueprint).length;
   const statusMessage = loading
     ? activeStepLabel
       ? `${completedSteps} of ${steps.length} sections ready. Working on ${activeStepLabel}.`
@@ -353,7 +366,12 @@ export function Workspace({
                     ? `Working on ${activeStepLabel}.`
                     : "The generation job is queued. You can leave this page — progress is saved with the job."}
                 </p>
-                {steps.length > 0 && <GenerationProgressPanel steps={steps} />}
+                {steps.length > 0 && (
+                  <GenerationProgressPanel
+                    steps={steps}
+                    partialBlueprint={partialBlueprint}
+                  />
+                )}
                 {blueprint && (
                   <p className="text-xs text-muted-foreground">
                     Your previous blueprint stays saved until the new one is ready.
@@ -370,6 +388,23 @@ export function Workspace({
                 onRegenerate={handleRegenerate}
                 regeneratingSection={regeneratingSection}
               />
+            ) : completedSections > 0 ? (
+              // The run stopped early, but the sections it finished are real.
+              <div className="flex min-h-[480px] flex-col gap-5">
+                <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4">
+                  <h3 className="font-heading text-sm font-semibold">
+                    The run stopped before every section was ready
+                  </h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {completedSections} of {steps.length} sections were produced
+                    and saved. Generate again to complete the blueprint.
+                  </p>
+                </div>
+                <GenerationProgressPanel
+                  steps={steps}
+                  partialBlueprint={partialBlueprint}
+                />
+              </div>
             ) : (
               <div className="flex min-h-[480px] flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant bg-surface/55 p-8 text-center">
                 <span className="mb-5 flex size-14 items-center justify-center rounded-full bg-primary-fixed text-primary"><FileText className="size-6" /></span>

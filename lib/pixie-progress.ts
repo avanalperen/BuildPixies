@@ -1,6 +1,15 @@
-import type { GenerationStep } from "@/types/generation-job";
+import type { GenerationJob, GenerationStep } from "@/types/generation-job";
 import type { BlueprintSection } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
+
+/** Mirrors the server-side staleness rule for abandoned runs. */
+const staleJobMs = 10 * 60_000;
+
+export function isJobActive(job: GenerationJob | null | undefined): boolean {
+  if (!job) return false;
+  if (job.status !== "queued" && job.status !== "running") return false;
+  return Date.now() - new Date(job.updatedAt).getTime() < staleJobMs;
+}
 
 export const sectionLabels: Record<BlueprintSection, string> = {
   orchestrationPlan: "Orchestration plan",

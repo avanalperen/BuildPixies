@@ -21,6 +21,9 @@ export interface GenerationProgress {
   updatedAt: string;
 }
 
+/** Sections that already passed schema validation during a run. */
+export type PartialBlueprint = Partial<Blueprint>;
+
 export interface GenerationJob {
   id: string;
   projectId?: string;
@@ -29,6 +32,7 @@ export interface GenerationJob {
   error?: string;
   input?: CreateProjectInput;
   blueprint?: Blueprint;
+  partialBlueprint?: PartialBlueprint;
   progress?: GenerationProgress;
   attemptCount?: number;
   leaseExpiresAt?: string;

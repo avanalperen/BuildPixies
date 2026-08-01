@@ -2,7 +2,14 @@ import { z } from "zod";
 import { blueprintSchema } from "@/lib/ai/schemas";
 import { blueprintSectionSchema } from "@/lib/schemas/blueprint-section";
 import { createProjectInputSchema } from "@/lib/schemas/project";
-import type { GenerationJob, GenerationProgress } from "@/types/generation-job";
+import type {
+  GenerationJob,
+  GenerationProgress,
+  PartialBlueprint,
+} from "@/types/generation-job";
+
+export const partialBlueprintSchema: z.ZodType<PartialBlueprint> =
+  blueprintSchema.partial();
 
 export const generationProgressSchema: z.ZodType<GenerationProgress> = z
   .object({
@@ -30,6 +37,7 @@ export const generationJobSchema: z.ZodType<GenerationJob> = z
     error: z.string().trim().min(1).optional(),
     input: createProjectInputSchema.optional(),
     blueprint: blueprintSchema.optional(),
+    partialBlueprint: partialBlueprintSchema.optional(),
     progress: generationProgressSchema.optional(),
     attemptCount: z.number().int().min(0).optional(),
     leaseExpiresAt: z.iso.datetime().optional(),

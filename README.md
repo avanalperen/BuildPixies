@@ -91,6 +91,8 @@ formatlarda hazırlanır.
 - Sayfa yenilense de devam eden üretim kaldığı yerden izlenir; aynı proje için
   ikinci bir üretim başlatılmaz
 - Geçici sağlayıcı hatalarında (timeout, 429, 5xx) bölüm bazlı tekrar deneme
+- Doğrulanan bölümler üretim sırasında job kaydına yazılır; tamamlanan bölüm
+  pipeline bitmeden okunabilir ve üretim yarıda kalsa da kaybolmaz
 - Vercel Queues ile kalıcı üretim kuyruğu, lease tabanlı tekrar deneme ve
   idempotent job tamamlama
 - Supabase üzerinde owner bazlı atomik API rate limit
@@ -650,8 +652,9 @@ Supabase ile kalıcı storage kullanacaksanız migration'ları uygulayın:
 supabase db push
 ```
 
-> Deploy öncesi `202608010001_generation_progress.sql` uygulanmış olmalıdır;
-> `generation_jobs.progress` kolonu olmadan generation job kaydı oluşturulamaz.
+> Deploy öncesi `202608010001_generation_progress.sql` ve
+> `202608010002_partial_blueprint.sql` uygulanmış olmalıdır; `generation_jobs`
+> üzerindeki `progress` kolonu olmadan generation job kaydı oluşturulamaz.
 
 Gerekli ortam değişkenleri:
 

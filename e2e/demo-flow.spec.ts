@@ -155,6 +155,7 @@ test("reports real pipeline progress and exports from the stored project", async
   let job = created.job as {
     id: string;
     status?: string;
+    partialBlueprint?: Record<string, unknown>;
     progress?: { steps: { section: string; status: string }[] };
   };
   for (let attempt = 0; attempt < 30 && job.status !== "succeeded"; attempt++) {
@@ -165,6 +166,11 @@ test("reports real pipeline progress and exports from the stored project", async
   }
   expect(job.status).toBe("succeeded");
   expect(job.progress?.steps.every((step) => step.status === "done")).toBe(true);
+
+  // Every validated section is persisted on the job as it completes.
+  expect(Object.keys(job.partialBlueprint ?? {}).sort()).toEqual(
+    job.progress?.steps.map((step) => step.section).sort(),
+  );
 
   // The stored blueprint is enough to export; no client payload required.
   const readme = await request.post("/api/export-readme", {

@@ -1,9 +1,11 @@
 import "server-only";
 
 import { getPipelineSteps, type OrchestratorEvent } from "@/lib/ai/orchestrator";
+import { partialBlueprintSchema } from "@/lib/schemas/generation-job";
 import type {
   GenerationProgress,
   GenerationStep,
+  PartialBlueprint,
 } from "@/types/generation-job";
 
 export function createInitialProgress(): GenerationProgress {
@@ -13,9 +15,14 @@ export function createInitialProgress(): GenerationProgress {
   };
 }
 
+export interface GenerationProgressState {
+  progress: GenerationProgress;
+  partialBlueprint: PartialBlueprint;
+}
+
 export interface GenerationProgressTracker {
   onEvent: (event: OrchestratorEvent) => void;
-  snapshot: () => GenerationProgress;
+  snapshot: () => GenerationProgressState;
   flush: () => Promise<void>;
 }
 
@@ -25,15 +32,20 @@ export interface GenerationProgressTracker {
  * events that arrived while the previous write was in flight.
  */
 export function createGenerationProgressTracker(
-  persist: (progress: GenerationProgress) => Promise<void>,
+  persist: (state: GenerationProgressState) => Promise<void>,
 ): GenerationProgressTracker {
   const steps: GenerationStep[] = createInitialProgress().steps;
+  const sections: Record<string, unknown> = {};
   let inFlight: Promise<void> | null = null;
   let dirty = false;
 
-  const snapshot = (): GenerationProgress => ({
-    steps: steps.map((step) => ({ ...step })),
-    updatedAt: new Date().toISOString(),
+  const snapshot = (): GenerationProgressState => ({
+    progress: {
+      steps: steps.map((step) => ({ ...step })),
+      updatedAt: new Date().toISOString(),
+    },
+    // Anything that fails this parse simply is not published as partial.
+    partialBlueprint: partialBlueprintSchema.safeParse(sections).data ?? {},
   });
 
   function schedule(): Promise<void> {
@@ -61,6 +73,9 @@ export function createGenerationProgressTracker(
       const step = steps.find((item) => item.section === event.section);
       if (!step) return;
       step.status = event.status;
+      if (event.status === "done" && event.output !== undefined) {
+        sections[event.section] = event.output;
+      }
       void schedule();
     },
     snapshot,
