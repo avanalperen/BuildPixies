@@ -394,3 +394,37 @@ kapsamından çıkarılır.
   testi ve kod incelemesiyle kanıtlanır; bu sınırlama README'de açıkça yazılır.
 - Ürün canlıya alınmak istenirse gereken tek iş migration'ları uygulamak ve
   environment değişkenlerini girmektir; kodda değişiklik gerekmez.
+
+---
+
+## ADR-013 — Bağımlılık yükseltmesi ve postcss sabitlemesinin kaldırılması
+
+**Tarih:** 1 Ağustos 2026
+**Durum:** Kabul edildi
+
+### Bağlam
+
+BP-038 kapsamındaki bağımlılık denetimi, üretim bağımlılıklarında dört high
+severity açık buldu. Bunlardan biri App Router'da **Middleware / Proxy bypass**
+idi; BuildPixies oturum bootstrap'ini tam olarak `proxy.ts` üzerinden yapıyor.
+Ayrıca ADR-005'te eklenen `postcss@8.5.10` transitive override'ı, aradan geçen
+sürede kendisi açık bir sürümü sabitler hale gelmiş ve düzeltmeyi engelliyordu.
+
+### Karar
+
+- `next` 16.2.10 → 16.2.12 (patch), `eslint-config-next` aynı sürüme çekildi.
+- `postcss` override'ı `8.5.10` → `8.5.25` olarak güncellendi.
+- `sharp` `^0.35.0` override'ı eklendi.
+- `brace-expansion` `^5.0.8` override'ı **yalnız `@vercel/queue` altında**
+  tanımlandı; global tanım ESLint'in `minimatch@3` bağımlılığını kırıyordu.
+
+### Sonuçlar
+
+- `npm audit --omit=dev` sonucu 0 vulnerability.
+- Proxy bypass advisory'si kapandı; oturum bootstrap yüzeyi korunmuş oldu.
+- Teslime bir gün kala yapılan bu değişiklik tam kalite kapısıyla doğrulandı
+  (lint, typecheck, build, 9/9 E2E); davranış değişikliği gözlenmedi.
+- Geliştirme zincirinde kalan `fast-uri` açığı kabul edilen risktir; üretim
+  bundle'ına girmez.
+- Geri alınmak istenirse tek işlem `package.json` içindeki sürüm ve override
+  bloğunu önceki haline döndürmektir.
