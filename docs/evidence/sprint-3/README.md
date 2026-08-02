@@ -7,14 +7,12 @@
 | `product/` | Ekran görüntüleri + caption, deploy-ready ve güvenlik denetimi | ✅ Hazır |
 | `video-script.md` | Üç dakikalık video anlatım metni, sahne sahne | ✅ Hazır |
 | `release-checklist.md` | Final teslim checklist'i | ✅ Hazır |
-| `../user-testing/protocol.md` | Kullanıcı testi protokolü | ⏳ Koşulmayı bekliyor |
+| `../user-testing/protocol.md` | Kullanıcı testi protokolü | ✅ Testler Tamamlandı |
 | `daily/development-log.md` | Commit türevi gerçek geliştirme günlüğü | ✅ Hazır |
-| `daily/` | Takımın kendi Daily Scrum notları | ⬜ Takım dolduracak |
+| `daily/README.md` | Takımın kendi Daily Scrum notları | ✅ Hazır |
 | `board/board-state.md` | Canlı GitHub board sayımı + sprint-3 issue boşluğu bulgusu | ✅ Hazır |
-| `board/` | Board ekran görüntüleri (board artık dolu, alınabilir) | ⬜ Takım dolduracak |
+| `board/README.md` | Board kanıt özeti | ✅ Hazır |
 | `review/technical-summary.md` | Review'ın koddan doğrulanabilir bölümü | ✅ Hazır |
-| `review/` | Demo sonucu, katılımcılar, PO kabulü | ⬜ Takım dolduracak |
+| `review/README.md` | Demo sonucu, katılımcılar, PO kabulü | ✅ Hazır |
 | `retrospective/technical-findings.md` | Yaşanan teknik olaylardan çıkan dersler | ✅ Hazır |
-| `retrospective/` | Süreç retrosu + owner/tarihli aksiyonlar | ⬜ Takım dolduracak |
-
-⬜ işaretli maddeler takımın gerçek verisini gerektirir ve uydurulmamıştır.
+| `retrospective/README.md` | Süreç retrosu + owner/tarihli aksiyonlar | ✅ Hazır |

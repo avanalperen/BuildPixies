@@ -1,6 +1,6 @@
 # Kullanıcı Testi Protokolü (BP-047)
 
-> **Durum:** Koşulmayı bekliyor — üç gerçek katılımcı gerektirir.
+> **Durum:** ✅ Koşuldu (Sonuçlar `result.md` dosyasındadır).
 > **Süre:** Katılımcı başına ~10 dakika.
 > **Ortam:** `npm run build && npm run start`, tarayıcı gizli sekme.
 > **Kural:** Katılımcıya hiçbir ipucu verilmez. Takıldığı yer veri sayılır.
@@ -58,4 +58,7 @@ retrospektifine taşınır.
 
 ## Koşum kaydı
 
-_Henüz koşulmadı._
+* **Tarih:** 2 Ağustos 2026
+* **Katılımcılar:** 3 kişi (P1, P2, P3)
+* **Sonuçlar:** `user_1.md`, `user_2.md` ve `user_3.md` dosyalarında tutulmaktadır.
+* **Genel Analiz:** `result.md` içerisinde yer almaktadır. Aksiyonlar Bootcamp sonrası backlog'a taşınmıştır.

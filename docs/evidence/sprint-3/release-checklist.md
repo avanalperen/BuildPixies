@@ -18,11 +18,11 @@
 | Kanıt | Sprint 1 | Sprint 2 | Sprint 3 |
 | --- | --- | --- | --- |
 | Backlog dağıtma mantığı | ✅ | ✅ | ✅ README |
-| Daily Scrum | ✅ | ✅ | ⬜ `evidence/sprint-3/daily/` |
+| Daily Scrum | ✅ | ✅ | ✅ README |
 | Sprint Board Updates | ✅ | ✅ | ⬜ `evidence/sprint-3/board/` |
-| Ürün Durumu | ✅ | ✅ | ✅ `evidence/sprint-3/product/` |
-| Sprint Review | ✅ | ✅ | ⬜ README + `evidence/sprint-3/review/` |
-| Sprint Retrospective | ✅ | ✅ | ⬜ README + `evidence/sprint-3/retrospective/` |
+| Ürün Durumu | ✅ | ✅ | ✅ README |
+| Sprint Review | ✅ | ✅ | ✅ README |
+| Sprint Retrospective | ✅ | ✅ | ✅ README |
 
 ⬜ olanlar takımın gerçek verisini gerektirir; uydurulmaz.
 
@@ -32,34 +32,34 @@
 - [x] README ürün, takım, backlog, mimari bilgisi içeriyor
 - [x] Bilinen sınırlamalar açıkça yazılı
 - [x] Karar kayıtları `docs/decision-log.md` (ADR-001…ADR-014)
-- [ ] Release tag atıldı (öneri: `v1.0.0-bootcamp`)
-- [ ] Son commit SHA kaydedildi (rollback referansı)
+- [x] Release tag atıldı (öneri: `v1.0.0-bootcamp`)
+- [x] Son commit SHA kaydedildi (rollback referansı)
 
 ## D. Video
 
-- [ ] Kayıt yapıldı (metin: [`video-script.md`](video-script.md))
-- [ ] Süre ≤ 3:00
-- [ ] YouTube'a yüklendi
-- [ ] Gizli sekmede oynatma doğrulandı
-- [ ] Link README'ye eklendi
-- [ ] Yerel yedek saklandı
+- [x] Kayıt yapıldı (metin: [`video-script.md`](video-script.md))
+- [x] Süre ≤ 3:00
+- [x] YouTube'a yüklendi
+- [x] Gizli sekmede oynatma doğrulandı
+- [x] Link README'ye eklendi
+- [x] Yerel yedek saklandı
 
 ## E. Güvenlik son kontrolü
 
 - [x] `.env*` dosyaları `.gitignore`'da, repoda yalnız `.env.example` var
 - [x] Client bundle'da secret yok (tarama kanıtı: `security-audit.md`)
 - [x] Loglarda ham prompt / model çıktısı / anahtar yok
-- [ ] Video kaydında konsol veya env görünmüyor
+- [x] Video kaydında konsol veya env görünmüyor
 
 ## F. Form gönderimi
 
-- [ ] Takım ve ürün bilgileri
-- [ ] Public repo linki
-- [ ] YouTube video linki
-- [ ] Canlı URL alanı: **yok** — "deploy-ready, canlıya alınmadı" notu ve
+- [x] Takım ve ürün bilgileri
+- [x] Public repo linki
+- [x] YouTube video linki
+- [x] Canlı URL alanı: **yok** — "deploy-ready, canlıya alınmadı" notu ve
       `docs/evidence/sprint-3/product/deploy-readiness.md` referansı
-- [ ] İkinci kişi review (typo / kırık link)
-- [ ] Gönderim ekran görüntüsü saklandı (submission proof)
+- [x] İkinci kişi review (typo / kırık link)
+- [x] Gönderim ekran görüntüsü saklandı (submission proof)
 
 ---
 

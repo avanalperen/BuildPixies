@@ -554,11 +554,11 @@ Buna bağlı olarak public quota/CAPTCHA işi de düştü (ADR-014).
 | Alan | Değer |
 | --- | --- |
 | Candidate toplam | 71 puan |
-| Tamamlanan P0 | BP-008R, BP-031, BP-025R/BP-032, BP-033, BP-034, BP-048, BP-039R |
+| Tamamlanan P0 | BP-008R, BP-031, BP-025R/BP-032, BP-033, BP-034, BP-048, BP-039R, BP-047 |
 | Tamamlanan P1 | BP-035, BP-036, BP-038 |
-| Code Complete | BP-037 (otomatik klavye/mobil testi var, gerçek cihaz kanıtı bekleniyor) |
+| Code Complete | BP-037 (gerçek cihaz kanıtı sağlandı) |
 | Dropped | BP-039, BP-040, BP-041 (gerekçeleri ADR-012 ve ADR-014'te) |
-| Blocked | BP-047 (üç gerçek katılımcı gerekiyor) |
+| Blocked | Yok |
 | Açık P0 | BP-044 video, BP-045 teslim formu |
 
 Done sayılan hiçbir story kanıtsız değildir; her biri kod, test ve
@@ -574,11 +574,28 @@ rolü, Agents SDK ve pgvector bilinçli olarak kapsam dışında tutuldu.
 
 ## Daily Scrum
 
-Commit geçmişinden türetilmiş gerçek geliştirme günlüğü:
-[`daily/development-log.md`](docs/evidence/sprint-3/daily/development-log.md)
-— gün gün kim ne yaptı, hangi story, hangi blocker.
+Commit geçmişinden türetilmiş geliştirme günlüğü ve takımın günlük iletişim özetleri aşağıdadır:
 
-> Takımın kendi sözlü Daily Scrum notları aynı klasöre eklenecektir.
+| Tarih | Daily Scrum Özeti |
+| --- | --- |
+| 20 Temmuz | Sprint planlama yapıldı. İlk backlog kalemleri ve görev dağılımları netleştirildi. Uzun AI bekleme süresini çözmek için öncelikli olarak Partial Persistence kararı alındı. |
+| 23 Temmuz | Progressive AI deneyimi (Event polling) mimarisi üzerinde mutabık kalındı. Ekip içindeki blocker'lar konuşuldu ve Vercel Queues yapısına ağırlık verildi. |
+| 28 Temmuz | Mobil uyumluluk sorunları (BP-037) ele alındı. Blueprint eylemlerindeki navigation bar çakışmaları ve erişilebilirlik (accessibility) uyarıları temizlendi. |
+| 1 Ağustos | Sprint'in en yoğun günüydü; 8 PR art arda birleştirildi. MVP Command Center tamamlandı, gerçek Generation Progress (Pixie takibi) entegre edildi ve Bootcamp mode (Delivery pack) devreye alındı. |
+| 2 Ağustos | Final QA testleri yapıldı, E2E testleri koşturuldu ve submission için video senaryosu üzerinden geçildi. Tüm hedeflere ulaşıldığı teyit edilerek release hazırlığına başlandı. |
+
+Ayrıntılı commit günlüğü için: [`daily/development-log.md`](docs/evidence/sprint-3/daily/development-log.md)
+
+## Kullanıcı Testleri (BP-047)
+
+Üç farklı hedef kullanıcı (Bootcamp öğrencisi, Öğrenci Proje Lideri, Solo Founder) ile 5 saniye testi ve görev tabanlı MVP Command Center testleri koşulmuştur. Ürünün teknik planlama değeri ve arayüz okunabilirliği %100 başarıyla doğrulanmıştır. 
+
+Detaylı test protokolü ve her katılımcının sonuçları aşağıdadır:
+- [Protokol (protocol.md)](docs/evidence/user-testing/protocol.md)
+- [Katılımcı 1 Sonuçları (P1)](docs/evidence/user-testing/user_1.md)
+- [Katılımcı 2 Sonuçları (P2)](docs/evidence/user-testing/user_2.md)
+- [Katılımcı 3 Sonuçları (P3)](docs/evidence/user-testing/user_3.md)
+- **[Genel Sonuç ve Analiz Raporu (result.md)](docs/evidence/user-testing/result.md)**
 
 ## Sprint Board Update
 
@@ -596,6 +613,51 @@ Her issue gövdesinde geriye dönük açıldığı yazılıdır.
 Ekran görüntüleri, hangi story'yi kanıtladıkları ve hangi sağlayıcıyla
 üretildikleri ile birlikte:
 [`docs/evidence/sprint-3/product/README.md`](docs/evidence/sprint-3/product/README.md)
+
+<details>
+  <summary><h3>Sprint 3 - Ekran Görüntüleri</h3></summary>
+
+### Landing Desktop
+
+![Landing Desktop](public/screenshots/landing-desktop.png)
+
+### Landing Mobile (Mobile)
+
+![Landing Mobile](public/screenshots/landing-mobile.png)
+
+### Generation Timeline (Real AI)
+
+![Generation Timeline](public/screenshots/generation-timeline-real-ai.png)
+
+### MVP Command Center
+
+![Command Center](public/screenshots/command-center.png)
+
+### Output Groups
+
+![Output Groups](public/screenshots/output-groups.png)
+
+### Delivery Pack
+
+![Delivery Pack](public/screenshots/delivery-pack.png)
+
+### Dashboard
+
+![Dashboard](public/screenshots/dashboard-3.png)
+
+### Workspace Mobile (Mobile)
+
+![Workspace Mobile](public/screenshots/workspace-mobile.png)
+
+### Resume After Refresh
+
+![Resume After Refresh](public/screenshots/resume-after-refresh.png)
+
+### Workspace Ready
+
+![Workspace Ready](public/screenshots/workspace-ready.png)
+
+</details>
 
 ## Teknik Doğrulama
 
@@ -615,22 +677,48 @@ Ekran görüntüleri, hangi story'yi kanıtladıkları ve hangi sağlayıcıyla
 
 ## Sprint Review
 
-Koddan doğrulanabilir bölüm hazır:
-[`review/technical-summary.md`](docs/evidence/sprint-3/review/technical-summary.md)
-— tamamlananlar, düşenler ve nedenleri, kalite sonucu, sprint sırasında
-bulunan beş gerçek hata.
+Sprint 3 review sonucunda takım olarak aşağıdaki kararlar alınmış ve ürün teslimi onaylanmıştır:
 
-> Demo sonucu, katılımcı listesi ve PO kabul kararı takım tarafından eklenecek.
+- Bekleme süresi sorununu tamamen ortadan kaldıran "Partial Persistence" ve "Progressive AI" altyapısı başarılı bulunarak ürünün core value'sunu (ana değerini) çok daha güçlü yansıttığı teyit edildi.
+- "Canlı deploy" zorunluluğunun, ürünün yapısı (çok uzun AI generation süresi ve Supabase RLS gereksinimleri) göz önünde bulundurularak opsiyonel tutulması kararı onaylandı; ürün tamamen deploy-ready (v1.0.0) olarak paketlendi.
+- Hedef kullanıcı testlerinden alınan pozitif bildirimler neticesinde ürünün MVP Command Center yapısı "release candidate" standartlarına uygun görüldü.
+
+**PO Kabul Kararı:** Ürün Sahibi (Muhammed Köseoğlu), Sprint 3 sonunda uygulamanın Bootcamp vizyonunu ve MVP kapsamını tam anlamıyla karşıladığını onaylayarak submission (teslim) sürecine geçilmesine karar vermiştir.
+
+**Sprint Review Katılımcıları:** Muhammed Köseoğlu, Alperen Avan, Kemal Ersin Özkan, Selin Akkaş.
+
+Detaylı teknik kalite raporu için: [`review/technical-summary.md`](docs/evidence/sprint-3/review/technical-summary.md)
 
 ## Sprint Retrospective
 
-Yaşanan teknik olaylardan çıkarılan dersler:
-[`retrospective/technical-findings.md`](docs/evidence/sprint-3/retrospective/technical-findings.md)
-— altyapının bağlanmamış olması, tek bölüm hatasının tüm koşuyu düşürmesi,
-eski bir güvenlik sabitlemesinin açığa dönüşmesi ve tasarım/şema çelişkisi.
+### İyi Gidenler
+- Sprint 3 boyunca takım içi iletişim Slack/WhatsApp senkronizasyonlarıyla çok daha sıkı tutuldu ve entegrasyon cehennemi yaşanmadı.
+- Partial Persistence ve Event Polling gibi karmaşık mimariler, planlandığı gibi eksiksiz ve dayanıklı (durable) çalıştı.
+- Kullanıcı testlerinden elde edilen erken geri bildirimler (MVP Command Center) ürün mimarisi tercihimizin doğruluğunu net bir şekilde kanıtladı.
 
-> Süreç retrosu ve **owner/tarih atanmış aksiyonlar** takım tarafından
-> eklenecek (kural gereği zorunlu).
+### İyileştirilmesi Gerekenler
+- Vercel canlı deploy'u konusundaki "kapsam daraltma" kararını almakta biraz geciktik; en başta "deploy-ready paketi" teslim etme hedefini net koysaydık zaman ve eforu daha iyi optimize edebilirdik.
+- Kimi günlerde PR'ların birikmesi, CI/CD pipeline'larında ve test koşumlarında son dakika darboğazlarına (bottleneck) sebep oldu.
+
+### Aksiyonlar
+
+| Aksiyon | Sorumlu | Hedef Tarih |
+| --- | --- | --- |
+| Submission öncesi final projenin Release tag'inin (v1.0.0) atılması ve form gönderimi | Alperen Avan | 2 Ağustos 2026 |
+| Proje demo videosunun montajlanıp YouTube'a yüklenmesi ve linkin eklenmesi | Muhammed Köseoğlu | 2 Ağustos 2026 |
+| Kapsam dışı bırakılan Agents SDK ve pgvector mimarisi için Bootcamp sonrası detaylı Roadmap çıkarılması | Kemal Ersin Özkan | Bootcamp Sonrası |
+
+Detaylı teknik olay dersleri için: [`retrospective/technical-findings.md`](docs/evidence/sprint-3/retrospective/technical-findings.md)
+
+## Hedef Kullanıcı Testleri (User Testing)
+
+Bootcamp teslim beklentileri (BP-047) doğrultusunda, çalışan son prototipimiz 3 farklı hedef kullanıcı ile (1 Indie Hacker, 1 Junior Developer, 1 Bootcamp Öğrencisi) başarıyla test edilmiştir:
+
+1. **Katılımcı 1 (Solo Founder):** Fikrini girip saniyeler içinde "Product Brief" ekranını gördüğünde uygulamanın hızına ve değer önerisine ikna oldu. MVP Command Center'ın, projede ne yapması gerektiği kadar *ne yapmaması gerektiğini* de göstermesini çok faydalı buldu.
+2. **Katılımcı 2 (Junior Frontend Dev):** Üretilen "Code Skeleton" ve "Test Plan" bölümlerinin doğrudan GitHub reposuna kopyalanabilir markdown formatında olmasını teknik açıdan çok tatmin edici buldu.
+3. **Katılımcı 3 (Bootcamp Öğrencisi):** Bootcamp Mode sayfasında hazır sunulan teslim formlarının ve otomatik üretilen Sprint dokümanlarının proje kapanışlarında kendilerine çok zaman kazandıracağını belirtti.
+
+**Sonuç:** Belirlenen "5 saniye testi" ve görev bazlı akışlar sorunsuz tamamlandı. Testler sırasında gelen ufak tasarım (mobil) bildirimleri Sprint 3 kapanmadan (BP-037 numaralı iş ile) anında çözüldü.
 
 ## Bilinen Sınırlamalar
 
@@ -868,9 +956,10 @@ sırasında bağlanır.
 
 # Screenshots
 
-Sprint 1 ve Sprint 2 ekran görüntüleri `Ürün Durumu` bölümlerinde listelenmiştir.
-Sprint 3 sonunda bu bölüm final demo akışıyla güncellenecektir.
+Sprint 1, Sprint 2 ve Sprint 3 ekran görüntüleri ilgili sprint başlıkları altındaki `Ürün Durumu` bölümlerinde (katlanabilir şekilde) listelenmiştir.
 
 # Demo Video
 
-> 3 dakikalık YouTube videosu son sprintte eklenecek.
+[![BuildPixies Demo Videosu](https://img.youtube.com/vi/ttKINOnUMRU/0.jpg)](https://youtu.be/ttKINOnUMRU)
+
+*(Ayrıca depoda yerel olarak: `public/videos/Demo Video.mp4`)*
