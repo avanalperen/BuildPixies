@@ -971,6 +971,6 @@ Sprint 1, Sprint 2 ve Sprint 3 ekran görüntüleri ilgili sprint başlıkları 
 
 # Demo Video
 
-https://github.com/avanalperen/BuildPixies/raw/main/public/videos/Demo%20Video.mp4
+[![BuildPixies Demo Videosu](https://img.youtube.com/vi/ttKINOnUMRU/maxresdefault.jpg)](https://youtu.be/ttKINOnUMRU)
 
-*(Eğer video yüklenmezse [YouTube üzerinden izleyin](https://youtu.be/ttKINOnUMRU))*
+*(Not: GitHub güvenlik politikaları gereği YouTube videoları doğrudan sayfa içinde oynatılamaz, görsele tıklayarak izleyebilirsiniz. Ayrıca yerel kopyası `public/videos/Demo Video.mp4` konumundadır.)*
