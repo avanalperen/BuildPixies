@@ -554,12 +554,12 @@ Buna bağlı olarak public quota/CAPTCHA işi de düştü (ADR-014).
 | Alan | Değer |
 | --- | --- |
 | Candidate toplam | 71 puan |
-| Tamamlanan P0 | BP-008R, BP-031, BP-025R/BP-032, BP-033, BP-034, BP-048, BP-039R, BP-047 |
+| Tamamlanan P0 | BP-008R, BP-031, BP-025R/BP-032, BP-033, BP-034, BP-048, BP-039R, BP-047, BP-044, BP-045 |
 | Tamamlanan P1 | BP-035, BP-036, BP-038 |
 | Code Complete | BP-037 (gerçek cihaz kanıtı sağlandı) |
 | Dropped | BP-039, BP-040, BP-041 (gerekçeleri ADR-012 ve ADR-014'te) |
 | Blocked | Yok |
-| Açık P0 | BP-044 video, BP-045 teslim formu |
+| Açık P0 | Yok |
 
 Done sayılan hiçbir story kanıtsız değildir; her biri kod, test ve
 `docs/evidence/sprint-3/` altındaki bir belge ile eşleşir.
@@ -605,8 +605,19 @@ Canlı board sayımı ve bulgu:
 Sprint 3 işleri sprint boyunca GitHub Issues yerine `docs/sprint-3.md`
 üzerinden takip edilmiş, board'da `sprint-3` etiketli issue açılmamıştı. Bu
 boşluk gizlenmedi: 18 story gerçek durumlarıyla ve planın kuralı gereği
-**`backfilled` etiketiyle** issue'ya dönüştürüldü (10 done, 3 dropped, 5 açık).
+**`backfilled` etiketiyle** issue'ya dönüştürüldü (15 done, 3 dropped, 0 açık).
 Her issue gövdesinde geriye dönük açıldığı yazılıdır.
+
+[Sprint 3 Closed Board](https://github.com/avanalperen/BuildPixies/issues?q=state%3Aclosed%20label%3Asprint-3)
+
+![Sprint 3 Board Closeout 1](docs/evidence/sprint-3/board/2026-08-02-board-closeout-backfilled-1.png)
+![Sprint 3 Board Closeout 2](docs/evidence/sprint-3/board/2026-08-02-board-closeout-backfilled-2.png)
+
+| Board Kolonu | Sprint 3 Sonu Durum |
+| --- | --- |
+| Done | Progressive AI (polling), Partial Persistence, MVP Command Center, Delivery Pack, E2E testleri, Video ve Teslim Formu |
+| Dropped | Production deploy, RLS smoke, Public quota/CAPTCHA (bkz. ADR-012, ADR-014) |
+| In Progress / Backlog | Yok (Tüm işler tamamlandı) |
 
 ## Ürün Durumu
 
@@ -960,6 +971,6 @@ Sprint 1, Sprint 2 ve Sprint 3 ekran görüntüleri ilgili sprint başlıkları 
 
 # Demo Video
 
-[![BuildPixies Demo Videosu](https://img.youtube.com/vi/ttKINOnUMRU/0.jpg)](https://youtu.be/ttKINOnUMRU)
+<video src="https://github.com/avanalperen/BuildPixies/raw/main/public/videos/Demo%20Video.mp4" controls="controls" width="100%"></video>
 
-*(Ayrıca depoda yerel olarak: `public/videos/Demo Video.mp4`)*
+*(Eğer video yüklenmezse [YouTube üzerinden izleyin](https://youtu.be/ttKINOnUMRU))*

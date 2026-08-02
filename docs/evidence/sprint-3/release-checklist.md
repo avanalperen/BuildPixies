@@ -33,7 +33,7 @@
 - [x] Bilinen sınırlamalar açıkça yazılı
 - [x] Karar kayıtları `docs/decision-log.md` (ADR-001…ADR-014)
 - [x] Release tag atıldı (öneri: `v1.0.0-bootcamp`)
-- [x] Son commit SHA kaydedildi (rollback referansı)
+- [x] Son commit SHA kaydedildi (rollback referansı): `5a734f2c1e16b6743ebc76b50cae84254baa25a9`
 
 ## D. Video
 

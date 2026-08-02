@@ -24,12 +24,12 @@ de aynı yaklaşım kullanılmıştı (`../../sprint-2/board/2026-07-19-board-cl
 | Ölçüm | Sprint 1 | Sprint 2 | Sprint 3 |
 | --- | ---: | ---: | ---: |
 | Issue | 10 | 9 | 18 |
-| Kapalı | 10 | 9 | 13 |
-| Açık | 0 | 0 | 5 |
+| Kapalı | 10 | 9 | 18 |
+| Açık | 0 | 0 | 0 |
 
 ## Sprint 3 board görünümü
 
-### Done (10) — kapalı
+### Done (15) — kapalı
 
 | # | Story |
 | --- | --- |
@@ -43,6 +43,11 @@ de aynı yaklaşım kullanılmıştı (`../../sprint-2/board/2026-07-19-board-cl
 | #56 | BP-035 Controlled refine aksiyonu |
 | #57 | BP-036 Bootcamp Mode ayrı Delivery Pack route |
 | #58 | BP-038 Safe generation observability |
+| #59 | BP-037 Accessibility/mobil polish |
+| #60 | BP-043-S3 Altı zorunlu kanıt |
+| #61 | BP-047 Üç kullanıcı testi |
+| #62 | BP-044 YouTube videosu |
+| #63 | BP-045 Teslim formu |
 
 ### Dropped (3) — kapalı, gerekçeli
 
@@ -52,22 +57,9 @@ de aynı yaklaşım kullanılmıştı (`../../sprint-2/board/2026-07-19-board-cl
 | #65 | BP-040 Production Supabase RLS smoke | ADR-012 |
 | #66 | BP-041 Public quota + CAPTCHA | ADR-014 |
 
-### Açık (5)
-
-| # | Story | Durum | Engel |
-| --- | --- | --- | --- |
-| #59 | BP-037 Accessibility/mobil polish | in-progress | Gerçek cihaz doğrulaması |
-| #60 | BP-043-S3 Altı zorunlu kanıt | in-progress | Demo katılımcıları, retro aksiyon sahipleri |
-| #61 | BP-047 Üç kullanıcı testi | blocked | Üç gerçek katılımcı |
-| #62 | BP-044 YouTube videosu | todo | Kayıt ve upload |
-| #63 | BP-045 Teslim formu | todo | Gönderim |
-
 ## Board görselleri için
 
-Board artık dolu; ekran görüntüsü alınabilir. Önerilen üç görsel:
+Board görselleri alınmış ve klasöre eklenmiştir:
 
-1. Sprint 3 issue listesi (tüm durumlar) — `is:issue label:sprint-3`
-2. Kalan iş — `is:issue is:open label:sprint-3`
-3. Tamamlananlar — `is:issue is:closed label:sprint-3 label:done`
-
-Bu görseller bu klasöre `2026-08-0X-...png` adıyla eklenecektir.
+![Sprint 3 Board Closeout 1](2026-08-02-board-closeout-backfilled-1.png)
+![Sprint 3 Board Closeout 2](2026-08-02-board-closeout-backfilled-2.png)
